@@ -1,0 +1,53 @@
+﻿.ParentListSelected {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item-Parent:hover {
+    background-color: #22252f;
+    border: 0.5px dashed gray;
+}
+
+.item-Parent {
+    display: inline-flex;
+    min-width: 250px;
+    margin-top: 15px;
+    min-height: 50px;
+    background-color: #222529;
+    align-items: center;
+    padding-right: 11px;
+    color: #ccc;
+    border-radius: 10px;
+    border: 0.5px solid gray;
+    margin-right: 7px;
+    margin-left: 6px;
+}
+
+.Tag-select {
+    display: inline-flex;
+    min-width: 250px;
+    margin-top: 15px;
+    min-height: 50px;
+    background-color: #110500;
+    align-items: center;
+    padding-right: 11px;
+    color: #ccc;
+    border-radius: 10px;
+    border: 0.5px solid gray;
+    margin-right: 7px;
+    margin-left: 6px;
+}
+
+.item-btn-remove:hover {
+    background-color: #2a2a2b;
+    border: 0.5px solid white;
+}
+
+.item-btn-remove {
+    min-width: 27px;
+    border-radius: 5px;
+    background-color: #0a0a0a;
+    border: none;
+    color: white;
+    margin-left: 13px;
+}

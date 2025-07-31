@@ -1,0 +1,129 @@
+﻿@using GameOnline.Core.ViewModels.CategoryViewModels
+@model EditCategoriesViewModels
+
+@{
+    var parentList = ViewBag.Parents as List<GetParentCategoryForAddOrRemoveSubViewmodel>;
+    var oldParent = new List<GetParentCategoryForAddOrRemoveSubViewmodel>();
+    var categoryList = ViewBag.ParentList as List<GetCategoriesForParentListViewmodel>;
+
+    ViewData["title"] = "ویرایش دسته بندی";
+    ViewData["selected"] = "categories";
+}
+
+<div class="content-wrapper py-4">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ویرایش دسته بندی</h3>
+                        </div>
+                        <form asp-controller="Category" asp-action="Edit" method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="CategoryId" />
+
+                            <div class="card-body row">
+                                <div class="form-group col-md-6">
+                                    <label asp-for="FaTitle">نام فارسی دسته‌بندی</label>
+                                    <input asp-for="FaTitle" class="form-control" placeholder="مثلاً موبایل">
+                                    <span class="text-danger" asp-validation-for="FaTitle"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label asp-for="EnTitle">نام انگلیسی دسته‌بندی</label>
+                                    <input asp-for="EnTitle" class="form-control" placeholder="مثلاً Mobile">
+                                    <span class="text-danger" asp-validation-for="EnTitle"></span>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label asp-for="Description">توضیحات</label>
+                                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="توضیحات..."></textarea>
+                                    <span class="text-danger" asp-validation-for="Description"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label asp-for="Icon">آیکون</label>
+                                    <input asp-for="Icon" class="form-control" placeholder="مثلاً fa-phone">
+                                    <span class="text-danger" asp-validation-for="Icon"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label>تصویر شاخص</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input asp-for="ImageName" type="file" class="custom-file-input" id="exampleInputFile">
+                                            <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">آپلود</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label>انتخاب دسته والد</label>
+                                    <div class="d-flex gap-2 mb-2">
+                                        <button type="button" class="btn btn-success btn-sm add-parent" data-name="AddOrEditParent.ParentId">انتخاب</button>
+                                        <select class="form-control" id="ParentList">
+                                            @foreach (var item in categoryList)
+                                            {
+                                                if (parentList.Any(x => x.CategoryId == item.CategoryId))
+                                                {
+                                                    oldParent.Add(new GetParentCategoryForAddOrRemoveSubViewmodel
+                    {
+                        CategoryId = item.CategoryId,
+                        FaTitle = item.FaTitle
+                    });
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.CategoryId">@item.FaTitle</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="ParentListSelected mt-3">
+                                        @foreach (var item in oldParent)
+                                        {
+                                            <div class="item-Parent border p-2 d-inline-block rounded bg-light me-2 mb-2">
+                                                <button type="button" class="btn-remove item-btn-remove btn btn-sm btn-danger me-1">×</button>
+                                                <input type="hidden" value="@item.CategoryId" name="AddOrEditParent.ParentId" />
+                                                <span>@item.FaTitle</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="form-check col-md-2">
+                                    <input asp-for="IsActive" type="checkbox" class="form-check-input" id="isActiveCheck">
+                                    <label class="form-check-label" for="isActiveCheck">فعال / غیرفعال</label>
+                                </div>
+
+                                <div class="form-check col-md-2">
+                                    <input asp-for="IsMine" type="checkbox" class="form-check-input" id="isMineCheck">
+                                    <label class="form-check-label" for="isMineCheck">اصلی / فرعی</label>
+                                </div>
+                            </div>
+
+                            <div class="card-footer justify-content-between">
+                                <button type="submit" class="btn btn-success px-4">ثبت تغییرات</button>
+                                <a href="/Admin/Category" class="btn btn-primary">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_MultiSelectJsPartial" />
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+}

@@ -1,0 +1,100 @@
+﻿@using GameOnline.Core.ExtenstionMethods
+@model IEnumerable<GameOnline.Core.ViewModels.GalleryViewmodel.GetImageGalleryForProductViewmodel>
+
+@{
+    ViewData["title"] = "گالری محصولات";
+    ViewData["selected"] = "products";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <form asp-controller="Gallery" asp-action="Create" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="ProductId" value="@TempData["ProductId"]?.ToString()" />
+    
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="galleryFile" name="imageName">
+                        <label class="custom-file-label" for="galleryFile">انتخاب تصویر</label>
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-success">آپلود تصویر</button>
+                    </div>
+                </div>
+            </form>
+
+            <div style="margin-top: 10px;">
+                @await Component.InvokeAsync("ResultComponents")
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3 class="card-title d-inline">گالری محصول</h3>
+                            <a href="/Admin/Product" class="btn btn-secondary btn-sm ml-3">
+                                <i class="fa fa-arrow-right ml-1"></i> بازگشت به لیست محصولات
+                            </a>
+                        </div>
+                        <span>تعداد تصاویر: <strong>@Model.Count()</strong></span>
+                    </div>
+                    <div class="card-body">
+                        @if (!Model.Any())
+                        {
+                            <div class="alert alert-warning text-center">هنوز تصویری در گالری ثبت نشده است.</div>
+                        }
+                        else
+                        {
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>شناسه</th>
+                                        <th class="text-center">تصویر</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.GalleryId</td>
+                                            <td class="text-center">
+                                                <img src="@($"{PathTools.PathGalleryImageClient}/{item.ImageName}")"
+                                                     alt="@item.ImageName"
+                                                     style="max-height: 60px; transition: 0.3s; border-radius: 5px;"
+                                                     onmouseover="this.style.transform='scale(1.2)'"
+                                                     onmouseout="this.style.transform='scale(1)'" />
+                                            </td>
+                                            <td>
+                                                <form asp-controller="Gallery" asp-action="Remove" method="post" style="display:inline;">
+                                                    <input type="hidden" name="galleryId" value="@item.GalleryId" />
+                                                    <input type="hidden" name="productId" value="@ViewBag.ProductId" />
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('آیا مطمئنید حذف شود؟');">
+                                                        <i class="fa fa-trash"></i> حذف
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+    </script>
+}

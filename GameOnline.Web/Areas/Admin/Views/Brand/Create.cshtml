@@ -1,0 +1,70 @@
+﻿@model GameOnline.Core.ViewModels.BrandViewModels.CreateBrandsViewModel
+@{
+    ViewData["title"] = "ایجاد برند";
+    ViewData["selected"] = "brands";
+}
+<div class="content-wrapper" style="min-height: 797px;">
+    <section class="content-header">
+        <div class="container-fluid">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ایجاد برند</h3>
+                        </div>
+                        <form asp-controller="Brand" asp-action="Create" method="post" enctype="multipart/form-data">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="FaTitle">نام فارسی برند</label>
+                                    <input asp-for="FaTitle" class="form-control"  placeholder="نام فارسی برند را وارد کنید">
+                                    <span asp-validation-for="FaTitle"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="EnTitle">نام انگلیسی برند</label>
+                                    <input asp-for="EnTitle" class="form-control" placeholder="نام انگلیسی برند را وارد کنید">
+                                    <span asp-validation-for="EnTitle"></span>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label asp-for="Description">توضیحات</label>
+                                    <input asp-for="Description" class="form-control" placeholder="توضیحات را وارد کنید">
+                                    <span asp-validation-for="Description"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">ارسال فایل</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input asp-for="ImageName" type="file" class="custom-file-input" id="exampleInputFile">
+                                            <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="">Upload</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-success">ارسال</button>
+                                <a class="btn btn-primary" href="/Admin/Brand">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+}

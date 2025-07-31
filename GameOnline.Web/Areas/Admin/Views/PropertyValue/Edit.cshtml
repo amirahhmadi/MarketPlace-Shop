@@ -1,0 +1,64 @@
+﻿@using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyNameViewmodel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model GameOnline.Core.ViewModels.PropertyViewmodel.PropertyValueViewmodel.EditPropertyValueViewmodel
+
+@{
+    ViewData["title"] = "ویرایش مقدار ویژگی ها";
+    ViewData["selected"] = "propertyvalue";
+}
+
+
+<div class="content-wrapper" style="min-height: 617.6px;">
+    <section class="content-header">
+        <div class="container-fluid">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ویرایش مقدار ویژگی</h3>
+                        </div>
+
+                        <form asp-controller="PropertyValue" asp-action="Edit" method="post">
+                            <input type="hidden" asp-for="PropertyValueId" />
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="PropertyValueTitle">مقدار ویژگی</label>
+                                        <input asp-for="PropertyValueTitle" class="form-control" placeholder="مقدار ویژگی را وارد کنید">
+                                        <span asp-validation-for="PropertyValueTitle"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="NameId">عنوان</label>
+                                        <select asp-for="NameId" class="form-control">
+                                            <option disabled>برای کدام عنوان است ؟</option>
+                                            @foreach (var item in Model.GetPropertyName)
+                                            {
+                                                <option value="@item.PropertyNameId">@item.PropertyNameTitle</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="NameId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer justify-content-between">
+                                <button type="submit" class="btn btn-success px-4">ویرایش</button>
+                                <a class="btn btn-primary px-4" href="/Admin/PropertyValue">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>

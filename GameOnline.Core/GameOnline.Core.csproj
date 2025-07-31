@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Enums\" />
+    <Folder Include="Security\" />
+    <Folder Include="Services\BrandServices\BrandServicesClient\" />
+    <Folder Include="Services\CategoryServices\CategoryServicesClient\" />
+    <Folder Include="Services\ColorServices\ColorServicesClient\" />
+    <Folder Include="Services\GalleryServices\GalleryServicesClient\" />
+    <Folder Include="Services\GuaranteeServices\GuaranteeServicesAdmin\" />
+    <Folder Include="Services\GuaranteeServices\GuaranteeServicesClient\" />
+    <Folder Include="Services\GuaranteeServices\" />
+    <Folder Include="Services\ProductServices\ProductServicesClient\" />
+    <Folder Include="Services\SliderServices\SliderServicesClient\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameOnline.Common\GameOnline.Common.csproj" />
+    <ProjectReference Include="..\GameOnline.DataBase\GameOnline.DataBase.csproj" />
+  </ItemGroup>
+
+</Project>

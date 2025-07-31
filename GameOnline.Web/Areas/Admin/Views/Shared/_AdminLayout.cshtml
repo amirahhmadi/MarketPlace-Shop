@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>@ViewData["Title"]</title>
+
+    <partial name="_csspartial" />
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+
+        <partial name="_Navbar" />
+
+        <partial name="_Sidebar" />
+
+        @RenderBody()
+
+        <partial name="_Footer" />
+    </div>
+    <partial name="_jspartial" />
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

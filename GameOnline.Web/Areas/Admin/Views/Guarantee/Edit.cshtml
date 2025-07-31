@@ -1,0 +1,39 @@
+﻿@model GameOnline.Core.ViewModels.GuaranteeViewModels.EditGuaranteesViewModel
+@{
+    ViewData["title"] = "ویرایش گارانتی";
+    ViewData["selected"] = "guarantees";
+}
+<div class="content-wrapper" style="min-height: 797px;">
+    <section class="content-header">
+        <div class="container-fluid">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ویرایش گارانتی</h3>
+                        </div>
+                        <form asp-controller="Guarantee" asp-action="Edit" method="post">
+                            <input type="hidden" asp-for="GuaranteeId" />
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="GuaranteeName">نام گارانتی</label>
+                                    <input asp-for="GuaranteeName" class="form-control" placeholder="نام گارانتی را وارد کنید">
+                                    <span asp-validation-for="GuaranteeName"></span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-success">ویرایش</button>
+                                <a class="btn btn-primary" href="/Admin/Guarantee">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

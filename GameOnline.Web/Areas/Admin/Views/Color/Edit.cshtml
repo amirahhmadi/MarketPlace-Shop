@@ -1,0 +1,85 @@
+﻿@model GameOnline.Core.ViewModels.ColorViewModels.EditColorsViewModel
+@{
+    ViewData["title"] = "ویرایش رنگ";
+    ViewData["selected"] = "colors";
+}
+
+<div class="content-wrapper" style="min-height: 797px;">
+    <section class="content-header">
+        <div class="container-fluid"></div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ویرایش رنگ</h3>
+                        </div>
+                        <form asp-controller="Color" asp-action="Edit" method="post">
+                            <input type="hidden" asp-for="ColorId" />
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="ColorName">نام رنگ</label>
+                                    <input asp-for="ColorName" class="form-control" placeholder="نام رنگ را وارد کنید" />
+                                    <span asp-validation-for="ColorName" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="ColorCode">کد رنگ</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input asp-for="ColorCode" class="form-control col-md-1" id="ColorCodeInput" readonly />
+                                        <div id="color-picker" style="margin-left: 10px;"></div>
+                                    </div>
+                                    <span asp-validation-for="ColorCode" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-check">
+                                    <input asp-for="IsActive" type="checkbox" class="form-check-input" id="exampleCheck1" />
+                                    <label class="form-check-label" for="exampleCheck1">فعال / غیر فعال</label>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-success">ویرایش</button>
+                                <a class="btn btn-primary" href="/Admin/Color">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        const pickr = Pickr.create({
+            el: '#color-picker',
+            theme: 'classic',
+            default: '#000000',
+            components: {
+                preview: true,
+                opacity: true,
+                hue: true,
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    input: true,
+                    save: true
+                }
+            }
+        });
+
+        const input = document.getElementById('ColorCodeInput');
+
+        pickr.on('save', (color) => {
+            input.value = color.toHEXA().toString();
+            pickr.hide();
+        });
+
+        pickr.on('change', (color) => {
+            input.value = color.toHEXA().toString();
+        });
+    </script>
+}

@@ -1,0 +1,44 @@
+﻿<script>
+    $(document).ready(function () {
+
+        // اضافه کردن دسته والد
+        $(".add-parent").click(function () {
+            var dataname = $(this).data("name");
+
+            var selectedOption = $("#ParentList option:selected");
+
+            if (selectedOption.length > 0 && selectedOption.val()) {
+                var value = selectedOption.val();
+                var text = selectedOption.text();
+
+                var itemHtml =
+                    `<div class="item-Parent d-flex align-items-center mb-2">
+                        <button type="button" class="btn-remove btn btn-danger btn-sm ml-2">×</button>
+                        <input type="hidden" value="${value}" name="${dataname}" />
+                        <span>${text}</span>
+                    </div>`;
+
+                $(".ParentListSelected").append(itemHtml);
+
+                selectedOption.remove();
+            } else {
+                alert("مقداری را وارد نمایید");
+            }
+        });
+
+        // حذف دسته والد انتخاب‌شده
+        $('.ParentListSelected').on("click", ".btn-remove", function () {
+            var parentDiv = $(this).closest('.item-Parent');
+            var value = parentDiv.find("input[type=hidden]").val();
+            var text = parentDiv.find("span").text();
+
+            $("#ParentList").append($('<option>', {
+                value: value,
+                text: text
+            }));
+
+            parentDiv.remove();
+        });
+
+    });
+</script>

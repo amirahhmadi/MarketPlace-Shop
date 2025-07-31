@@ -1,0 +1,100 @@
+﻿@model GameOnline.Core.ViewModels.ProductViewmodel.CreateProductViewmodel
+@{
+    ViewData["title"] = "ایجاد محصول";
+    ViewData["selected"] = "products";
+}
+<div class="content-wrapper py-4">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary shadow-sm rounded">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title mb-0">فرم ثبت محصول</h3>
+                        </div>
+                        <form asp-controller="Product" asp-action="Create" method="post" enctype="multipart/form-data">
+                            <div class="card-body row">
+
+                                <div class="form-group col-md-4">
+                                    <label asp-for="FaTitle">نام فارسی برند</label>
+                                    <input asp-for="FaTitle" class="form-control" placeholder="مثلاً: لپ‌تاپ ایسوس">
+                                    <span class="text-danger" asp-validation-for="FaTitle"></span>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label asp-for="EnTitle">نام انگلیسی برند</label>
+                                    <input asp-for="EnTitle" class="form-control" placeholder="مثلاً: ASUS Laptop">
+                                    <span class="text-danger" asp-validation-for="EnTitle"></span>
+                                </div>
+                                
+                                <div class="form-group col-md-4">
+                                    <label asp-for="Score">امتیاز محصول</label>
+                                    <input asp-for="Score" class="form-control" placeholder="مثلاً: 150">
+                                    <span class="text-danger" asp-validation-for="Score"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label asp-for="CategoryId">دسته‌بندی</label>
+                                    <select asp-for="CategoryId" class="form-control">
+                                        <option disabled selected>دسته بندی را انتخاب کنید</option>
+                                        @foreach (var item in Model.GetCategories)
+                                        {
+                                            <option value="@item.CategoryId">@item.FaTitle</option>
+                                        }
+                                    </select>
+                                    <span class="text-danger" asp-validation-for="CategoryId"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label asp-for="BrandId">برند</label>
+                                    <select asp-for="BrandId" class="form-control">
+                                        <option disabled selected>برند را انتخاب کنید</option>
+                                        @foreach (var item in Model.GetBrands)
+                                        {
+                                            <option value="@item.BrandId">@item.FaTitle</option>
+                                        }
+                                    </select>
+                                    <span class="text-danger" asp-validation-for="BrandId"></span>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label for="exampleInputFile">آپلود تصویر محصول</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input asp-for="ImageName" type="file" class="custom-file-input" id="exampleInputFile">
+                                            <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 mt-3">
+                                    <div class="form-check">
+                                        <input asp-for="IsActive" type="checkbox" class="form-check-input" id="isActiveCheck" />
+                                        <label class="form-check-label" for="isActiveCheck">فعال / غیر فعال</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card-footer justify-content-between">
+                                <button type="submit" class="btn btn-success px-4">ذخیره</button>
+                                <a class="btn btn-secondary px-4" href="/Admin/Product">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+}

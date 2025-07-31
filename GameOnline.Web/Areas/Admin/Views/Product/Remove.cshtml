@@ -1,0 +1,77 @@
+﻿@using GameOnline.Core.ExtenstionMethods
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model GameOnline.Core.ViewModels.ProductViewmodel.EditProductViewmodel
+
+@{
+    ViewData["title"] = "حذف محصول";
+    ViewData["selected"] = "products";
+}
+
+<div class="content-wrapper py-4">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary shadow-sm rounded">
+                        <div class="card-header bg-primary text-dark">
+                            <h3 class="card-title mb-0">آیا از حذف محصول اطمینان دارید؟</h3>
+                        </div>
+
+                        <form asp-controller="Product" asp-action="Remove" method="post">
+                            <input type="hidden" asp-for="ProductId" />
+
+                            <div class="card-body row">
+                                <div class="col-md-4 form-group">
+                                    <label>نام فارسی</label>
+                                    <input disabled asp-for="FaTitle" class="form-control bg-light" />
+                                </div>
+
+                                <div class="col-md-4 form-group">
+                                    <label>نام انگلیسی</label>
+                                    <input disabled asp-for="EnTitle" class="form-control bg-light" />
+                                </div>
+
+                                <div class="col-md-4 form-group">
+                                    <label>امتیاز</label>
+                                    <input disabled asp-for="Score" class="form-control bg-light" />
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>دسته‌بندی</label>
+                                    <input type="text" class="form-control" value="@Model.GetCategories.FirstOrDefault(c => c.CategoryId == Model.CategoryId)?.FaTitle" readonly />
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>برند</label>
+                                    <input type="text" class="form-control" value="@Model.GetBrands.FirstOrDefault(c => c.BrandId == Model.BrandId)?.FaTitle" readonly />
+                                </div>
+
+                                <div class="col-md-12 mt-3">
+                                    <label class="d-block font-weight-bold">تصویر محصول</label>
+                                    <img src="@($"{PathTools.PathProductImageClient}/{Model.OldImage}")"
+                                         alt="@Model.FaTitle"
+                                         class="img-thumbnail shadow-sm"
+                                         style="max-height: 150px;" />
+                                </div>
+                            </div>
+
+                            <div class="card-footer justify-content-between">
+                                <button type="submit" class="btn btn-danger px-4">حذف محصول</button>
+                                <a class="btn btn-primary px-4" href="/Admin/Product">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+}

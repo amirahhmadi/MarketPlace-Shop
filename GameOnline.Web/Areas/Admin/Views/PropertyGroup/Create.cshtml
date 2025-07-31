@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model GameOnline.Core.ViewModels.PropertyViewmodel.PropertyGroupViewmodel.CreatePropertyGroupsViewmodel
+@{
+    ViewData["title"] = "افزودن گروه ویژگی‌ها";
+    ViewData["selected"] = "property";
+}
+<div class="content-wrapper" style="min-height: 797px;">
+    <section class="content-header">
+        <div class="container-fluid">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">افزودن گروه جدید برای ویژگی‌ها</h3>
+                        </div>
+                        <form asp-controller="PropertyGroup" asp-action="Create" method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="GroupTitle">عنوان گروه ویژگی</label>
+                                    <input asp-for="GroupTitle" class="form-control" placeholder="مثلاً: مشخصات فنی یا امکانات">
+                                    <span asp-validation-for="GroupTitle" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-success">ذخیره گروه</button>
+                                <a class="btn btn-primary" href="/Admin/PropertyGroup">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

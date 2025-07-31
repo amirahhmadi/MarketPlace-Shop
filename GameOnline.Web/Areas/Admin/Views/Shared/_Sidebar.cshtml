@@ -1,0 +1,126 @@
+﻿@{
+    var selected = ViewData["selected"]?.ToString()?.ToLower();
+    // var isDeletedSection = selected == "deleted-posts" || selected == "deleted-categories";
+    var isDashboardActive = selected == "dashboard";
+    var isBrandsActive = selected == "brands";
+    var isGuaranteesActive = selected == "guarantees";
+    var isSlidersActive = selected == "sliders";
+    var isCategoriesActive = selected == "categories";
+    var isColorsActive = selected == "colors";
+    var isProductsActive = selected == "products";
+    var isPropertyGroupActive = selected == "propertygroup";
+    var isPropertyNameActive = selected == "propertyname";
+    var isPropertyValueActive = selected == "propertyvalue";
+    var isPropertyActive = isPropertyGroupActive || isPropertyNameActive || isPropertyValueActive;
+}
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+        <span class="brand-text font-weight-light">پنل مدیریت</span>
+    </a>
+
+    <div class="sidebar">
+        <div>
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="https://www.gravatar.com/avatar/52f0fbcbedee04a121cba8dad1174462?s=200&d=mm&r=g" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">حسام موسوی</a>
+                </div>
+            </div>
+
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview @(isDashboardActive ? "menu-open" : "")">
+                        <a href="#" class="nav-link @(isDashboardActive ? "active" : "")">
+                            <i class="nav-icon fa fa-dashboard"></i>
+                            <p>
+                                صفحات شروع
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/Admin" class="nav-link @(isDashboardActive ? "active" : "")">
+                                    <i class="fa fa-circle-o nav-icon"></i>
+                                    <p>داشبورد</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="fa fa-circle-o nav-icon"></i>
+                                    <p>صفحه غیر فعال</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Brand" class="nav-link @(isBrandsActive ? "active" : "")">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>لیست برند ها</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Guarantee" class="nav-link @(isGuaranteesActive ? "active" : "")">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>لیست گارانتی ها</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Slider" class="nav-link @(isSlidersActive ? "active" : "")">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>لیست اسلایدر ها</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Category" class="nav-link @(isCategoriesActive ? "active" : "")">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>لیست دسته بندی ها</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Color" class="nav-link @(isColorsActive ? "active" : "")">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>لیست رنگ ها</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Product" class="nav-link @(isProductsActive ? "active" : "")">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>لیست محصولات</p>
+                        </a>
+                    </li> 
+                    <li class="nav-item has-treeview @(isPropertyActive ? "menu-open" : "")">
+                        <a href="#" class="nav-link @(isPropertyActive ? "active" : "")">
+                            <i class="nav-icon fa fa-dashboard"></i>
+                            <p>
+                                ویژگی ها
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/Admin/PropertyGroup" class="nav-link @(isPropertyGroupActive ? "active" : "")">
+                                    <i class="fa fa-circle-o nav-icon"></i>
+                                    <p>گروه ها</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Admin/PropertyName" class="nav-link @(isPropertyNameActive ? "active" : "")">
+                                    <i class="fa fa-circle-o nav-icon"></i>
+                                    <p>عنوان ها</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Admin/PropertyValue" class="nav-link @(isPropertyValueActive ? "active" : "")">
+                                    <i class="fa fa-circle-o nav-icon"></i>
+                                    <p>مقدار ها</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</aside>

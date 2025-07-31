@@ -1,0 +1,57 @@
+﻿@using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyGroupViewmodel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model GameOnline.Core.ViewModels.PropertyViewmodel.PropertyNameViewmodel.EditPropertyNameViewmodel
+@{
+    ViewData["title"] = "ویرایش عنوان";
+    ViewData["selected"] = "propertyname";
+}
+<div class="content-wrapper" style="min-height: 797px;">
+    <section class="content-header">
+        <div class="container-fluid">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ویرایش عنوان</h3>
+                        </div>
+                        <form asp-controller="PropertyName" asp-action="Edit" method="post">
+                            <input type="hidden" asp-for="PropertyNameId" />
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="PropertyNameTitle">عنوان</label>
+                                        <input asp-for="PropertyNameTitle" class="form-control" placeholder="عنوان را وارد کنید" required />
+                                        <span asp-validation-for="PropertyNameTitle" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="GroupId">گروه</label>
+                                        <select class="form-control" asp-for="GroupId">
+                                            <option disabled>گروه را انتخاب کنید</option>
+                                            @foreach (var item in Model.GetPropertyGroups)
+                                            {
+                                                <option selected="@(item.PropertyGroupId == Model.GroupId ? "selected" : null)" value="@item.PropertyGroupId">
+                                                    @item.GroupTitle
+                                                </option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="GroupId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer justify-content-between">
+                                <button type="submit" class="btn btn-success px-4">ویرایش</button>
+                                <a class="btn btn-primary px-4" href="/Admin/PropertyName">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

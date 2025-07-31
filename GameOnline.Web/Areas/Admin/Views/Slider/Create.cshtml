@@ -1,0 +1,68 @@
+﻿@model GameOnline.Core.ViewModels.SliderViewModels.CreateSlidersViewModel
+@{
+    ViewData["title"] = "ایجاد اسلایدر";
+    ViewData["selected"] = "sliders";
+}
+<div class="content-wrapper" style="min-height: 797px;">
+    <section class="content-header">
+        <div class="container-fluid">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ایجاد اسلایدر</h3>
+                        </div>
+                        <form asp-controller="Slider" asp-action="Create" method="post" enctype="multipart/form-data">
+                            <div class="card-body">
+
+                                <div class="form-group">
+                                    <label asp-for="Link">لینک</label>
+                                    <input asp-for="Link" class="form-control" placeholder="لینک را وارد کنید">
+                                    <span asp-validation-for="Link"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Sort">ترتیب نمایش</label>
+                                    <input asp-for="Sort" class="form-control" placeholder="لینک را وارد کنید">
+                                    <span asp-validation-for="Sort"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">ارسال فایل</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input asp-for="ImageName" type="file" class="custom-file-input" id="exampleInputFile">
+                                            <label class="custom-file-label" for="exampleInputFile">انتخاب فایل</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="">Upload</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <input asp-for="IsActive" type="checkbox" class="form-check-input" id="exampleCheck1" />
+                                    <label class="form-check-label" for="exampleCheck1">فعال / غیر فعال</label>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-success">ارسال</button>
+                                <a class="btn btn-primary" href="/Admin/Slider">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+}

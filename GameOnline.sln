@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOnline.Common", "GameOnline.Common\GameOnline.Common.csproj", "{18FA3D86-F6D3-4364-BCD8-475705AFCDD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOnline.DataBase", "GameOnline.DataBase\GameOnline.DataBase.csproj", "{37249B44-254C-4E53-92B0-7304823A2A88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOnline.Core", "GameOnline.Core\GameOnline.Core.csproj", "{1496AE81-87B0-4CD3-AE3D-B04AA5096763}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOnline.Web", "GameOnline.Web\GameOnline.Web.csproj", "{268A34B8-541C-4A56-9B4B-93ED6A4B2C78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18FA3D86-F6D3-4364-BCD8-475705AFCDD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18FA3D86-F6D3-4364-BCD8-475705AFCDD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18FA3D86-F6D3-4364-BCD8-475705AFCDD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18FA3D86-F6D3-4364-BCD8-475705AFCDD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37249B44-254C-4E53-92B0-7304823A2A88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37249B44-254C-4E53-92B0-7304823A2A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37249B44-254C-4E53-92B0-7304823A2A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37249B44-254C-4E53-92B0-7304823A2A88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1496AE81-87B0-4CD3-AE3D-B04AA5096763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1496AE81-87B0-4CD3-AE3D-B04AA5096763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1496AE81-87B0-4CD3-AE3D-B04AA5096763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1496AE81-87B0-4CD3-AE3D-B04AA5096763}.Release|Any CPU.Build.0 = Release|Any CPU
+		{268A34B8-541C-4A56-9B4B-93ED6A4B2C78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{268A34B8-541C-4A56-9B4B-93ED6A4B2C78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{268A34B8-541C-4A56-9B4B-93ED6A4B2C78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{268A34B8-541C-4A56-9B4B-93ED6A4B2C78}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5FDD1A73-60E3-48A4-A3D5-3CB372D77D7E}
+	EndGlobalSection
+EndGlobal

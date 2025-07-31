@@ -1,0 +1,82 @@
+﻿@using GameOnline.Core.ExtenstionMethods
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model GameOnline.Core.ViewModels.CategoryViewModels.EditCategoriesViewModels
+
+@{
+    ViewData["Title"] = "حذف دسته‌بندی";
+    ViewData["selected"] = "categories";
+}
+
+<div class="content-wrapper" style="min-height: 100vh;">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>حذف دسته‌بندی</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-danger">
+                        <div class="card-header">
+                            <h3 class="card-title">آیا از حذف این دسته‌بندی اطمینان دارید؟</h3>
+                        </div>
+
+                        <form asp-controller="Category" asp-action="Remove" method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="CategoryId" />
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="FaTitle">نام فارسی</label>
+                                    <input asp-for="FaTitle" class="form-control" readonly />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="EnTitle">نام انگلیسی</label>
+                                    <input asp-for="EnTitle" class="form-control" readonly />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Description">توضیحات</label>
+                                    <textarea asp-for="Description" class="form-control" readonly rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Icon">آیکون</label>
+                                    <input asp-for="Icon" class="form-control" readonly />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="d-block font-weight-bold">تصویر</label>
+                                    <img src="@($"{PathTools.PathCategoryImageClient}/{Model.OldImage}")"
+                                         alt="@Model.FaTitle"
+                                         class="img-thumbnail shadow"
+                                         style="max-height: 180px;" />
+                                </div>
+                            </div>
+
+                            <div class="card-footer justify-content-between">
+                                <a asp-controller="Category" asp-action="Index" class="btn btn-primary">بازگشت</a>
+                                <button type="submit" class="btn btn-danger">حذف دسته‌بندی</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+}

@@ -1,0 +1,30 @@
+﻿@using GameOnline.Common.Core
+@model OperationResult<string>?
+
+@if (Model != null)
+{
+    if (Model.Code == OperationCode.Success)
+    {
+        <div class="alert alert-success alert-dismissible col-md-6">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fa fa-check"></i> توجه!</h5>
+            @Html.Raw(Model.Message)
+        </div>
+    }
+    else if (Model.Code == OperationCode.Duplicate)
+    {
+        <div class="alert alert-warning alert-dismissible col-md-6">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fa fa-warning"></i> توجه!</h5>
+            @Html.Raw(Model.Message)
+        </div>
+    }
+    else if (Model.Code == OperationCode.Error)
+    {
+        <div class="alert alert-danger alert-dismissible col-md-6">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fa fa-ban"></i> توجه!</h5>
+            @Html.Raw(Model.Message)
+        </div>
+    }
+}
