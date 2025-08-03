@@ -1,7 +1,8 @@
-﻿namespace GameOnline.DataBase.Entities.Discounts;
+﻿namespace GameOnline.Core.ViewModels.DiscountViewModels;
 
-public class Discount : BaseEntity
+public class GetDiscountViewModels
 {
+    public int DiscountId { get; set; }
     public string Code { get; set; }
     public int? UserCount { get; set; }
     public bool IsActive { get; set; }

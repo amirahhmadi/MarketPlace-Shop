@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GameOnline.Web.Areas.Admin.Controllers
 {
-    public class DiscountController : Controller
+    public class DiscountController : BaseAdminController
     {
         private readonly IDiscountServicesAdmin _discountServicesAdmin;
         public DiscountController(IDiscountServicesAdmin discountServicesAdmin)
@@ -14,7 +14,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            return View(_discountServicesAdmin.GetDiscount());
         }
     }
 }
