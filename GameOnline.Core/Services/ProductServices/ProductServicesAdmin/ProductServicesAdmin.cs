@@ -77,6 +77,50 @@ public class ProductServicesAdmin : IProductServicesAdmin
         return OperationResult<int>.Success(editProduct.ProductId);
     }
 
+    public OperationResult<int> EditProductReview(AddOrUpdateProductReviewViewmodel reviewViewmodel)
+    {
+        var productReview = _context.ProductReviews.FirstOrDefault(x => x.ProductId == reviewViewmodel.ProductId);
+
+        if (productReview == null)
+        {
+            productReview = new ProductReview()
+            {
+                ProductId = reviewViewmodel.ProductId,
+                CreationDate = DateTime.Now,
+                Negative = reviewViewmodel.Negative,
+                Positive = reviewViewmodel.Positive,
+                Review = reviewViewmodel.Review
+            };
+            _context.ProductReviews.Add(productReview);
+        }
+        else
+        {
+            productReview.Review = reviewViewmodel.Review;
+            productReview.Positive = reviewViewmodel.Positive;
+            productReview.Negative = reviewViewmodel.Negative;
+            productReview.LastModified = DateTime.Now;
+
+            _context.ProductReviews.Update(productReview);
+        }
+
+        _context.SaveChanges();
+        return OperationResult<int>.Success(productReview.Id);
+    }
+
+    public AddOrUpdateProductReviewViewmodel? FindProductReviewById(int productId)
+    {
+        return _context.ProductReviews
+            .Where(x => x.ProductId == productId)
+            .Select(x => new AddOrUpdateProductReviewViewmodel()
+            {
+                Negative = x.Negative,
+                Positive = x.Positive,
+                ProductId = productId,
+                Review = x.Review,
+                ReviewId = x.Id
+            }).AsNoTracking().FirstOrDefault();
+    }
+
     public EditProductViewmodel? GetProductById(int productId)
     {
         return _context.Products

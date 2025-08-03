@@ -1,0 +1,54 @@
+﻿@model GameOnline.Core.ViewModels.ProductViewmodel.AddOrUpdateProductReviewViewmodel
+
+@{
+    ViewData["title"] = "توضیحات محصول";
+    ViewData["selected"] = "products";
+}
+
+<div class="content-wrapper py-4" style="min-height: 617.6px; background-color: #f4f6f9;">
+    <section class="content-header mb-4">
+        <div class="container-fluid text-center">
+            <h2 class="text-primary font-weight-bold">ثبت و بروزرسانی توضیحات محصول</h2>
+            <hr />
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card-body p-4">
+                        <form asp-controller="Product" asp-action="ProductReview" method="post">
+                            <input type="hidden" asp-for="ProductId" />
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                            <div class="form-group mb-4">
+                                <label asp-for="Positive" class="form-label font-weight-bold">نقاط قوت</label>
+                                <textarea asp-for="Positive" class="form-control rounded shadow-sm" rows="4" placeholder="مثلاً کیفیت ساخت بالا..."></textarea>
+                                <span asp-validation-for="Positive" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label asp-for="Negative" class="form-label font-weight-bold">نقاط ضعف</label>
+                                <textarea asp-for="Negative" class="form-control rounded shadow-sm" rows="4" placeholder="مثلاً قیمت بالا..."></textarea>
+                                <span asp-validation-for="Negative" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label asp-for="Review" class="form-label font-weight-bold">بررسی کلی محصول</label>
+                                <textarea asp-for="Review" class="form-control rounded shadow-sm" rows="5" placeholder="توضیح کاملی از تجربه استفاده یا مزایا و معایب کلی..."></textarea>
+                                <span asp-validation-for="Review" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="submit" class="btn btn-success px-4 shadow">ارسال</button>
+                                <a href="/Admin/Product/Index" class="btn btn-secondary px-4 shadow">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

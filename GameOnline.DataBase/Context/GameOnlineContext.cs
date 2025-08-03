@@ -2,6 +2,7 @@
 using GameOnline.DataBase.Entities.Brands;
 using GameOnline.DataBase.Entities.Categories;
 using GameOnline.DataBase.Entities.Colors;
+using GameOnline.DataBase.Entities.Discounts;
 using GameOnline.DataBase.Entities.Guarantees;
 using GameOnline.DataBase.Entities.Products;
 using GameOnline.DataBase.Entities.Properties;
@@ -31,6 +32,7 @@ public class GameOnlineContext : DbContext
     public DbSet<PropertyValue> PropertyValues { get; set; }
     public DbSet<PropertyProduct> PropertyProducts { get; set; }
     public DbSet<PropertyNameCategory> PropertyNameCategories { get; set; }
+    public DbSet<Discount> Discounts { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

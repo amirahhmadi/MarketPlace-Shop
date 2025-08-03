@@ -11,4 +11,6 @@ public interface IProductServicesAdmin
     EditProductViewmodel? GetProductById(int productId);
     OperationResult<int> EditProduct(EditProductViewmodel editProduct);
     OperationResult<int> RemoveProduct(RemoveProductViewModel removeProduct);
+    AddOrUpdateProductReviewViewmodel? FindProductReviewById(int productId);
+    OperationResult<int> EditProductReview(AddOrUpdateProductReviewViewmodel reviewViewmodel);
 }

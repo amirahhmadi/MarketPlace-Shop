@@ -8,6 +8,7 @@
     var isCategoriesActive = selected == "categories";
     var isColorsActive = selected == "colors";
     var isProductsActive = selected == "products";
+    var isDiscountsActive = selected == "discounts";
     var isPropertyGroupActive = selected == "propertygroup";
     var isPropertyNameActive = selected == "propertyname";
     var isPropertyValueActive = selected == "propertyvalue";
@@ -88,6 +89,12 @@
                         <a href="/Admin/Product" class="nav-link @(isProductsActive ? "active" : "")">
                             <i class="nav-icon fa fa-th"></i>
                             <p>لیست محصولات</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Discount" class="nav-link @(isDiscountsActive ? "active" : "")">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>لیست کدهای تخفیف</p>
                         </a>
                     </li> 
                     <li class="nav-item has-treeview @(isPropertyActive ? "menu-open" : "")">

@@ -94,5 +94,26 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             TempData[Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult ProductReview(int id)
+        {
+            var product = _productServicesAdmin.FindProductReviewById(id);
+            if (product == null)
+                product = product ?? new AddOrUpdateProductReviewViewmodel()
+                {
+                    ProductId = id
+                };
+
+            return View(product);
+        }
+
+        [HttpPost]
+        public IActionResult ProductReview(AddOrUpdateProductReviewViewmodel reviewViewmodel)
+        {
+            var result = _productServicesAdmin.EditProductReview(reviewViewmodel);
+            TempData[Result] = JsonConvert.SerializeObject(result);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
