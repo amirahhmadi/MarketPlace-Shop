@@ -11,5 +11,10 @@ namespace GameOnline.Core.Services.PropertyService.PropertyValueService
         OperationResult<int> EditPropertyValue(EditPropertyValueViewmodel editPropertyValue);
         EditPropertyValueViewmodel? GetPropertyValueById(int propertyValueId);
         OperationResult<int> RemovePropertyValue(int propertyValueId);
+
+
+        List<AddPropertyNameForProductViewmodel> GetPropertyNameForProductByCategoryId(int CategoryId);
+        List<PropertyOldValueForProductViewmodel> oldPropertyValueForProduct(int ProductId);
+        OperationResult<int> AddOrRemovePropertyForProduct(AddOrUpdatePropertyValueForProductViewmodel addOrUpdateProperty);
     }
 }

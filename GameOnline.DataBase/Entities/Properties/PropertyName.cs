@@ -6,6 +6,7 @@ public class PropertyName : BaseEntity
 {
     public string Title { get; set; }
     public int GroupId { get; set; }
+    public byte type { get; set; }
 
 
     [ForeignKey(nameof(GroupId))]

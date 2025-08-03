@@ -35,21 +35,44 @@ public class GameOnlineContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Global Query Filters (Soft Delete)
         modelBuilder.Entity<Brand>().HasQueryFilter(x => x.IsRemove == false);
         modelBuilder.Entity<Guarantee>().HasQueryFilter(x => x.IsRemove == false);
         modelBuilder.Entity<Slider>().HasQueryFilter(x => x.IsRemove == false);
         modelBuilder.Entity<Category>().HasQueryFilter(x => x.IsRemove == false);
         modelBuilder.Entity<SubCategory>().HasQueryFilter(x => x.IsRemove == false);
+        modelBuilder.Entity<Product>().HasQueryFilter(x => x.IsRemove == false);
 
+        // Optional relations to Product for avoiding EF Core warnings
+        modelBuilder.Entity<ProductGallery>()
+            .HasOne(pg => pg.Product)
+            .WithMany(p => p.ProductGalleries) // فرض بر اینکه این نام navigation هست
+            .HasForeignKey(pg => pg.ProductId)
+            .IsRequired(false);
 
-        var cascade = modelBuilder.Model.GetEntityTypes()
-            .SelectMany(x => x.GetForeignKeys())
-            .Where(x => !x.IsOwnership && x.DeleteBehavior == DeleteBehavior.Cascade);
+        modelBuilder.Entity<ProductReview>()
+            .HasOne(pr => pr.Product)
+            .WithMany(p => p.ProductReviews) // فرض بر اینکه این navigation هست
+            .HasForeignKey(pr => pr.ProductId)
+            .IsRequired(false);
 
-        foreach (var type in cascade)
-            type.DeleteBehavior = DeleteBehavior.Restrict;
+        modelBuilder.Entity<PropertyProduct>()
+            .HasOne(pp => pp.Product)
+            .WithMany(p => p.PropertyProducts) // فرض بر اینکه این navigation هست
+            .HasForeignKey(pp => pp.ProductId)
+            .IsRequired(false);
 
+        // تغییر همه DeleteBehaviorها از Cascade به Restrict
+        var cascadeFKs = modelBuilder.Model.GetEntityTypes()
+            .SelectMany(t => t.GetForeignKeys())
+            .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+
+        foreach (var fk in cascadeFKs)
+        {
+            fk.DeleteBehavior = DeleteBehavior.Restrict;
+        }
 
         base.OnModelCreating(modelBuilder);
     }
+
 }

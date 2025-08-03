@@ -6,11 +6,11 @@ namespace GameOnline.DataBase.Entities.Properties;
 public class PropertyProduct : BaseEntity
 {
     public int PropertyValueId { get; set; }
-    public int ProductId { get; set; }
+    public int? ProductId { get; set; }
 
     [ForeignKey(nameof(PropertyValueId))]
     public PropertyValue PropertyValue { get; set; }
 
     [ForeignKey(nameof(ProductId))]
-    public Product Product { get; set; }
+    public Product? Product { get; set; }
 }

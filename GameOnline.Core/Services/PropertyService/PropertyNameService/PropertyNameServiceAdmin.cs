@@ -26,7 +26,8 @@ public class PropertyNameServiceAdmin : IPropertyNameServiceAdmin
         {
             Title = createPropertyName.PropertyNameTitle,
             GroupId = createPropertyName.GroupId,
-            CreationDate = DateTime.Now
+            CreationDate = DateTime.Now,
+            type = createPropertyName.type
         };
         _context.PropertyNames.Add(propertyName);
         _context.SaveChanges();
@@ -63,7 +64,8 @@ public class PropertyNameServiceAdmin : IPropertyNameServiceAdmin
             {
                 GroupTitle = g.Title,
                 PropertyNameId = n.Id,
-                PropertyNameTitle = n.Title
+                PropertyNameTitle = n.Title,
+                type = n.type
             }).AsNoTracking().ToList();
     }
 

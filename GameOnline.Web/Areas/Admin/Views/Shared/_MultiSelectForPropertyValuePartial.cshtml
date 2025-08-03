@@ -1,0 +1,37 @@
+﻿<script>
+
+    $(".add-prop").click(function () {
+        var nameprop = $(this).data("porpname");
+        var porpvalue = $(this).data("propvaluename");
+        var nameid = $(this).data("nameid");
+        var selectlist = $(this).parents(".selectList");
+
+        if (selectlist.find($(".valueProperty")).val()) {
+            var value = selectlist.find($(".valueProperty")).children("option:selected").val();
+            var text = selectlist.find($(".valueProperty")).children("option:selected").text();
+
+            selectlist.find($(".propertySelected")).append("<div class='item-Parent'><button  type='button' class='btn-remove item-btn-remove'>×</button>" +
+                "<input type='hidden' value='" + value + "' name='" + porpvalue + "' /><input type='hidden' value='" + nameid + "' name='" + nameprop + "' /><span class='subtext'>" + text + "</span> </div>");
+
+            selectlist.find($(".valueProperty")).children("option:selected").remove();
+
+        } else {
+            alert("مقداری را وارد نمایید")
+        }
+
+    });
+
+    $('.propertySelected').delegate(".btn-remove", 'click', function () {
+        var selectlist = $(this).parents(".selectList");
+        var text = $(this).nextAll($(".subtext")).text();
+        var value = $(this).nextAll($("input [name=value]")).val();
+
+        selectlist.find($(".valueProperty")).append($('<option>', {
+            value: value,
+            text: text
+        }));
+
+        $(this).parent().remove();
+    });
+
+</script>

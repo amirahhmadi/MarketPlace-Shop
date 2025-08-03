@@ -81,5 +81,35 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             TempData["Result"] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult ProductProperty(int id)
+        {
+            AddOrUpdatePropertyValueForProductViewmodel addOrUpdate = new AddOrUpdatePropertyValueForProductViewmodel();
+            addOrUpdate.categoryid = _productServiceAdmin.GetProductById(id).CategoryId;
+            addOrUpdate.propertyNameForProduct = _propertyValueServiceAdmin.GetPropertyNameForProductByCategoryId(addOrUpdate.categoryid);
+            ViewBag.OldValue = _propertyValueServiceAdmin.oldPropertyValueForProduct(id);
+            addOrUpdate.ProductId = id;
+
+            return View(addOrUpdate);
+        }
+
+        [HttpPost]
+        public IActionResult ProductProperty(AddOrUpdatePropertyValueForProductViewmodel addOrUpdateProperty)
+        {
+
+            if (addOrUpdateProperty.nameid.Count() != addOrUpdateProperty.value.Count())
+            {
+                addOrUpdateProperty.categoryid = _productServiceAdmin.GetProductById(addOrUpdateProperty.ProductId).CategoryId;
+                addOrUpdateProperty.propertyNameForProduct = _propertyValueServiceAdmin.GetPropertyNameForProductByCategoryId(addOrUpdateProperty.categoryid);
+                ViewBag.OldValue = _propertyValueServiceAdmin.oldPropertyValueForProduct(addOrUpdateProperty.ProductId);
+
+                return View(addOrUpdateProperty);
+            }
+
+            var result = _propertyValueServiceAdmin.AddOrRemovePropertyForProduct(addOrUpdateProperty);
+            TempData["Result"] = JsonConvert.SerializeObject(result);
+            return Redirect("/Admin/Product");
+        }
     }
 }

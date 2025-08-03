@@ -1,0 +1,141 @@
+﻿@using GameOnline.Core.ExtenstionMethods
+@using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyValueViewmodel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model GameOnline.Core.ViewModels.PropertyViewmodel.PropertyValueViewmodel.AddOrUpdatePropertyValueForProductViewmodel
+@{
+    var OldValue = ViewBag.OldValue as List<PropertyOldValueForProductViewmodel>;
+    ViewData["title"] = "مدیریت ویژگی ها محصول";
+    ViewData["selected"] = "products";
+}
+
+<div class="content-wrapper" style="min-height: 617.6px;">
+    <section class="content-header">
+        <div class="container-fluid">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ایجاد دسته بندی</h3>
+                        </div>
+
+                        <form asp-controller="PropertyValue" asp-action="ProductProperty" method="post">
+                            <input type="hidden" asp-for="ProductId" />
+                            <input type="hidden" asp-for="categoryid" />
+                            <div class="card-body">
+
+                                @for (int i = 0; i < Model.propertyNameForProduct.Count(); i++)
+                                {
+                                    @switch (Model.propertyNameForProduct[i].type)
+                                    {
+                                        case PropertyType.single_choice:
+                                            <div class="form-group">
+                                                <input type="hidden" name="nameid" value="@Model.propertyNameForProduct[i].NameId" />
+                                                <label>@Model.propertyNameForProduct[i].PropertyNameTitle</label>
+                                                <select name="value" class="form-control">
+                                                    <option value="">@($"{Model.propertyNameForProduct[i].PropertyNameTitle} را انتخاب کنید ")</option>
+                                                    @foreach (var item in Model.propertyNameForProduct[i].Values)
+                                                    {
+                                                        <option selected="@(OldValue.Any(x=>x.ValueId == item.ValueId)?"selected":null)" value="@item.ValueId">@item.Value</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            break;
+
+                                        case PropertyType.multiple_choice:
+
+                                            <div class="form-group selectList">
+                                                <label>@Model.propertyNameForProduct[i].PropertyNameTitle</label>
+                                                <div class="row">
+
+                                                    <div class="col-lg-4">
+                                                        <button type="button" class="btn btn-success col-lg-6  add-prop"
+                                                                data-porpname="nameid"
+                                                                data-propvaluename="value"
+                                                                data-nameid="@Model.propertyNameForProduct[i].NameId">
+                                                            انتخاب
+                                                        </button>
+
+                                                    </div>
+                                                    <select class="form-control col-lg-8 valueProperty">
+                                                        @foreach (var item in Model.propertyNameForProduct[i].Values)
+                                                        {
+                                                            @if (OldValue.Any(x => x.ValueId == item.ValueId) == false)
+                                                            {
+                                                                <option value="@item.ValueId">@item.Value</option>
+                                                            }
+
+                                                        }
+                                                    </select>
+
+                                                </div>
+
+                                                <div class="propertySelected">
+                                                    @foreach (var item in OldValue.Where(x => x.NameId == Model.propertyNameForProduct[i].NameId))
+                                                    {
+                                                        <div class="item-Parent">
+                                                            <button type="button" class="btn-remove item-btn-remove">×</button>
+                                                            <input type="hidden" value="@item.ValueId" name="value" />
+                                                            <input type="hidden" value="@item.NameId" name="nameid" />
+                                                            <span class="subtext">@item.Value</span>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                            break;
+
+                                        case PropertyType.linear:
+                                            <div class="form-group">
+                                                <input type="hidden" name="nameid" value="@Model.propertyNameForProduct[i].NameId" />
+                                                <label>@Model.propertyNameForProduct[i].PropertyNameTitle</label>
+                                                <input class="form-control" name="value" value="@Html.Raw(
+                                                OldValue.Find(x=>x.NameId==Model.propertyNameForProduct[i].NameId)==null?"":
+                                                OldValue.Find(x=>x.NameId==Model.propertyNameForProduct[i].NameId).Value)" />
+                                            </div>
+                                            break;
+
+                                        case PropertyType.written:
+                                            <div class="form-group">
+                                                <input type="hidden" name="nameid" value="@Model.propertyNameForProduct[i].NameId" />
+                                                <label>@Model.propertyNameForProduct[i].PropertyNameTitle</label>
+                                                <textarea class="form-control" name="value">@Html.Raw(
+                                                OldValue.Find(x => x.NameId == Model.propertyNameForProduct[i].NameId) == null ? "" :
+                                                OldValue.Find(x => x.NameId == Model.propertyNameForProduct[i].NameId).Value)</textarea>
+                                            </div>
+                                            break;
+
+                                        default:
+                                            <div class="form-group">
+                                                <span>تعریف نشده</span>
+                                            </div>
+                                            break;
+                                    }
+
+                                }
+
+
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">ارسال</button>
+                                <a class="btn btn-warning" href="/Admin/Product/Index">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@section Scripts {
+    <partial name="_MultiSelectForPropertyValuePartial" />
+}

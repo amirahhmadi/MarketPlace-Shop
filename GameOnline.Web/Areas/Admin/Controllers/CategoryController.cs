@@ -40,7 +40,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
 
             var result = _categoryServiceAdmin.CreateCategory(createCategory);
 
-            if (result.IsSuccess)
+            if (result != null && result.IsSuccess && createCategory.AddOrEditParent != null)
             {
                 createCategory.AddOrEditParent.SubId = result.Data;
                 var resultParent = _categoryServiceAdmin.AddOrEditParentCategory(createCategory.AddOrEditParent);

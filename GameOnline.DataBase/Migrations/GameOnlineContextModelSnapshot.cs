@@ -217,7 +217,7 @@ namespace GameOnline.DataBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BrandId")
+                    b.Property<int?>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -283,7 +283,7 @@ namespace GameOnline.DataBase.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("RemoveDate")
@@ -314,21 +314,18 @@ namespace GameOnline.DataBase.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Negative")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Positive")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("RemoveDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Review")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -394,6 +391,9 @@ namespace GameOnline.DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte>("type")
+                        .HasColumnType("tinyint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
@@ -409,7 +409,7 @@ namespace GameOnline.DataBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreationDate")
@@ -453,7 +453,7 @@ namespace GameOnline.DataBase.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("PropertyValueId")
@@ -566,9 +566,7 @@ namespace GameOnline.DataBase.Migrations
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Brands.Brand", "Brand")
                         .WithMany("Products")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("BrandId");
 
                     b.HasOne("GameOnline.DataBase.Entities.Categories.Category", "Category")
                         .WithMany("Product")
@@ -585,9 +583,7 @@ namespace GameOnline.DataBase.Migrations
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Products.Product", "Product")
                         .WithMany("ProductGalleries")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
@@ -596,9 +592,7 @@ namespace GameOnline.DataBase.Migrations
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Products.Product", "Product")
                         .WithMany("ProductReviews")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
@@ -618,9 +612,7 @@ namespace GameOnline.DataBase.Migrations
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Categories.Category", "Category")
                         .WithMany("PropertyNameCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("GameOnline.DataBase.Entities.Properties.PropertyName", "PropertyName")
                         .WithMany("PropertyNameCategories")
@@ -637,9 +629,7 @@ namespace GameOnline.DataBase.Migrations
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Products.Product", "Product")
                         .WithMany("PropertyProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("GameOnline.DataBase.Entities.Properties.PropertyValue", "PropertyValue")
                         .WithMany("PropertyProducts")

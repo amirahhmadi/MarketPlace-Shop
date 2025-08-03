@@ -6,7 +6,7 @@ namespace GameOnline.DataBase.Entities.Properties;
 public class PropertyNameCategory : BaseEntity
 {
     public int PropertyNameId { get; set; }
-    public int CategoryId { get; set; }
+    public int? CategoryId { get; set; }
 
 
     [ForeignKey(nameof(PropertyNameId))]
@@ -14,5 +14,5 @@ public class PropertyNameCategory : BaseEntity
 
 
     [ForeignKey(nameof(CategoryId))] 
-    public Category Category { get; set; }
+    public Category? Category { get; set; }
 }

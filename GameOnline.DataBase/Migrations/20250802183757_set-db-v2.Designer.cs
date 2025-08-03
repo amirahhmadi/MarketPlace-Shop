@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOnline.DataBase.Migrations
 {
     [DbContext(typeof(GameOnlineContext))]
-    [Migration("20250726095138_upd-tbls-product")]
-    partial class updtblsproduct
+    [Migration("20250802183757_set-db-v2")]
+    partial class setdbv2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -220,7 +220,7 @@ namespace GameOnline.DataBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BrandId")
+                    b.Property<int?>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -276,8 +276,9 @@ namespace GameOnline.DataBase.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ImageName")
-                        .HasColumnType("int");
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsRemove")
                         .HasColumnType("bit");
@@ -285,7 +286,7 @@ namespace GameOnline.DataBase.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("RemoveDate")
@@ -316,21 +317,18 @@ namespace GameOnline.DataBase.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Negative")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Positive")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("RemoveDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Review")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -396,11 +394,49 @@ namespace GameOnline.DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte>("type")
+                        .HasColumnType("tinyint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
                     b.ToTable("PropertyNames");
+                });
+
+            modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyNameCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRemove")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PropertyNameId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("RemoveDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PropertyNameId");
+
+                    b.ToTable("PropertyNameCategories");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyProduct", b =>
@@ -420,7 +456,7 @@ namespace GameOnline.DataBase.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("PropertyValueId")
@@ -533,9 +569,7 @@ namespace GameOnline.DataBase.Migrations
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Brands.Brand", "Brand")
                         .WithMany("Products")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("BrandId");
 
                     b.HasOne("GameOnline.DataBase.Entities.Categories.Category", "Category")
                         .WithMany("Product")
@@ -552,9 +586,7 @@ namespace GameOnline.DataBase.Migrations
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Products.Product", "Product")
                         .WithMany("ProductGalleries")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
@@ -563,9 +595,7 @@ namespace GameOnline.DataBase.Migrations
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Products.Product", "Product")
                         .WithMany("ProductReviews")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
@@ -581,13 +611,28 @@ namespace GameOnline.DataBase.Migrations
                     b.Navigation("PropertyGroup");
                 });
 
+            modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyNameCategory", b =>
+                {
+                    b.HasOne("GameOnline.DataBase.Entities.Categories.Category", "Category")
+                        .WithMany("PropertyNameCategories")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("GameOnline.DataBase.Entities.Properties.PropertyName", "PropertyName")
+                        .WithMany("PropertyNameCategories")
+                        .HasForeignKey("PropertyNameId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("PropertyName");
+                });
+
             modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyProduct", b =>
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Products.Product", "Product")
                         .WithMany("PropertyProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("GameOnline.DataBase.Entities.Properties.PropertyValue", "PropertyValue")
                         .WithMany("PropertyProducts")
@@ -622,6 +667,8 @@ namespace GameOnline.DataBase.Migrations
 
                     b.Navigation("Product");
 
+                    b.Navigation("PropertyNameCategories");
+
                     b.Navigation("SSubCategory");
                 });
 
@@ -641,6 +688,8 @@ namespace GameOnline.DataBase.Migrations
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyName", b =>
                 {
+                    b.Navigation("PropertyNameCategories");
+
                     b.Navigation("PropertyValues");
                 });
 

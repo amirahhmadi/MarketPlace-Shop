@@ -5,5 +5,7 @@
         public string PropertyNameTitle { get; set; }
         public int GroupId { get; set; }
         public List<int> Categories { get; set; }
+        public byte type { get; set; }
+
     }
 }

@@ -4,7 +4,8 @@
     {
         public string Value { get; set; }
         public int PropertyNameId { get; set; }
-        
+        public byte type { get; set; }
+
 
     }
 }

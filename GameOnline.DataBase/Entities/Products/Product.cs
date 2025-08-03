@@ -11,7 +11,7 @@ public class Product : BaseEntity
     public string FaTitle { get; set; }
     public string EnTitle { get; set; }
     public int CategoryId { get; set; }
-    public int BrandId { get; set; }
+    public int? BrandId { get; set; }
     public bool IsActive { get; set; }
     public int Score { get; set; }
 
@@ -21,7 +21,7 @@ public class Product : BaseEntity
     public Category Category { get; set; }
 
     [ForeignKey(nameof(BrandId))]
-    public Brand Brand { get; set; }
+    public Brand? Brand { get; set; }
 
     public List<ProductGallery> ProductGalleries { get; set; }
     public List<ProductReview> ProductReviews { get; set; }

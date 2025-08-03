@@ -1,5 +1,7 @@
-﻿@using GameOnline.Core.ViewModels.CategoryViewModels
+﻿@using GameOnline.Core.ExtenstionMethods
+@using GameOnline.Core.ViewModels.CategoryViewModels
 @using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyGroupViewmodel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model GameOnline.Core.ViewModels.PropertyViewmodel.PropertyNameViewmodel.CreatePropertyNameViewmodel
 @{
     var Groups = ViewBag.Groups as List<GetPropertyGroupsViewmodel>;
@@ -43,6 +45,18 @@
                                         <span asp-validation-for="GroupId" class="text-danger"></span>
                                     </div>
                                     
+                                    <div class="form-group">
+                                        <label>نوع ورودی</label>
+                                        <select asp-for="type" class="form-control">
+
+                                            <option value="@PropertyType.single_choice">تک انتخابی</option>
+                                            <option value="@PropertyType.multiple_choice">چند انتخابی</option>
+                                            <option value="@PropertyType.linear">خطی</option>
+                                            <option value="@PropertyType.written">متن بلند</option>
+                                        </select>
+                                        <span asp-validation-for="GroupId"></span>
+                                    </div>
+
                                     <div class="form-group col-md-12">
                                         <label>انتخاب دسته والد</label>
                                         <div class="d-flex gap-2 mb-2">
