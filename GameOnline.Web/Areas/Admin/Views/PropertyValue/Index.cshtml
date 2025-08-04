@@ -1,12 +1,14 @@
 ﻿@model IEnumerable<GameOnline.Core.ViewModels.PropertyViewmodel.PropertyValueViewmodel.GetPropertyValuesViewmodel>
+
 @{
     ViewData["title"] = "مدیریت مقدار ویژگی ها";
     ViewData["selected"] = "propertyvalue";
 }
+
 <div class="content-wrapper" style="min-height: 617.6px;">
     <section class="content-header">
         <div class="container-fluid">
-            <a class="btn btn-success" href="/Admin/PropertyValue/Create">ایجاد مقدار ویژگی </a>
+            <a href="/Admin/PropertyValue/Create" class="btn btn-success">ایجاد مقدار ویژگی</a>
         </div>
     </section>
 
@@ -14,51 +16,44 @@
         <div class="row">
             <div class="col-12">
                 @await Component.InvokeAsync("ResultComponents")
+
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">لیست مقدار ویژگی ها</h3>
+                        <h3 class="card-title">لیست مقدار ویژگی‌ها</h3>
                     </div>
+
                     <div class="card-body">
-                        <div id="example1_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                        <div class="table-responsive">
+                            <table id="example1" class="table table-bordered table-striped dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>شناسه</th>
+                                        <th>مقدار ویژگی</th>
+                                        <th>عنوان ویژگی</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.PropertyValueId</td>
+                                            <td>@item.Value</td>
+                                            <td>@item.PropertyNameTitle</td>
+                                            <td>
+                                                <a href="/Admin/PropertyValue/Edit/@item.PropertyValueId" class="btn btn-warning btn-sm">ویرایش</a>
 
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table id="example1" class="table table-bordered table-striped dataTable" role="grid">
-                                        <thead>
-                                            <tr role="row">
-                                                <th>شناسه</th>
-                                                <th>مقدار ویژگی</th>
-                                                <th>عنوان ویژگی</th>
-                                                <th>عملیات</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            @foreach (var item in Model)
-                                            {
-                                                <tr role="row" class="odd">
-
-                                                    <td>@item.PropertyValueId</td>
-
-                                                    <td>@item.Value</td>
-                                                    <td>@item.PropertyNameTitle</td>
-                                                    <td>
-                                                        <a href="/Admin/PropertyValue/Edit/@item.PropertyValueId" class="btn btn-warning btn-sm">ویرایش</a>
-                                                        <form asp-controller="PropertyValue" asp-action="Remove" method="post" style="display:inline;">
-                                                            <input type="hidden" name="PropertyValueId" value="@item.PropertyValueId" />
-                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('آیا مطمئنید حذف شود؟');">
-                                                                <i class="fa fa-trash"></i> حذف
-                                                            </button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            }
-
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            </div>
+                                                @* <form asp-controller="PropertyValue" asp-action="Remove" method="post" style="display:inline;" onsubmit="return confirm('آیا مطمئنید حذف شود؟');">
+                                                    <input type="hidden" name="PropertyValueId" value="@item.PropertyValueId" />
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        <i class="fa fa-trash"></i> حذف
+                                                    </button>
+                                                </form> *@
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

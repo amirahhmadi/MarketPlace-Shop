@@ -1,0 +1,88 @@
+﻿@model GameOnline.Core.ViewModels.DiscountViewModels.CreateDiscountViewModels
+@{
+    ViewData["title"] = "ساخت کد تخفیف";
+    ViewData["selected"] = "discounts";
+}
+
+<div class="content-wrapper" style="min-height: 797px;">
+    <section class="content-header">
+        <div class="container-fluid">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ساخت کد تخفیف</h3>
+                        </div>
+                        <form asp-controller="Discount" asp-action="Create" method="post">
+                            <div class="card-body row">
+                                <div class="form-group col-md-6">
+                                    <label asp-for="Code">کد تخفیف</label>
+                                    <input asp-for="Code" class="form-control" placeholder="کد را وارد کنید" />
+                                    <span asp-validation-for="Code" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label asp-for="UserCount">تعداد دفعات قابل استفاده</label>
+                                    <input asp-for="UserCount" class="form-control" placeholder="تعداد دفعات استفاده را وارد کنید" />
+                                    <span asp-validation-for="UserCount" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label asp-for="StartDiscount">تاریخ شروع تخفیف:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input asp-for="StartDiscount" class="normal-example form-control pwt-datepicker-input-element startDate">
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label asp-for="EndDiscount">تاریخ پایان تخفیف:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <input asp-for="EndDiscount" class="normal-example form-control pwt-datepicker-input-element endDate">
+                                    </div>
+                                </div>
+
+                                <div class="form-check my-3">
+                                    <input asp-for="IsActive" type="checkbox" class="form-check-input" id="IsActiveCheck" />
+                                    <label class="form-check-label" for="IsActiveCheck">فعال / غیرفعال</label>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-success">ارسال</button>
+                                <a class="btn btn-primary" href="/Admin/Discount">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts
+{
+    <script>
+        $(function () {
+
+            $('.startDate,.endDate').persianDatepicker({
+                "format": "YYYY/MM/DD",
+                initialValue: false,
+                autoClose: true
+            });
+        })
+    </script>
+}

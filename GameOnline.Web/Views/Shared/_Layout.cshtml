@@ -1,13 +1,29 @@
 ﻿<!DOCTYPE html>
+<html lang="fa">
 
-<html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png"
+        href="https://www.digikala.com/mag/wp-content/themes/digikalamag/assets/common/img/ms-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="144x144"
+        href="https://www.digikala.com/mag/wp-content/themes/digikalamag/assets/common/img/ms-icon-144x144.png">
+    <title>فروشگاه اینترنتی دیجی استور</title>
+    <partial name="_CssPartial" />
 </head>
+
 <body>
-    <div>
-        @RenderBody()
-    </div>
-</body>
+
+
+<partial name="_HeaderPartial"/>
+    <div class="nav-categories-overlay"></div>
+    <div class="overlay-search-box"></div>
+
+   @RenderBody()
+
+    <partial name="_FooterPartial" />
+    <partial name="_JsPartial" />
+    @await RenderSectionAsync("Scripts", required: false)
+    </body>
+
 </html>

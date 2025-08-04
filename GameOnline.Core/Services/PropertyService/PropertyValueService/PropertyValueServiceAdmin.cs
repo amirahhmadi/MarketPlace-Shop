@@ -66,25 +66,42 @@ namespace GameOnline.Core.Services.PropertyService.PropertyValueService
             x.PropertyNameId == propertyNameId && x.Id != propertyValueId);
         }
 
-        public OperationResult<int> EditPropertyValue(EditPropertyValueViewmodel editPropertyValue)
+        public OperationResult<int> EditPropertyValue(EditPropertyValueViewmodel editModel)
         {
-            var result = _context.PropertyValues.FirstOrDefault(x => x.Id == editPropertyValue.PropertyValueId);
-            if (result == null)
+            var propertyValue = _context.PropertyValues
+                .FirstOrDefault(x => x.Id == editModel.PropertyValueId);
+
+            if (propertyValue == null)
                 return OperationResult<int>.NotFound();
 
+            var newValueNormalized = editModel.PropertyValueTitle.ToLower().Trim();
+            var currentValueNormalized = propertyValue.Value.ToLower().Trim();
 
-            if (IsPropertyValueExist(editPropertyValue.NameId, editPropertyValue.PropertyValueId, editPropertyValue.PropertyValueTitle))
+            // اگر نام و مقدار هیچ‌کدام تغییر نکرده‌اند، نیازی به ذخیره نیست
+            if (propertyValue.PropertyNameId == editModel.NameId &&
+                currentValueNormalized == newValueNormalized)
             {
-                return OperationResult<int>.Duplicate();
+                return OperationResult<int>.Success(propertyValue.Id);
             }
 
-            result.PropertyNameId = editPropertyValue.NameId;
-            result.Value = editPropertyValue.PropertyValueTitle;
-            result.LastModified = DateTime.Now;
+            // بررسی تکراری نبودن
+            bool isDuplicate = IsPropertyValueExist(
+                editModel.NameId,
+                editModel.PropertyValueId,
+                editModel.PropertyValueTitle
+            );
 
-            _context.PropertyValues.Update(result);
+            if (isDuplicate)
+                return OperationResult<int>.Duplicate();
+
+            // بروزرسانی
+            propertyValue.PropertyNameId = editModel.NameId;
+            propertyValue.Value = editModel.PropertyValueTitle;
+            propertyValue.LastModified = DateTime.Now;
+
             _context.SaveChanges();
-            return OperationResult<int>.Success(result.Id);
+
+            return OperationResult<int>.Success(propertyValue.Id);
         }
 
         public EditPropertyValueViewmodel? GetPropertyValueById(int propertyValueId)

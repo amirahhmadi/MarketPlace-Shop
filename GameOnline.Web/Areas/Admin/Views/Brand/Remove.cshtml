@@ -39,13 +39,17 @@
                                     <input readonly asp-for="Description" class="form-control" placeholder="توضیحات را وارد کنید">
                                     <span asp-validation-for="Description"></span>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label class="d-block mb-2 font-weight-bold">تصویر</label>
                                     <img src="@($"{PathTools.PathBrandImageClient}/{Model.OldImgName}")"
                                          alt="@Model.FaTitle"
                                          class="img-thumbnail shadow-sm"
                                          style="max-height: 150px;" />
+                                </div>
+
+                                <div class="alert alert-danger mt-4" role="alert">
+                                    <strong>توجه!</strong> با حذف این برند، محصولات مربوط به آن نیز حذف می‌شوند. آیا مطمئن هستید؟
                                 </div>
 
                             </div>
