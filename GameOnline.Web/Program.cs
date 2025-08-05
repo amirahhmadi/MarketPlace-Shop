@@ -13,6 +13,7 @@ using GameOnline.Core.Services.PropertyService.PropertyGroupService;
 using GameOnline.Core.Services.PropertyService.PropertyNameService;
 using GameOnline.Core.Services.PropertyService.PropertyValueService;
 using GameOnline.Core.Services.DiscountServices.DiscountServicesAdmin;
+using GameOnline.Core.Services.SliderServices.SliderServicesClient;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<GameOnlineContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+#region Admin
 
 builder.Services.AddTransient<IBrandServiceAdmin, BrandServiceAdmin>();
 builder.Services.AddTransient<IGuaranteeServiceAdmin, GuaranteeServiceAdmin>();
@@ -34,6 +36,14 @@ builder.Services.AddTransient<IPropertyGroupServiceAdmin, PropertyGroupServiceAd
 builder.Services.AddTransient<IPropertyNameServiceAdmin, PropertyNameServiceAdmin>();
 builder.Services.AddTransient<IPropertyValueServiceAdmin, PropertyValueServiceAdmin>();
 builder.Services.AddTransient<IDiscountServicesAdmin, DiscountServicesAdmin>();
+
+#endregion
+
+#region Client
+
+builder.Services.AddTransient<ISliderServiceClient, SliderServiceClient>();
+
+#endregion
 
 var app = builder.Build();
 

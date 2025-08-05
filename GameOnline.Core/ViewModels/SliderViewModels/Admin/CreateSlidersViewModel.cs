@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace GameOnline.Core.ViewModels.SliderViewModels;
+namespace GameOnline.Core.ViewModels.SliderViewModels.Admin;
 
 public class CreateSlidersViewModel
 {

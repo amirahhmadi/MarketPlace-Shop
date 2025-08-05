@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameOnline.Core.ViewModels.SliderViewModels
+namespace GameOnline.Core.ViewModels.SliderViewModels.Admin
 {
     public class GetSlidersViewModel
     {

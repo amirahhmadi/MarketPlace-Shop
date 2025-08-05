@@ -2,7 +2,7 @@
 using GameOnline.Common.Core;
 using GameOnline.Core.ExtenstionMethods;
 using GameOnline.Core.ViewModels.BrandViewModels;
-using GameOnline.Core.ViewModels.SliderViewModels;
+using GameOnline.Core.ViewModels.SliderViewModels.Admin;
 using GameOnline.DataBase.Context;
 using GameOnline.DataBase.Entities.Brands;
 using GameOnline.DataBase.Entities.Sliders;

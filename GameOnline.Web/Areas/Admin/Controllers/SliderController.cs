@@ -1,6 +1,6 @@
 ﻿using GameOnline.Core.Services.SliderServices.SliderServicesAdmin;
 using GameOnline.Core.ViewModels.BrandViewModels;
-using GameOnline.Core.ViewModels.SliderViewModels;
+using GameOnline.Core.ViewModels.SliderViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
