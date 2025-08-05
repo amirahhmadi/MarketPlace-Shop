@@ -1,12 +1,16 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using GameOnline.DataBase.Entities.Brands;
+using GameOnline.DataBase.Entities.Carts;
 using GameOnline.DataBase.Entities.Categories;
 using GameOnline.DataBase.Entities.Colors;
 using GameOnline.DataBase.Entities.Discounts;
 using GameOnline.DataBase.Entities.Guarantees;
+using GameOnline.DataBase.Entities.Payment;
 using GameOnline.DataBase.Entities.Products;
 using GameOnline.DataBase.Entities.Properties;
+using GameOnline.DataBase.Entities.Sellers;
 using GameOnline.DataBase.Entities.Sliders;
+using GameOnline.DataBase.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameOnline.DataBase.Context;
@@ -33,7 +37,13 @@ public class GameOnlineContext : DbContext
     public DbSet<PropertyProduct> PropertyProducts { get; set; }
     public DbSet<PropertyNameCategory> PropertyNameCategories { get; set; }
     public DbSet<Discount> Discounts { get; set; }
-
+    public DbSet<Seller> Sellers { get; set; }
+    public DbSet<ProductPrice> ProductPrices { get; set; }
+    public DbSet<Cart> Carts { get; set; }
+    public DbSet<CartDetail> CartDetails { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<PaymentDetail> PaymentDetails { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

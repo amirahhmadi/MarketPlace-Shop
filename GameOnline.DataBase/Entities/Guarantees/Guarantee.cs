@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameOnline.DataBase.Entities.Products;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,8 @@ namespace GameOnline.DataBase.Entities.Guarantees
     public class Guarantee : BaseEntity
     {
         public string GuaranteeName { get; set; }
+
+        public List<ProductPrice> ProductPrices { get; set; }
+
     }
 }

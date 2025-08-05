@@ -26,5 +26,6 @@ public class Product : BaseEntity
     public List<ProductGallery> ProductGalleries { get; set; }
     public List<ProductReview> ProductReviews { get; set; }
     public List<PropertyProduct> PropertyProducts { get; set; }
+    public List<ProductPrice> ProductPrices { get; set; }
 
 }
