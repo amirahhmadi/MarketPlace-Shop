@@ -2,7 +2,7 @@
 using GameOnline.Core.ViewModels.CategoryViewModels;
 using Microsoft.AspNetCore.Http;
 
-namespace GameOnline.Core.ViewModels.ProductViewmodel;
+namespace GameOnline.Core.ViewModels.ProductViewmodel.Admin;
 
 public class CreateProductViewmodel
 {

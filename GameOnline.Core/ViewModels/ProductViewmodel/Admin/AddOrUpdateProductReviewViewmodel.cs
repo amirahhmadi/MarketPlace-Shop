@@ -1,4 +1,4 @@
-﻿namespace GameOnline.Core.ViewModels.ProductViewmodel;
+﻿namespace GameOnline.Core.ViewModels.ProductViewmodel.Admin;
 
 public class AddOrUpdateProductReviewViewmodel
 {

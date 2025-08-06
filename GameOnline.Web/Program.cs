@@ -14,6 +14,7 @@ using GameOnline.Core.Services.PropertyService.PropertyNameService;
 using GameOnline.Core.Services.PropertyService.PropertyValueService;
 using GameOnline.Core.Services.DiscountServices.DiscountServicesAdmin;
 using GameOnline.Core.Services.SliderServices.SliderServicesClient;
+using GameOnline.Core.Services.ProductServices.ProductServicesClient;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -42,6 +43,7 @@ builder.Services.AddTransient<IDiscountServicesAdmin, DiscountServicesAdmin>();
 #region Client
 
 builder.Services.AddTransient<ISliderServiceClient, SliderServiceClient>();
+builder.Services.AddTransient<IProductServicesClient, ProductServicesClient>();
 
 #endregion
 

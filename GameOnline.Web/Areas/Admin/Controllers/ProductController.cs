@@ -3,7 +3,7 @@ using GameOnline.Core.Services.CategoryServices.CategoryServicesAdmin;
 using GameOnline.Core.Services.ProductServices.ProductServicesAdmin;
 using GameOnline.Core.ViewModels.BrandViewModels;
 using GameOnline.Core.ViewModels.ColorViewModels;
-using GameOnline.Core.ViewModels.ProductViewmodel;
+using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
 using GameOnline.Core.ViewModels.SliderViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

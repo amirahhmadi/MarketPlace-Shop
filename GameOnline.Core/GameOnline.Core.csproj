@@ -16,7 +16,6 @@
     <Folder Include="Services\GuaranteeServices\GuaranteeServicesAdmin\" />
     <Folder Include="Services\GuaranteeServices\GuaranteeServicesClient\" />
     <Folder Include="Services\GuaranteeServices\" />
-    <Folder Include="Services\ProductServices\ProductServicesClient\" />
   </ItemGroup>
 
   <ItemGroup>
