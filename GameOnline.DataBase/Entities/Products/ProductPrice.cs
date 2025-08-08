@@ -9,10 +9,10 @@ namespace GameOnline.DataBase.Entities.Products;
 public class ProductPrice :BaseEntity
 {
     public int Price { get; set; }
-    public int SpecialPrice { get; set; }
+    public int? SpecialPrice { get; set; }
     public int Count { get; set; }
     public int? MaxOrderCount { get; set; }
-    public int SubmitDate { get; set; }
+    public int? SubmitDate { get; set; }
 
     public int ProductId { get; set; }
     public int GuaranteeId { get; set; }

@@ -8,10 +8,5 @@ public class GetDetailProductClientViewmodel
     public string ImageName { get; set; }
     public string BrandName { get; set; }
     public string CategoryFa { get; set; }
-}
-
-public class DetailProductViewmodel
-{
-    public GetDetailProductClientViewmodel? DetailProduct { get; set; }
-
+    public int Score { get; set; }
 }

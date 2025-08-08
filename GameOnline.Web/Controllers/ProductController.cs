@@ -12,11 +12,24 @@ namespace GameOnline.Web.Controllers
             _productServicesClient = productServicesClient;
         }
 
-        [Route("/Detail/{productId}")]
+        [HttpGet("/Detail/{productId}")]
         public IActionResult Detail(int productId)
         {
-            DetailProductViewmodel detail = new DetailProductViewmodel();
-            detail.DetailProduct = _productServicesClient.GetDetailProductById(productId);
+            var detail = new DetailProductViewmodel
+            {
+                DetailProduct = _productServicesClient.GetDetailProductById(productId)
+            };
+
+            if (detail.DetailProduct == null)
+                return NotFound();
+
+            detail.GetProductGalleries = _productServicesClient.GetProductGalleries(productId);
+            detail.GetProductPriceClient = _productServicesClient.GetProductPriceClient(productId);
+            detail.GetSellerClient = _productServicesClient.GetSellerForProductById(detail.GetProductPriceClient.GroupBy(x=>x.SellerId).Select(x=>x.Key).ToList());
+
+            if (detail.GetProductPriceClient is null || detail.GetProductPriceClient.Count <= 0)
+                return View("~/Views/Product/NoProduct.cshtml");
+
             return View(detail);
         }
     }

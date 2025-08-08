@@ -1,0 +1,29 @@
+﻿<script>
+
+    $(function () {
+        $(".property-product").click(function () {
+            $.ajax({
+                type: "Post",
+                url: "/PropertyProduct/@Model.DetailProduct.ProductId/@Html.Raw(Model.DetailProduct.EnTitle)",
+                success: function (result) {
+                    $(".partial-propertyvalue").html(result);
+                }
+            });
+
+
+        });
+        
+        $(".FaqQuestion").click(function () {
+            $.ajax({
+                type: "Post",
+                url: "/Question/@Model.DetailProduct.ProductId/@Html.Raw(Model.DetailProduct.EnTitle)",
+                success: function (result) {
+                    $(".FAQContent").html(result);
+                }
+            });
+
+
+        });
+    });
+
+</script>

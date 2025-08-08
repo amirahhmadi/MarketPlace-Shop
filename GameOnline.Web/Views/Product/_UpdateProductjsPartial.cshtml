@@ -1,0 +1,109 @@
+﻿<script>
+    $(function () {
+
+        var sellers = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetSellerClient));
+        var ProductPrice = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetProductPriceClient));
+
+        $('.color-id').click(function () {
+            var colorId = $(this).data("id");
+            var getProductByColorId = GetProductByColorId(colorId);
+            var GetSeller = sellers.find(x => x.SellerId == getProductByColorId[0].SellerId);
+            UpdateProduct(getProductByColorId[0], GetSeller, getProductByColorId.length);
+            printSeller(getProductByColorId);
+        });
+
+        function GetProductByColorId(ColorId) {
+            var list = [];
+            $.each(ProductPrice, function (index, item) {
+                if (item.ColorId == ColorId)
+                    list.push(item);
+            });
+            return list;
+        }
+
+        function UpdateProduct(products, sellers, sellerCount) {
+
+            $(".guarantee-name").text(products.GuaranteeName);
+            $(".js-price").text(products.Price.toLocaleString('fa-IR'));
+            $(".length-seller").text(sellerCount);
+            $(".add-product-price-a").attr('href', `AddCart/${products.ProductPriceId}`);
+            if (products.SubmitDate == null) {
+                $(".js-inventory").text("موجود در انبار");
+            } else {
+                $(".js-inventory").text(" ارسال از " + products.SubmitDate + " روزکاری ");
+
+            }
+
+        }
+
+        function printSeller(products) {
+            $(".sellers").html("");
+            $(".show-less").hide();
+            $(".show-more").show();
+            var inventory_1 = "درانبار موجود است";
+
+            for (var i = 0; i < products.length; ++i) {
+
+                var GetSeller = sellers.find(x => x.SellerId == products[i].SellerId);
+
+                    var first_div = `
+    <div class="table-suppliers-row ${i == 0 ? "table-suppliers-row-active" : i >= 2 ? "in-filter in-list" : ''}">
+        <div class="table-suppliers-cell table-suppliers-cell-title">
+            <div class="seller-wrapper">
+                <p class="table-suppliers-seller-name">
+                    <span><a href="#">${GetSeller.SellerName}</a></span>
+                </p>
+                <div class="table-suppliers-rating">
+                                            <div class="product-seller-second-line">
+                                                عملکرد:
+                                                <span class="u-text-bold">۵</span>
+                                                از ۵
+                                                <span class="u-divider"></span>
+                                                <span class="u-text-bold">۸۳٪</span>
+                                                رضایت از کالا
+                                            </div>
+                                        </div>
+            </div>
+        </div>
+
+        <div class="table-suppliers-cell table-suppliers-cell-no-lead-time">
+            <div class="seller-wrapper">
+                <p>${products[i].SubmitDate == null ? inventory_1 : "ارسال از " + products[i].SubmitDate + " روز کاری دیگر "}</p>
+            </div>
+        </div>
+
+        <div class="table-suppliers-cell table-suppliers-cell-guarantee">
+            <div class="seller-wrapper">
+                <span>${products[i].GuaranteeName}</span>
+            </div>
+        </div>
+
+        <div class="table-suppliers-cell table-suppliers-cell-price">
+            <div class="seller-wrapper">
+                <div class="price-secondary">
+                    <div class="price-value">
+                        ${Number(products[i].Price).toLocaleString('fa-IR')}
+                        <span class="price-currency">تومان</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-suppliers-cell table-suppliers-cell-action">
+            <div class="seller-wrapper">
+                <a href="/AddCart/${products[i].ProductPriceId}" class="js-btn-add-to-cart">افزودن به سبد</a>
+            </div>
+        </div>
+    </div>`;
+
+    $(".sellers").append(first_div);
+
+
+            }
+        }
+
+        $('.color-id').first().click();
+
+    });
+
+</script>
