@@ -8,4 +8,5 @@ public interface IProductServicesClient
     List<GetProductGalleriesViewmodel> GetProductGalleries(int productId);
     List<GetProductPriceClientViewmodel> GetProductPriceClient(int productId);
     List<GetSellerClientViewmodel> GetSellerForProductById(List<int> sellerId);
+    GetReviewForClientViewmodel? GetReviewForClient(int productId);
 }

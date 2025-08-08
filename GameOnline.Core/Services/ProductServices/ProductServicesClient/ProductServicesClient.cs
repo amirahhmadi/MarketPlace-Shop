@@ -66,6 +66,18 @@ public class ProductServicesClient : IProductServicesClient
         return productPrice;
     }
 
+    public GetReviewForClientViewmodel? GetReviewForClient(int productId)
+    {
+        return _context.ProductReviews
+            .Where(x => x.ProductId == productId)
+            .Select(x => new GetReviewForClientViewmodel()
+            {
+                Negative = x.Negative,
+                Positive = x.Positive,
+                Review = x.Review
+            }).AsNoTracking().FirstOrDefault();
+    }
+
     public List<GetSellerClientViewmodel> GetSellerForProductById(List<int> sellerId)
     {
         return _context.Sellers

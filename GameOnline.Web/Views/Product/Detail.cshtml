@@ -86,7 +86,6 @@
                     </div>
                 </div>
 
-                <!-- Modal social-->
                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -144,8 +143,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Modal social-->
-                <!-- Modal alarm -->
+
                 <div class="modal fade" id="exampleModalCenteralarm" tabindex="-1" role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -285,7 +283,7 @@
                                         <div class="product-variants">
                                             <span>انتخاب رنگ: </span>
                                             <ul>
-                                                @foreach (var item in Model.GetProductPriceClient.GroupBy(x => x.ColorId))
+                                                @foreach (var item in Model.GetProductPrice.GroupBy(x => x.ColorId))
                                                 {
                                                     <li class="js-c-ui-variant">
 
@@ -385,14 +383,14 @@
                                         </div>
                                         <div class="product-seller-row product-seller-row-guarantee">
                                             <div class="js-guarantee-text">
-                                                <span class="guarantee-name"></span>
                                                 <i class="mdi mdi-check"></i>
+                                                <span class="guarantee-name"></span>
                                             </div>
                                         </div>
                                         <div class="product-seller-row js-seller-info-shipment">
                                             <div class="js-guarantee-text">
-                                                <span class="js-inventory"></span>
                                                 <i class="mdi mdi-content-save-outline"></i>
+                                                <span class="js-inventory"></span>
                                             </div>
                                             <div class="product-delivery-warehouse">آماده ارسال</div>
                                         </div>
@@ -552,59 +550,14 @@
                             <h2 class="params-headline">
                                 نقد و بررسی اجمالی
                                 <span>
-                                    Xiaomi Redmi Note 10 M2101K7AG Dual SIM 128GB And 6GB RAM Mobile
-                                    Phone
+                                    @Html.Raw(Model.DetailProduct.EnTitle)
                                 </span>
                             </h2>
                             <section class="content-expert-summary">
                                 <div class="is-masked">
                                     <div class="mask-text-product-summary">
                                         <p>
-                                            گوشی موبایل شیائومی مدل Redmi Note 10 دو سیم‌ کارت ظرفیت 128
-                                            گیگابایت با
-                                            بدون فناوری NFC وارد بازار شده است. شیائومی در مارس 2021، نسل
-                                            دهم از
-                                            گوشی‌های Redmi Note خود را معرفی کرده است. گوشی « Redmi Note 10»
-                                            مانند
-                                            نسخه‌های قبلی این سری از گوشی‌های شیائومی از صفحه‌نمایش بزرگ،
-                                            باتری
-                                            پرقدرت، طراحی جذاب دوربین و سخت‌افزار مناسب برای اجرای بازی
-                                            برخوردار
-                                            است. هم با پنل IPS LCD ساخته‌شده و فاصله لبه صفحه‌نمایش در آن
-                                            بسیار
-                                            کم
-                                            است. این نمایشگر 4.43 اینچی حدود 409 پیکسل را در هر اینچ جا داده
-                                            است.
-                                            بدنه و نمایشگر این محصول با استفاده از Corning Gorilla Glass 3
-                                            محافظت
-                                            می‌شود تا گوشی در برابر خط ‌وخش ایمن باشد. ویژگی دیگر Redmi Note
-                                            10
-                                            مجهز
-                                            شدن به حسگر اثرانگشت بر روی لبه کناری آن است. شیائومی برای این
-                                            محصول
-                                            خود
-                                            از یک دوربین چهارگانه استفاده کرده است. لنزعریض 48 مگاپیکسلی،
-                                            لنز
-                                            فوق
-                                            عریض 8 مگاپیکسلی، لنز ماکرو با کیفیت 2 مگاپیکسل و سنسور عمق 2
-                                            مگاپیکسلی
-                                            مجموعه دوربین Redmi Note 10 را تشکیل می‌دهد. یک دوربین سلفی 13
-                                            مگاپیکسلی
-                                            هم در مرکز بالای نمایشگر این گوشی به کار گرفته شده است. ازنظر
-                                            سخت‌افزاری
-                                            هم این گوشی از تراشه Snapdragon 678 بهره می‌برد که در آن
-                                            پردازنده‌ای
-                                            هشت‌هسته‌ا‌ی و قدرتمند قرارگرفته است. حافظه رم با ظرفیت 6
-                                            گیگابایت
-                                            هم در
-                                            کنار این مجموعه قرار گرفته است تا بتواند علاوه‌بر کارهای معمول،
-                                            از
-                                            قابلیت‌های جدید گوشی‌های امروزی پشتیبانی کند. باتری 5000
-                                            میلی‌آمپرساعتی
-                                            با پشتیبانی از شارژ سریع 33 وات، درگاه ارتباطی USB Type-C 2.0 و
-                                            جک
-                                            3.5
-                                            میلی‌متری صدا هم از دیگر مشخصات این محصول جدید است.
+                                            @Html.Raw(Model.GetReview.Review)
                                         </p>
                                     </div>
                                     <a href="#" class="mask-handler">
@@ -623,10 +576,10 @@
                                                 <div class="content-expert-evaluation-positive">
                                                     <span>نقاط قوت</span>
                                                     <ul>
-                                                        <li>صفحه نمایش AMOLED </li>
-                                                        <li>طراحی چشم‎نواز قاب پشتی</li>
-                                                        <li>عملکرد مطلوب تراشه Exynos 9610 </li>
-                                                        <li>طول عمر بالای باتری</li>
+                                                        @foreach (var item in Model.GetReview.Positive.Split("-", StringSplitOptions.RemoveEmptyEntries))
+                                                        {
+                                                            <li>@item</li>
+                                                        }
                                                     </ul>
                                                 </div>
                                             </div>
@@ -635,8 +588,10 @@
                                                 <div class="content-expert-evaluation-negative">
                                                     <span>نقاط ضعف</span>
                                                     <ul>
-                                                        <li>مقاوم نبودن در برابر آب</li>
-                                                        <li>عملکرد نه چندان خوب دوربین در شب</li>
+                                                        @foreach (var item in Model.GetReview.Negative.Split("-", StringSplitOptions.RemoveEmptyEntries))
+                                                        {
+                                                            <li>@item</li>
+                                                        }
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1634,40 +1589,32 @@
                     <div class="mini-buy-box-fixed">
                         <div class="mini-buy-box js-mini-buy-box">
                             <div class="mini-buy-box-product-info">
-                                <img src="/assets/images/product-slider-2/RedmiNote-10-M2101K7AG.jpg"
+                                <img src="@PathTools.PathProductImageClient/@Html.Raw(Model.DetailProduct.ImageName)"
                                      class="mini-buy-box-product-info-img" alt="img-slider">
                                 <div class="mini-buy-box-product-info-info">
                                     <div class="title">
-                                        گوشی موبایل شیائومی مدل Redmi Note 10 M2101K7AG دو سیم‌ کارت
-                                        ظرفیت 128 گیگابایت و رم 6 گیگابایت
-                                    </div>
-                                    <div class="colors ">
-                                        <label data-color-code="#FFFFFF" class="js-variant-color"
-                                               style="background-color: rgb(255, 255, 255);"></label>
-                                        <span class="js-color-title">سفید</span>
+                                        @Html.Raw(Model.DetailProduct.FaTitle)
                                     </div>
                                 </div>
                             </div>
                             <div class="mini-buy-box-row mini-buy-box-seller js-mini-not-digikala-seller">
                                 <i class="mdi mdi-storefront"></i>
-                                <label class="js-mini-seller-name">مارکت موبایل پایتخت</label>
+                                <label class="js-mini-seller-name">
+                                    @Html.Raw(Model.GetSeller.FirstOrDefault()?.SellerName)
+                                </label>
                             </div>
                             <div class="mini-buy-box-row mini-buy-box-warranty">
                                 <i class="mdi mdi-check"></i>
-                                گارانتی ۱۸ ماهه تجارت ژاو
+                                <span class="guarantee-name"></span>
                             </div>
                             <div class="mini-buy-box-row mini-buy-box-stock">
                                 <i class="mdi mdi-content-save-outline"></i>
-                                موجود در انبار دیجی‌کالا
-                            </div>
-                            <div class="mini-buy-box-row mini-buy-box-best-price js-data-best-price text-success">
-                                <i class="mdi mdi-information-outline"></i>
-                                بهترین قیمت ۳۰ روز گذشته
+                                <span class="js-inventory"></span>
                             </div>
                             <div class="product-seller-row product-seller-row-price mini-buy-box-price-row">
                                 <div class="product-mini-seller-price-real">
                                     <div class="product-mini-seller-price-pure js-price-value d-inline-block">
-                                        ۶,۲۱۵,۰۰۰
+                                        <span class="js-price"></span>
                                     </div>
                                     <span class="mini-buy-box-toman">تومان</span>
                                 </div>

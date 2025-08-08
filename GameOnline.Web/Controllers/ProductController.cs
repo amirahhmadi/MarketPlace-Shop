@@ -24,10 +24,11 @@ namespace GameOnline.Web.Controllers
                 return NotFound();
 
             detail.GetProductGalleries = _productServicesClient.GetProductGalleries(productId);
-            detail.GetProductPriceClient = _productServicesClient.GetProductPriceClient(productId);
-            detail.GetSellerClient = _productServicesClient.GetSellerForProductById(detail.GetProductPriceClient.GroupBy(x=>x.SellerId).Select(x=>x.Key).ToList());
+            detail.GetProductPrice = _productServicesClient.GetProductPriceClient(productId);
+            detail.GetSeller = _productServicesClient.GetSellerForProductById(detail.GetProductPrice.GroupBy(x=>x.SellerId).Select(x=>x.Key).ToList());
+            detail.GetReview = _productServicesClient.GetReviewForClient(productId);
 
-            if (detail.GetProductPriceClient is null || detail.GetProductPriceClient.Count <= 0)
+            if (detail.GetProductPrice is null || detail.GetProductPrice.Count <= 0)
                 return View("~/Views/Product/NoProduct.cshtml");
 
             return View(detail);

@@ -4,7 +4,7 @@ public class DetailProductViewmodel
 {
     public GetDetailProductClientViewmodel? DetailProduct { get; set; }
     public List<GetProductGalleriesViewmodel>? GetProductGalleries { get; set; }
-    public List<GetProductPriceClientViewmodel>? GetProductPriceClient { get; set; }
-    public List<GetSellerClientViewmodel> GetSellerClient { get; set; }
-
+    public List<GetProductPriceClientViewmodel>? GetProductPrice { get; set; }
+    public List<GetSellerClientViewmodel> GetSeller { get; set; }
+    public GetReviewForClientViewmodel? GetReview { get; set; }
 }

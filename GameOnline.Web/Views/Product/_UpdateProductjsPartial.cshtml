@@ -1,8 +1,8 @@
 ﻿<script>
     $(function () {
 
-        var sellers = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetSellerClient));
-        var ProductPrice = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetProductPriceClient));
+        var sellers = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetSeller));
+        var ProductPrice = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetProductPrice));
 
         $('.color-id').click(function () {
             var colorId = $(this).data("id");
