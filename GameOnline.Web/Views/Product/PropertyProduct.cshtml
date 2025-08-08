@@ -1,0 +1,85 @@
+﻿@using GameOnline.Core.ViewModels.ProductViewmodel.Client
+@model IEnumerable<GetPropertyForProductClientViewmodel>
+
+@{
+    Layout = null;
+}
+
+<h2 class="params-headline">
+    مشخصات فنی
+    <span>@Html.Raw(TempData["ProductEn"])</span>
+</h2>
+
+@foreach (var group in Model.GroupBy(x => x.GroupTitle))
+{
+    <section class="params-section">
+        <h3 class="params-title">@group.Key</h3>
+        <div class="params-grid">
+            @foreach (var item in group)
+            {
+                <div class="params-key">@item.NameTitle</div>
+                <div class="params-value">@item.Value</div>
+            }
+        </div>
+    </section>
+}
+
+<style>
+    .params-headline {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .params-headline span {
+        font-size: 14px;
+        font-weight: normal;
+        color: #777;
+        margin-right: 5px;
+    }
+
+    .params-section {
+        margin-bottom: 25px;
+    }
+
+    .params-title {
+        background: #f5f5f5;
+        padding: 10px 15px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px 8px 0 0;
+        color: #444;
+        border: 1px solid #ddd;
+        border-bottom: none;
+    }
+
+    .params-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        border: 1px solid #ddd;
+        border-radius: 0 0 8px 8px;
+        overflow: hidden;
+    }
+
+    .params-key {
+        background: #fafafa;
+        padding: 10px;
+        font-weight: 500;
+        color: #333;
+        border-bottom: 1px solid #eee;
+    }
+
+    .params-value {
+        padding: 10px;
+        color: #555;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+    }
+
+    /* حذف خط پایانی اضافی */
+    .params-grid > div:last-child,
+    .params-grid > div:nth-last-child(2) {
+        border-bottom: none;
+    }
+</style>

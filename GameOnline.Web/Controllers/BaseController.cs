@@ -4,5 +4,6 @@ namespace GameOnline.Web.Controllers
 {
     public class BaseController : Controller
     {
+        public const string ProductEn = "ProductEn";
     }
 }

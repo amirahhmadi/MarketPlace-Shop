@@ -9,4 +9,6 @@ public interface IProductServicesClient
     List<GetProductPriceClientViewmodel> GetProductPriceClient(int productId);
     List<GetSellerClientViewmodel> GetSellerForProductById(List<int> sellerId);
     GetReviewForClientViewmodel? GetReviewForClient(int productId);
+    List<GetPropertyForProductClientViewmodel> GetPropertyForProductClient(int productId);
+
 }

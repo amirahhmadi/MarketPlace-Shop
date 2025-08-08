@@ -66,6 +66,22 @@ public class ProductServicesClient : IProductServicesClient
         return productPrice;
     }
 
+    public List<GetPropertyForProductClientViewmodel> GetPropertyForProductClient(int productId)
+    {
+        return (from pProperty in _context.PropertyProducts
+            join v in _context.PropertyValues on pProperty.PropertyValueId equals v.Id
+            join n in _context.PropertyNames on v.PropertyNameId equals n.Id
+            join g in _context.PropertyGroups on n.GroupId equals g.Id
+
+            where (pProperty.ProductId == productId)
+            select new GetPropertyForProductClientViewmodel
+            {
+                GroupTitle = g.Title,
+                NameTitle = n.Title,
+                Value = v.Value,
+            }).AsNoTracking().ToList();
+    }
+
     public GetReviewForClientViewmodel? GetReviewForClient(int productId)
     {
         return _context.ProductReviews

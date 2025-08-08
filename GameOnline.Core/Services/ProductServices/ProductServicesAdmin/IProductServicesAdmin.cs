@@ -1,6 +1,7 @@
 ﻿using GameOnline.Common.Core;
 using GameOnline.Core.ViewModels.BrandViewModels;
 using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
+using GameOnline.Core.ViewModels.ProductViewmodel.Client;
 
 namespace GameOnline.Core.Services.ProductServices.ProductServicesAdmin;
 

@@ -1,5 +1,6 @@
 ﻿using GameOnline.Core.Services.ProductServices.ProductServicesClient;
 using GameOnline.Core.ViewModels.ProductViewmodel.Client;
+using GameOnline.DataBase.Entities.Products;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameOnline.Web.Controllers
@@ -32,6 +33,15 @@ namespace GameOnline.Web.Controllers
                 return View("~/Views/Product/NoProduct.cshtml");
 
             return View(detail);
+        }
+
+
+        [HttpPost]
+        [Route("PropertyProduct/{ProductId}/{Producten}")]
+        public IActionResult PropertyProduct(int ProductId, string Producten)
+        {
+            TempData[ProductEn] = Producten;
+            return View(_productServicesClient.GetPropertyForProductClient(ProductId));
         }
     }
 }

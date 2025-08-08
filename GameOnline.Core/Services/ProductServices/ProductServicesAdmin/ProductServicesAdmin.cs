@@ -3,6 +3,7 @@ using GameOnline.Common.Core;
 using GameOnline.Core.ExtenstionMethods;
 using GameOnline.Core.ViewModels.BrandViewModels;
 using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
+using GameOnline.Core.ViewModels.ProductViewmodel.Client;
 using GameOnline.DataBase.Context;
 using GameOnline.DataBase.Entities.Brands;
 using GameOnline.DataBase.Entities.Products;
