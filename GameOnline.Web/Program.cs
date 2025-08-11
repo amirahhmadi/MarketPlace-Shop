@@ -15,6 +15,8 @@ using GameOnline.Core.Services.PropertyService.PropertyValueService;
 using GameOnline.Core.Services.DiscountServices.DiscountServicesAdmin;
 using GameOnline.Core.Services.SliderServices.SliderServicesClient;
 using GameOnline.Core.Services.ProductServices.ProductServicesClient;
+using GameOnline.Core.Services.Comment_FAQ.Client;
+using GameOnline.Core.Services.UserService.UserServiceAdmin;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -37,6 +39,8 @@ builder.Services.AddTransient<IPropertyGroupServiceAdmin, PropertyGroupServiceAd
 builder.Services.AddTransient<IPropertyNameServiceAdmin, PropertyNameServiceAdmin>();
 builder.Services.AddTransient<IPropertyValueServiceAdmin, PropertyValueServiceAdmin>();
 builder.Services.AddTransient<IDiscountServicesAdmin, DiscountServicesAdmin>();
+builder.Services.AddTransient<IUserServiceAdmin, UserServiceAdmin>();
+builder.Services.AddTransient<IAccountServiceAdmin, AccountServiceAdmin>();
 
 #endregion
 
@@ -44,6 +48,7 @@ builder.Services.AddTransient<IDiscountServicesAdmin, DiscountServicesAdmin>();
 
 builder.Services.AddTransient<ISliderServiceClient, SliderServiceClient>();
 builder.Services.AddTransient<IProductServicesClient, ProductServicesClient>();
+builder.Services.AddTransient<IFaqServiceClient, FaqServiceClient>();
 
 #endregion
 

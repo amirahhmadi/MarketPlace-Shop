@@ -3,6 +3,7 @@ using GameOnline.DataBase.Entities.Brands;
 using GameOnline.DataBase.Entities.Carts;
 using GameOnline.DataBase.Entities.Categories;
 using GameOnline.DataBase.Entities.Colors;
+using GameOnline.DataBase.Entities.Comment_FAQ;
 using GameOnline.DataBase.Entities.Discounts;
 using GameOnline.DataBase.Entities.Guarantees;
 using GameOnline.DataBase.Entities.Payment;
@@ -43,6 +44,8 @@ public class GameOnlineContext : DbContext
     public DbSet<CartDetail> CartDetails { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<PaymentDetail> PaymentDetails { get; set; }
+    public DbSet<Question> Questions { get; set; }
+    public DbSet<FAQAnswer> FaqAnswers { get; set; }
     
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

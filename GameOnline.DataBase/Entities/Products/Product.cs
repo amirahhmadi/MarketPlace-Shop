@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using GameOnline.DataBase.Entities.Brands;
 using GameOnline.DataBase.Entities.Categories;
+using GameOnline.DataBase.Entities.Comment_FAQ;
 using GameOnline.DataBase.Entities.Properties;
 
 namespace GameOnline.DataBase.Entities.Products;
@@ -27,5 +28,6 @@ public class Product : BaseEntity
     public List<ProductReview> ProductReviews { get; set; }
     public List<PropertyProduct> PropertyProducts { get; set; }
     public List<ProductPrice> ProductPrices { get; set; }
+    public List<Question> Questions { get; set; }
 
 }

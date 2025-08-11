@@ -1,0 +1,138 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<GameOnline.Core.ViewModels.Comment_FAQ.FAQ.Client.GetQuestionsViewModel>
+@{
+    Layout = null;
+}
+<div class="faq-headline">
+    پرسش و پاسخ
+    <span>@Html.Raw(TempData["ProductEn"])</span>
+</div>
+<form action="#" class="form-faq">
+    <div class="form-faq-row">
+        <div class="form-faq-col">
+            <div class="ui-textarea">
+                <textarea name="Question-Text" title="متن سوال"
+                          class="ui-textarea-field"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-faq-row">
+        <div class="form-faq-col form-faq-col-submit">
+            <button class="btn-tertiary">ثبت پرسش</button>
+        </div>
+        <div class="account-agree">
+            <label class="checkbox-primary">
+                <span class="checkbox-check checkbox-custom-pic"></span>
+                <input type="checkbox" id="accountAutoLogin"
+                       class="remember-checkbox">
+            </label>
+            <label for="accountAutoLogin" class="remember-me">
+            </label>
+
+        </div>
+        <div class="form-auth-row form-auth-row-product">
+            <label class="ui-checkbox">
+                <input type="checkbox" value="1" name="login" checked=""
+                       id="remember">
+                <span class="ui-checkbox-check"></span>
+            </label>
+            <label for="remember" class="remember-me">
+                اولین پاسخی که به پرسش من داده شد، از طریق ایمیل به من اطلاع دهید.
+                <br>
+                با انتخاب دکمه “ثبت پرسش”، موافقت خود را با
+                <a href="#" class="link-border">قوانین انتشار محتوا</a>
+                در دیجی
+                کالا اعلام می کنم.
+            </label>
+        </div>
+    </div>
+</form>
+
+<div class="col-lg-9 col-md-9 col-xs-12 pull-left">
+    <ul class="faq-list">
+        @foreach (var question in Model.GroupBy(x => x.QuestionId))
+        {
+            var q = question.FirstOrDefault();
+            <li class="is-question">
+                <div class="section">
+                    <div class="faq-header-question">
+                        <span class="fa fa-question"></span>
+                        <p>
+                            پرسش
+                            <span>@q.UserName</span>
+                        </p>
+                    </div>
+                    <p>@Html.Raw(q.QuestionText)</p>
+                    <div class="footer">
+                        <em>@q.CreationDate</em>
+                        <a href="#" class="link-border js-add-answer-btn">به این پرسش پاسخ دهید</a>
+                    </div>
+                </div>
+
+                @* لیست جواب‌ها *@
+                @if (question.Any(x => x.getFAQAnswer != null && x.getFAQAnswer.AnswerId != null))
+                {
+                    <ul class="faq-answer-list">
+                        @foreach (var answer in question.Select(x => x.getFAQAnswer)
+                       .Where(a => a != null && a.AnswerId != null))
+                        {
+                            <li class="is-answer">
+                                <div class="section">
+                                    <div class="faq-header-question">
+                                        <span class="fa fa-check"></span>
+                                        <p>
+                                            پاسخ
+                                            <span>@answer.UserName</span>
+                                        </p>
+                                    </div>
+                                    <p>@Html.Raw(answer.AnswerText)</p>
+                                    <div class="footer">
+                                        <em>@answer.CreationDate</em>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ul>
+</div>
+
+
+<div class="col-lg-3 col-md-3 col-xs-12 pull-left sticky-sidebar">
+    <div class="question-side-bar">
+        <div class="question-filter">
+            <div class="form-auth-row d-inline-block mb-0">
+                <label class="ui-checkbox">
+                    <input type="checkbox" value="1" name="login" id="remember1">
+                    <span class="ui-checkbox-check"></span>
+                </label>
+                <label for="remember1" class="remember-me">
+                    پرسش‌های پاسخ داده شده
+                </label>
+            </div>
+            <div class="form-auth-row d-inline-block mt-0 mb-0">
+                <label class="ui-checkbox">
+                    <input type="checkbox" value="1" name="login" id="remember2">
+                    <span class="ui-checkbox-check"></span>
+                </label>
+                <label for="remember2" class="remember-me">
+                    پرسش‌های بی‌پاسخ
+                </label>
+            </div>
+            <div class="question-filter-bottom">
+                <div class="form-auth-row d-inline-block mt-0 mb-0">
+                    <label class="ui-checkbox">
+                        <input type="checkbox" value="1" name="login"
+                               id="remember3">
+                        <span class="ui-checkbox-check"></span>
+                    </label>
+                    <label for="remember3" class="remember-me">
+                        پرسش‌های من
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

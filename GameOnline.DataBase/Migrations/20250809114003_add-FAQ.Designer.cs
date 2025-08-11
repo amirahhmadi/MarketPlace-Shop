@@ -4,6 +4,7 @@ using GameOnline.DataBase.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOnline.DataBase.Migrations
 {
     [DbContext(typeof(GameOnlineContext))]
-    partial class GameOnlineContextModelSnapshot : ModelSnapshot
+    [Migration("20250809114003_add-FAQ")]
+    partial class addFAQ
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -918,12 +921,6 @@ namespace GameOnline.DataBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ActiveCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CartNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
@@ -931,7 +928,7 @@ namespace GameOnline.DataBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImgName")
+                    b.Property<string>("ImageName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsRemove")
@@ -943,21 +940,11 @@ namespace GameOnline.DataBase.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NationalCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("RemoveDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<byte>("type")
-                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 
