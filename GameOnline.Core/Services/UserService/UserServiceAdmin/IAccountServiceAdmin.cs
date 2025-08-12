@@ -7,4 +7,5 @@ public interface IAccountServiceAdmin
 {
     OperationResult<int> Register(RegisterViewmodel register);
     public OperationResult<int> ActiveAccount(int userId, string activeCode);
+    public Task<OperationResult<int>> LogIn(LoginViewmodel logIn);
 }

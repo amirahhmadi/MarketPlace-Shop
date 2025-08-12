@@ -42,7 +42,7 @@ public class GameOnlineContext : DbContext
     public DbSet<ProductPrice> ProductPrices { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartDetail> CartDetails { get; set; }
-    public DbSet<User> Users { get; set; }
+    public DbSet<User?> Users { get; set; }
     public DbSet<PaymentDetail> PaymentDetails { get; set; }
     public DbSet<Question> Questions { get; set; }
     public DbSet<FAQAnswer> FaqAnswers { get; set; }

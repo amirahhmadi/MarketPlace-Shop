@@ -1,4 +1,6 @@
 ﻿using GameOnline.DataBase.Context;
+using GameOnline.DataBase.Entities.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameOnline.Core.Services.UserService.UserServiceAdmin;
 
@@ -16,4 +18,11 @@ public class UserServiceAdmin : IUserServiceAdmin
             .Any(x => x.Email == email && x.Id != userId);
     }
 
+    public User? FindUserByEmail(string email)
+    {
+        return _context.Users
+            .Where(x => x.Email == email)
+            .AsNoTracking()
+            .FirstOrDefault();
+    }
 }

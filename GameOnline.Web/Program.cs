@@ -53,10 +53,27 @@ builder.Services.AddTransient<IFaqServiceClient, FaqServiceClient>();
 
 #endregion
 
+const string CoockieName = "GameOnline-Login";
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = CoockieName;
+        options.DefaultChallengeScheme = CoockieName;
+        options.DefaultSignInScheme = CoockieName;
+    })
+    .AddCookie(CoockieName, options =>
+    {
+        options.LoginPath = "/Login";
+        options.LogoutPath = "/LogOut";
+        options.ExpireTimeSpan = TimeSpan.FromDays(31);
+    });
+
 var app = builder.Build();
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "area",
