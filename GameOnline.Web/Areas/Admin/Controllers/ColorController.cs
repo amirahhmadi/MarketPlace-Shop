@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.ColorServices.ColorServicesAdmin;
+﻿using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.ColorServices.ColorServicesAdmin;
 using GameOnline.Core.ViewModels.ColorViewModels;
 using GameOnline.Core.ViewModels.GuaranteeViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         {
             var result = _colorServicesAdmin.CreateColor(createColors);
 
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
 
             return RedirectToAction(nameof(Index));
         }
@@ -52,7 +53,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Edit(EditColorsViewModel editColors)
         {
             var result = _colorServicesAdmin.EditColor(editColors);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -79,7 +80,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Remove(RemoveColorsViewModel removeColors)
         {
             var result = _colorServicesAdmin.RemoveColor(removeColors);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
     }

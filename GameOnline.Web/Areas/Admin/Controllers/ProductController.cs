@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.BrandServices.BrandServicesAdmin;
+﻿using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.BrandServices.BrandServicesAdmin;
 using GameOnline.Core.Services.CategoryServices.CategoryServicesAdmin;
 using GameOnline.Core.Services.ProductServices.ProductServicesAdmin;
 using GameOnline.Core.ViewModels.BrandViewModels;
@@ -40,7 +41,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Create(CreateProductViewmodel createProduct)
         {
             var result = _productServicesAdmin.CreateProduct(createProduct);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -69,7 +70,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             }
 
             var result = _productServicesAdmin.EditProduct(editProduct);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -91,7 +92,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Remove(RemoveProductViewModel removeProduct)
         {
             var result = _productServicesAdmin.RemoveProduct(removeProduct);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -112,7 +113,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult ProductReview(AddOrUpdateProductReviewViewmodel reviewViewmodel)
         {
             var result = _productServicesAdmin.EditProductReview(reviewViewmodel);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
     }

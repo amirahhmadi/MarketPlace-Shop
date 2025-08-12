@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.ProductServices.ProductServicesAdmin;
+﻿using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.ProductServices.ProductServicesAdmin;
 using GameOnline.Core.Services.PropertyService.PropertyNameService;
 using GameOnline.Core.Services.PropertyService.PropertyValueService;
 using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyNameViewmodel;
@@ -43,7 +44,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Create(CreatePropertyValueViewmodel createPropertyValue)
         {
             var result = _propertyValueServiceAdmin.CreatePropertyValue(createPropertyValue);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
         #endregion
@@ -70,7 +71,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             }
 
             var result = _propertyValueServiceAdmin.EditPropertyValue(editPropertyValue);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 

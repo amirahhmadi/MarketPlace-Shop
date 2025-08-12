@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.SliderServices.SliderServicesAdmin;
+﻿using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.SliderServices.SliderServicesAdmin;
 using GameOnline.Core.ViewModels.BrandViewModels;
 using GameOnline.Core.ViewModels.SliderViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Create(CreateSlidersViewModel createSlider)
         {
             var result = _sliderServiceAdmin.CreateSlider(createSlider);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -50,7 +51,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Edit(EditSlidersViewModel editSlider)
         {
             var result = _sliderServiceAdmin.EditSlider(editSlider);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -69,7 +70,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Remove(RemoveSlidersViewModel removeSlider)
         {
             var result = _sliderServiceAdmin.RemoveSlider(removeSlider);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
     }

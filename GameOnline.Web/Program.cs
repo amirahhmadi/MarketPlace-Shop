@@ -28,6 +28,7 @@ builder.Services.AddDbContext<GameOnlineContext>(options =>
 
 #region Admin
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IBrandServiceAdmin, BrandServiceAdmin>();
 builder.Services.AddTransient<IGuaranteeServiceAdmin, GuaranteeServiceAdmin>();
 builder.Services.AddTransient<ISliderServiceAdmin, SliderServiceAdmin>();

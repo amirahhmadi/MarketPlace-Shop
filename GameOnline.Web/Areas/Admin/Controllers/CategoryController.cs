@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.CategoryServices.CategoryServicesAdmin;
+﻿using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.CategoryServices.CategoryServicesAdmin;
 using GameOnline.Core.ViewModels.CategoryViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -44,10 +45,10 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             {
                 createCategory.AddOrEditParent.SubId = result.Data;
                 var resultParent = _categoryServiceAdmin.AddOrEditParentCategory(createCategory.AddOrEditParent);
-                TempData[ResultParent] = JsonConvert.SerializeObject(resultParent);
+                TempData[TempDataName.ResultParent] = JsonConvert.SerializeObject(resultParent);
             }
 
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
 
         }
@@ -78,10 +79,10 @@ namespace GameOnline.Web.Areas.Admin.Controllers
                 editCategory.AddOrEditParent = editCategory.AddOrEditParent ?? new AddOrEditParentCategoryViewmodel();
                 editCategory.AddOrEditParent.SubId = result.Data;
                 var resultParent = _categoryServiceAdmin.AddOrEditParentCategory(editCategory.AddOrEditParent);
-                TempData[ResultParent] = JsonConvert.SerializeObject(resultParent);
+                TempData[TempDataName.ResultParent] = JsonConvert.SerializeObject(resultParent);
             }
 
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
         #endregion
@@ -102,7 +103,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Remove(RemoveCategoriesViewModels removeCategory)
         {
             var result = _categoryServiceAdmin.RemoveCategory(removeCategory);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
         #endregion

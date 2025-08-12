@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.PropertyService.PropertyGroupService;
+﻿using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.PropertyService.PropertyGroupService;
 using GameOnline.Core.ViewModels.GuaranteeViewModels;
 using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyGroupViewmodel;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Create(CreatePropertyGroupsViewmodel createPropertyGroup)
         {
             var result = _propertyGroupServiceAdmin.CreatePropertyGroup(createPropertyGroup);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -49,7 +50,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Edit(EditPropertyGroupsViewmodel editPropertyGroup)
         {
             var result = _propertyGroupServiceAdmin.EditPropertyGroup(editPropertyGroup);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 

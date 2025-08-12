@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.BrandServices.BrandServicesAdmin;
+﻿using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.BrandServices.BrandServicesAdmin;
 using GameOnline.Core.ViewModels.BrandViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -30,7 +31,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Create(CreateBrandsViewModel createBrand)
         {
             var result = _brandServiceAdmin.CreateBrand(createBrand);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -49,7 +50,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Edit(EditBrandsViewModel editBrand)
         {
             var result = _brandServiceAdmin.EditBrand(editBrand);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -68,7 +69,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Remove(RemoveBrandsViewModel removeBrand)
         {
             var result = _brandServiceAdmin.RemoveBrand(removeBrand);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.DiscountServices.DiscountServicesAdmin;
+﻿using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.DiscountServices.DiscountServicesAdmin;
 using GameOnline.Core.ViewModels.DiscountViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -29,7 +30,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Create(CreateDiscountViewModels discountViewModels)
         {
             var result = _discountServicesAdmin.CreateDiscount(discountViewModels);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
     }

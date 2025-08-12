@@ -8,21 +8,13 @@ namespace GameOnline.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly ISliderServiceClient _sliderServiceClient;
-        private readonly IAccountServiceAdmin _accountServiceAdmin;
 
-        public HomeController(ISliderServiceClient sliderServiceClient, IAccountServiceAdmin accountServiceAdmin)
+        public HomeController(ISliderServiceClient sliderServiceClient)
         {
             _sliderServiceClient = sliderServiceClient;
-            _accountServiceAdmin = accountServiceAdmin;
         }
         public IActionResult Index()
         {
-            RegisterViewmodel registerViewmodel = new RegisterViewmodel()
-            {
-                Email = "amirrezaahmadi869@gmail.com",
-                Password = "123"
-            };
-            _accountServiceAdmin.Register(registerViewmodel);
             return View();
         }
     }

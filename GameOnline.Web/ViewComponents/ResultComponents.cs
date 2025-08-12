@@ -1,4 +1,5 @@
 ﻿using GameOnline.Common.Core;
+using GameOnline.Core.ExtenstionMethods;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -10,14 +11,14 @@ namespace GameOnline.Web.ViewComponents
         {
             OperationResult<string> result = null;
 
-            if (TempData["Result"] != null)
+            if (TempData[TempDataName.Result] != null)
             {
-                result = JsonConvert.DeserializeObject<OperationResult<string>>(TempData["Result"].ToString());
+                result = JsonConvert.DeserializeObject<OperationResult<string>>(TempData[TempDataName.Result].ToString());
             } 
             
-            if (TempData["ResultParent"] != null)
+            if (TempData[TempDataName.ResultParent] != null)
             {
-                result = JsonConvert.DeserializeObject<OperationResult<string>>(TempData["ResultParent"].ToString());
+                result = JsonConvert.DeserializeObject<OperationResult<string>>(TempData[TempDataName.ResultParent].ToString());
             }
 
             return await Task.FromResult(View("Result", result));

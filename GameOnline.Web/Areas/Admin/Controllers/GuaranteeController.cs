@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.GuaranteeServices.GuaranteeServicesAdmin;
+﻿using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.GuaranteeServices.GuaranteeServicesAdmin;
 using GameOnline.Core.ViewModels.BrandViewModels;
 using GameOnline.Core.ViewModels.GuaranteeViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         {
             var result = _guaranteeServiceAdmin.CreateGuarantee(createGuarantee);
 
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
 
             return RedirectToAction(nameof(Index));
         }
@@ -51,7 +52,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Edit(EditGuaranteesViewModel editGuarantee)
         {
             var result = _guaranteeServiceAdmin.EditGuarantee(editGuarantee);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
 
@@ -70,7 +71,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Remove(RemoveGuaranteesViewModel removeGuarantees)
         {
             var result = _guaranteeServiceAdmin.RemoveGuarantee(removeGuarantees);
-            TempData[Result] = JsonConvert.SerializeObject(result);
+            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
     }
