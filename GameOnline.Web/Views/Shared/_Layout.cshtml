@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png"
-        href="#">
+          href="#">
     <link rel="apple-touch-icon" sizes="144x144"
-        href="#">
+          href="#">
     <title>فروشگاه اینترنتی دیجی استور</title>
     <partial name="_CssPartial" />
 </head>
@@ -15,15 +15,26 @@
 <body>
 
 
-<partial name="_HeaderPartial"/>
+    <partial name="_HeaderPartial" />
     <div class="nav-categories-overlay"></div>
     <div class="overlay-search-box"></div>
 
-   @RenderBody()
+    @RenderBody()
 
     <partial name="_FooterPartial" />
     <partial name="_JsPartial" />
     @await RenderSectionAsync("Scripts", required: false)
-    </body>
+</body>
 
 </html>
+@if (TempData["SwalType"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: '@TempData["SwalType"]',
+            title: @Html.Raw(Json.Serialize(TempData["SwalTitle"])),
+            text: @Html.Raw(Json.Serialize(TempData["SwalMessage"])),
+            confirmButtonText: 'باشه'
+        });
+    </script>
+}

@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace GameOnline.Web.Controllers
 {
-    // همه‌ی متدهای POST به‌صورت خودکار AntiForgery رو چک می‌کنن
     [AutoValidateAntiforgeryToken]
     public class AccountController : BaseController
     {
-        private const string CookieScheme = "GameOnline-Login"; // با Program.cs هماهنگ باشه
+        private const string CookieScheme = "GameOnline-Login";
         private readonly IAccountServiceAdmin _accountService;
 
         public AccountController(IAccountServiceAdmin accountService)
@@ -31,18 +30,28 @@ namespace GameOnline.Web.Controllers
         public IActionResult Register(RegisterViewmodel model)
         {
             if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
                 return View(model);
+            }
 
             var result = _accountService.Register(model);
-            TempData["Flash"] = JsonConvert.SerializeObject(result); // فقط پیام مختصر
-            return View(); // یا Redirect به صفحه اطلاع‌رسانی
+
+            if (result.IsSuccess)
+                SetSweetAlert("success", "ثبت‌نام موفق!", "ایمیل تایید برای شما ارسال شد.");
+            else
+                SetSweetAlert("error", "خطا!", result.Message ?? "ثبت‌نام با خطا مواجه شد.");
+
+            return View();
         }
 
         [HttpGet, AllowAnonymous, Route("ActiveAccount/{userId:int}/{activeCode}")]
         public IActionResult ActiveAccount(int userId, string activeCode)
         {
             var result = _accountService.ActiveAccount(userId, activeCode);
-            TempData["Flash"] = JsonConvert.SerializeObject(result);
+            SetSweetAlert(result.IsSuccess ? "success" : "error",
+                          result.IsSuccess ? "موفق!" : "خطا!",
+                          result.Message ?? "");
             return View();
         }
 
@@ -61,13 +70,15 @@ namespace GameOnline.Web.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["ReturnUrl"] = returnUrl;
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
                 return View(model);
             }
 
             var result = await _accountService.LogIn(model);
-            TempData["Flash"] = JsonConvert.SerializeObject(result);
+            SetSweetAlert(result.IsSuccess ? "success" : "error",
+                          result.IsSuccess ? "ورود موفق" : "خطا در ورود",
+                          result.Message ?? "");
 
-            // جلوگیری از Open Redirect
             if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
 
@@ -78,8 +89,10 @@ namespace GameOnline.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             var result = await _accountService.LogoutAsync();
-            TempData["Flash"] = JsonConvert.SerializeObject(result);
-            return RedirectToAction(nameof(Login));
+            SetSweetAlert(result.IsSuccess ? "success" : "error",
+                          result.IsSuccess ? "خروج موفق" : "خطا در خروج",
+                          result.Message ?? "");
+            return Redirect("/");
         }
 
         [HttpGet, AllowAnonymous, Route("Recovery")]
@@ -95,12 +108,14 @@ namespace GameOnline.Web.Controllers
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                ModelState.AddModelError(nameof(email), "ایمیل الزامی است.");
+                SetSweetAlert("error", "خطا", "ایمیل الزامی است.");
                 return View();
             }
 
             var result = _accountService.FindUserByEmailForForgotPassword(email);
-            TempData["Flash"] = JsonConvert.SerializeObject(result);
+            SetSweetAlert(result.IsSuccess ? "success" : "error",
+                          result.IsSuccess ? "ایمیل ارسال شد" : "خطا",
+                          result.Message ?? "");
             return RedirectToAction(nameof(Login));
         }
 
@@ -125,7 +140,9 @@ namespace GameOnline.Web.Controllers
                 return View(model);
 
             var result = _accountService.RecoveryPassword(model);
-            TempData["Flash"] = JsonConvert.SerializeObject(result);
+            SetSweetAlert(result.IsSuccess ? "success" : "error",
+                          result.IsSuccess ? "رمز عبور تغییر کرد" : "خطا",
+                          result.Message ?? "");
             return RedirectToAction(nameof(Login));
         }
     }

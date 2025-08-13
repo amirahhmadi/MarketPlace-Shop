@@ -3,9 +3,7 @@ using GameOnline.Core.Services.CategoryServices.CategoryServicesAdmin;
 using GameOnline.Core.Services.PropertyService.PropertyGroupService;
 using GameOnline.Core.Services.PropertyService.PropertyNameService;
 using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyNameViewmodel;
-using GameOnline.DataBase.Entities.Products;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace GameOnline.Web.Areas.Admin.Controllers
 {
@@ -15,18 +13,25 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         private readonly IPropertyGroupServiceAdmin _propertyGroupServiceAdmin;
         private readonly ICategoryServiceAdmin _categoryServiceAdmin;
 
-        public PropertyNameController(IPropertyNameServiceAdmin propertyNameServiceAdmin, IPropertyGroupServiceAdmin propertyGroupServiceAdmin, ICategoryServiceAdmin categoryServiceAdmin)
+        public PropertyNameController(IPropertyNameServiceAdmin propertyNameServiceAdmin,
+                                      IPropertyGroupServiceAdmin propertyGroupServiceAdmin,
+                                      ICategoryServiceAdmin categoryServiceAdmin)
         {
             _propertyNameServiceAdmin = propertyNameServiceAdmin;
             _propertyGroupServiceAdmin = propertyGroupServiceAdmin;
             _categoryServiceAdmin = categoryServiceAdmin;
         }
 
+        #region Index
+        [HttpGet]
         public IActionResult Index()
         {
-            return View(_propertyNameServiceAdmin.GetPropertyName());
+            var model = _propertyNameServiceAdmin.GetPropertyName();
+            return View(model);
         }
+        #endregion
 
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -38,21 +43,33 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(CreatePropertyNameViewmodel createPropertyName)
         {
-            var result = _propertyNameServiceAdmin.CreatePropertyName(createPropertyName);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
+                ViewBag.Groups = _propertyGroupServiceAdmin.GetPropertyGroups();
+                ViewBag.Category = _categoryServiceAdmin.GetCategory();
+                return View(createPropertyName);
+            }
+
+            _propertyNameServiceAdmin.CreatePropertyName(createPropertyName);
+            SetSweetAlert("success", "عملیات موفق", "ویژگی با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region Edit
         [HttpGet]
         public IActionResult Edit(int id)
         {
             var result = _propertyNameServiceAdmin.GetPropertyNameById(id);
-
             if (result == null)
-                return NotFound();
+            {
+                SetSweetAlert("error", "خطا", "ویژگی پیدا نشد.");
+                return RedirectToAction(nameof(Index));
+            }
 
             result.GetPropertyGroups = _propertyGroupServiceAdmin.GetPropertyGroups();
-            return View(result); 
+            return View(result);
         }
 
         [HttpPost]
@@ -60,21 +77,25 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
                 editPropertyName.GetPropertyGroups = _propertyGroupServiceAdmin.GetPropertyGroups();
                 return View(editPropertyName);
             }
 
-            var result = _propertyNameServiceAdmin.EditPropertyName(editPropertyName);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            _propertyNameServiceAdmin.EditPropertyName(editPropertyName);
+            SetSweetAlert("success", "عملیات موفق", "ویژگی با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region Remove
         [HttpPost]
         public IActionResult Remove(int propertyNameId)
         {
-            var result = _propertyNameServiceAdmin.RemovePropertyName(propertyNameId);
-            TempData["Result"] = JsonConvert.SerializeObject(result);
+            _propertyNameServiceAdmin.RemovePropertyName(propertyNameId);
+            SetSweetAlert("success", "عملیات موفق", "ویژگی با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
     }
 }

@@ -67,3 +67,15 @@
 </body>
 
 </html>
+
+@if (TempData["SwalType"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: '@TempData["SwalType"]',
+            title: @Html.Raw(Json.Serialize(TempData["SwalTitle"])),
+            text: @Html.Raw(Json.Serialize(TempData["SwalMessage"])),
+            confirmButtonText: 'باشه'
+        });
+    </script>
+}

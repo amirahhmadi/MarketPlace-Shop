@@ -1,26 +1,28 @@
-﻿using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.GuaranteeServices.GuaranteeServicesAdmin;
-using GameOnline.Core.ViewModels.BrandViewModels;
+﻿using GameOnline.Core.Services.GuaranteeServices.GuaranteeServicesAdmin;
 using GameOnline.Core.ViewModels.GuaranteeViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class GuaranteeController : BaseAdminController
     {
         private readonly IGuaranteeServiceAdmin _guaranteeServiceAdmin;
+
         public GuaranteeController(IGuaranteeServiceAdmin guaranteeServiceAdmin)
         {
             _guaranteeServiceAdmin = guaranteeServiceAdmin;
         }
 
+        #region Index
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_guaranteeServiceAdmin.GetGuarantees());
+            var model = _guaranteeServiceAdmin.GetGuarantees();
+            return View(model);
         }
+        #endregion
 
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -30,49 +32,66 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(CreateGuaranteesViewModel createGuarantee)
         {
-            var result = _guaranteeServiceAdmin.CreateGuarantee(createGuarantee);
+            if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
+                return View(createGuarantee);
+            }
 
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
-
+            _guaranteeServiceAdmin.CreateGuarantee(createGuarantee);
+            SetSweetAlert("success", "عملیات موفق", "گارانتی با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region Edit
         [HttpGet]
         public IActionResult Edit(int id)
         {
             var guarantee = _guaranteeServiceAdmin.GetGuaranteeById(id);
-
             if (guarantee == null)
-                return NotFound();
-
+            {
+                SetSweetAlert("error", "خطا", "گارانتی پیدا نشد.");
+                return RedirectToAction(nameof(Index));
+            }
             return View(guarantee);
         }
 
         [HttpPost]
         public IActionResult Edit(EditGuaranteesViewModel editGuarantee)
         {
-            var result = _guaranteeServiceAdmin.EditGuarantee(editGuarantee);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
+                return View(editGuarantee);
+            }
+
+            _guaranteeServiceAdmin.EditGuarantee(editGuarantee);
+            SetSweetAlert("success", "عملیات موفق", "گارانتی با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region Remove
         [HttpGet]
         public IActionResult Remove(int id)
         {
             var guarantee = _guaranteeServiceAdmin.GetGuaranteeById(id);
-
             if (guarantee == null)
-                return NotFound();
-
+            {
+                SetSweetAlert("error", "خطا", "گارانتی پیدا نشد.");
+                return RedirectToAction(nameof(Index));
+            }
             return View(guarantee);
         }
 
         [HttpPost]
         public IActionResult Remove(RemoveGuaranteesViewModel removeGuarantees)
         {
-            var result = _guaranteeServiceAdmin.RemoveGuarantee(removeGuarantees);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            _guaranteeServiceAdmin.RemoveGuarantee(removeGuarantees);
+            SetSweetAlert("success", "عملیات موفق", "گارانتی با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
     }
 }

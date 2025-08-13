@@ -31,7 +31,11 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Create(CreateBrandsViewModel createBrand)
         {
             var result = _brandServiceAdmin.CreateBrand(createBrand);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+
+            TempData["SwalType"] = result.IsSuccess ? "success" : "error";
+            TempData["SwalTitle"] = result.IsSuccess ? "عملیات موفق" : "خطا";
+            TempData["SwalMessage"] = result.Message ?? (result.IsSuccess ? "برند با موفقیت ایجاد شد" : "ایجاد برند ناموفق بود");
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -50,7 +54,11 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Edit(EditBrandsViewModel editBrand)
         {
             var result = _brandServiceAdmin.EditBrand(editBrand);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+
+            TempData["SwalType"] = result.IsSuccess ? "success" : "error";
+            TempData["SwalTitle"] = result.IsSuccess ? "عملیات موفق" : "خطا";
+            TempData["SwalMessage"] = result.Message ?? (result.IsSuccess ? "برند با موفقیت ویرایش شد" : "ویرایش برند ناموفق بود");
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -69,7 +77,11 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Remove(RemoveBrandsViewModel removeBrand)
         {
             var result = _brandServiceAdmin.RemoveBrand(removeBrand);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+
+            TempData["SwalType"] = result.IsSuccess ? "success" : "error";
+            TempData["SwalTitle"] = result.IsSuccess ? "عملیات موفق" : "خطا";
+            TempData["SwalMessage"] = result.Message ?? (result.IsSuccess ? "برند با موفقیت حذف شد" : "حذف برند ناموفق بود");
+
             return RedirectToAction(nameof(Index));
         }
     }

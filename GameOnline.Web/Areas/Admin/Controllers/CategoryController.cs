@@ -36,21 +36,21 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ParentList = _categoryServiceAdmin.GetCategoriesForParentList(0);
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
                 return View();
             }
 
             var result = _categoryServiceAdmin.CreateCategory(createCategory);
 
-            if (result != null && result.IsSuccess && createCategory.AddOrEditParent != null)
+            if (result != null && createCategory.AddOrEditParent != null)
             {
                 createCategory.AddOrEditParent.SubId = result.Data;
                 var resultParent = _categoryServiceAdmin.AddOrEditParentCategory(createCategory.AddOrEditParent);
                 TempData[TempDataName.ResultParent] = JsonConvert.SerializeObject(resultParent);
             }
 
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            SetSweetAlert("success", "عملیات موفق", "دسته‌بندی با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
-
         }
         #endregion
 
@@ -59,13 +59,11 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         public IActionResult Edit(int id)
         {
             var category = _categoryServiceAdmin.GetCategoryById(id);
-
             if (category == null)
                 return NotFound();
 
             ViewBag.Parents = _categoryServiceAdmin.GetParentCategoryForAddOrRemoveSub(id);
             ViewBag.ParentList = _categoryServiceAdmin.GetCategoriesForParentList(id);
-
             return View(category);
         }
 
@@ -74,15 +72,14 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         {
             var result = _categoryServiceAdmin.EditCategory(editCategory);
 
-            if (result.IsSuccess)
+            if (result != null && editCategory.AddOrEditParent != null)
             {
-                editCategory.AddOrEditParent = editCategory.AddOrEditParent ?? new AddOrEditParentCategoryViewmodel();
                 editCategory.AddOrEditParent.SubId = result.Data;
                 var resultParent = _categoryServiceAdmin.AddOrEditParentCategory(editCategory.AddOrEditParent);
                 TempData[TempDataName.ResultParent] = JsonConvert.SerializeObject(resultParent);
             }
 
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            SetSweetAlert("success", "عملیات موفق", "دسته‌بندی با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }
         #endregion
@@ -91,19 +88,18 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Remove(int id)
         {
-            var brand = _categoryServiceAdmin.GetCategoryById(id);
-
-            if (brand == null)
+            var category = _categoryServiceAdmin.GetCategoryById(id);
+            if (category == null)
                 return NotFound();
 
-            return View(brand);
+            return View(category);
         }
 
         [HttpPost]
         public IActionResult Remove(RemoveCategoriesViewModels removeCategory)
         {
             var result = _categoryServiceAdmin.RemoveCategory(removeCategory);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            SetSweetAlert("success", "عملیات موفق", "دسته‌بندی با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }
         #endregion

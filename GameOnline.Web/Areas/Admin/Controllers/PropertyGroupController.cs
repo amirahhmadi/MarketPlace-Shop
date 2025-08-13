@@ -1,9 +1,7 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
 using GameOnline.Core.Services.PropertyService.PropertyGroupService;
-using GameOnline.Core.ViewModels.GuaranteeViewModels;
 using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyGroupViewmodel;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace GameOnline.Web.Areas.Admin.Controllers
 {
@@ -15,12 +13,16 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             _propertyGroupServiceAdmin = propertyGroupServiceAdmin;
         }
 
+        #region Index
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_propertyGroupServiceAdmin.GetPropertyGroups());
+            var model = _propertyGroupServiceAdmin.GetPropertyGroups();
+            return View(model);
         }
+        #endregion
 
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -30,18 +32,28 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(CreatePropertyGroupsViewmodel createPropertyGroup)
         {
-            var result = _propertyGroupServiceAdmin.CreatePropertyGroup(createPropertyGroup);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
+                return View(createPropertyGroup);
+            }
+
+            _propertyGroupServiceAdmin.CreatePropertyGroup(createPropertyGroup);
+            SetSweetAlert("success", "عملیات موفق", "گروه ویژگی با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region Edit
         [HttpGet]
         public IActionResult Edit(int id)
         {
             var propertyGroup = _propertyGroupServiceAdmin.GetPropertyGroupById(id);
-
             if (propertyGroup == null)
-                return NotFound();
+            {
+                SetSweetAlert("error", "خطا", "گروه ویژگی پیدا نشد.");
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(propertyGroup);
         }
@@ -49,17 +61,26 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(EditPropertyGroupsViewmodel editPropertyGroup)
         {
-            var result = _propertyGroupServiceAdmin.EditPropertyGroup(editPropertyGroup);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
+                return View(editPropertyGroup);
+            }
+
+            _propertyGroupServiceAdmin.EditPropertyGroup(editPropertyGroup);
+            SetSweetAlert("success", "عملیات موفق", "گروه ویژگی با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region Remove
         [HttpPost]
         public IActionResult Remove(int propertyGroupId)
         {
-            var result = _propertyGroupServiceAdmin.RemovePropertyGroup(propertyGroupId);
-            TempData["Result"] = JsonConvert.SerializeObject(result);
+            _propertyGroupServiceAdmin.RemovePropertyGroup(propertyGroupId);
+            SetSweetAlert("success", "عملیات موفق", "گروه ویژگی با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
     }
 }

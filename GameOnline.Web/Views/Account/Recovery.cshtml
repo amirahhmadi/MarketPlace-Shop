@@ -16,27 +16,38 @@
 </head>
 
 <body>
-    <div id="main">
-        <div class="col-lg-4 col-md-6 col-xs-12 mx-auto">
-            <div class="account-box">
-                <a href="index.html" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
-                <span class="account-head-line">یاد آوری کلمه عبور</span>
-                <div class="content-account pb-5">
-                    <form asp-controller="Account" asp-action="Recovery" method="post">
-                        <label for="email-phone">شماره موبایل یا پست الکترونیک خود را وارد کنید</label>
-                        <input name="Email" type="text" id="email-phone" class="input-email-account" placeholder="">
-                        <div class="parent-btn">
-                            <button type="submit" class="dk-btn dk-btn-info">
-                                ورود به دیجی استور
-                                <i class="mdi mdi-lock sign-in"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+<div id="main">
+    <div class="col-lg-4 col-md-6 col-xs-12 mx-auto">
+        <div class="account-box">
+            <a href="index.html" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
+            <span class="account-head-line">یاد آوری کلمه عبور</span>
+            <div class="content-account pb-5">
+                <form asp-controller="Account" asp-action="Recovery" method="post">
+                    <label for="email-phone">شماره موبایل یا پست الکترونیک خود را وارد کنید</label>
+                    <input name="Email" type="text" id="email-phone" class="input-email-account" placeholder="">
+                    <div class="parent-btn">
+                        <button type="submit" class="dk-btn dk-btn-info">
+                            ورود به دیجی استور
+                            <i class="mdi mdi-lock sign-in"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <partial name="_jsPartial" />
+</div>
+<partial name="_jsPartial" />
 </body>
 
 </html>
+@if (TempData["SwalType"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: '@TempData["SwalType"]',
+            title: @Html.Raw(Json.Serialize(TempData["SwalTitle"])),
+            text: @Html.Raw(Json.Serialize(TempData["SwalMessage"])),
+            confirmButtonText: 'باشه'
+        });
+    </script>
+}

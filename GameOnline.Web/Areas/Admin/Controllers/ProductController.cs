@@ -2,10 +2,7 @@
 using GameOnline.Core.Services.BrandServices.BrandServicesAdmin;
 using GameOnline.Core.Services.CategoryServices.CategoryServicesAdmin;
 using GameOnline.Core.Services.ProductServices.ProductServicesAdmin;
-using GameOnline.Core.ViewModels.BrandViewModels;
-using GameOnline.Core.ViewModels.ColorViewModels;
 using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
-using GameOnline.Core.ViewModels.SliderViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -17,17 +14,26 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         private readonly IBrandServiceAdmin _brandServiceAdmin;
         private readonly ICategoryServiceAdmin _categoryServiceAdmin;
 
-        public ProductController(IProductServicesAdmin productServicesAdmin, IBrandServiceAdmin brandServiceAdmin, ICategoryServiceAdmin categoryServiceAdmin)
+        public ProductController(
+            IProductServicesAdmin productServicesAdmin,
+            IBrandServiceAdmin brandServiceAdmin,
+            ICategoryServiceAdmin categoryServiceAdmin)
         {
             _productServicesAdmin = productServicesAdmin;
             _brandServiceAdmin = brandServiceAdmin;
             _categoryServiceAdmin = categoryServiceAdmin;
         }
+
+        #region Index
+        [HttpGet]
         public IActionResult Index()
         {
-            return View(_productServicesAdmin.GetProducts());
+            var model = _productServicesAdmin.GetProducts();
+            return View(model);
         }
+        #endregion
 
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -40,18 +46,26 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(CreateProductViewmodel createProduct)
         {
+            if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
+            }
             var result = _productServicesAdmin.CreateProduct(createProduct);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            SetSweetAlert("success", "عملیات موفق", "محصول با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region Edit
         [HttpGet]
         public IActionResult Edit(int id)
         {
             var product = _productServicesAdmin.GetProductById(id);
-
             if (product == null)
-                return NotFound();
+            {
+                SetSweetAlert("error", "خطا", "محصول پیدا نشد.");
+                return RedirectToAction(nameof(Index));
+            }
 
             product.GetCategories = _categoryServiceAdmin.GetCategory();
             product.GetBrands = _brandServiceAdmin.GetBrands();
@@ -66,21 +80,26 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             {
                 editProduct.GetCategories = _categoryServiceAdmin.GetCategory();
                 editProduct.GetBrands = _brandServiceAdmin.GetBrands();
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
                 return View(editProduct);
             }
 
-            var result = _productServicesAdmin.EditProduct(editProduct);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            _productServicesAdmin.EditProduct(editProduct);
+            SetSweetAlert("success", "عملیات موفق", "محصول با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region Remove
         [HttpGet]
         public IActionResult Remove(int id)
         {
             var product = _productServicesAdmin.GetProductById(id);
-
             if (product == null)
-                return NotFound();
+            {
+                SetSweetAlert("error", "خطا", "محصول پیدا نشد.");
+                return RedirectToAction(nameof(Index));
+            }
 
             product.GetCategories = _categoryServiceAdmin.GetCategory();
             product.GetBrands = _brandServiceAdmin.GetBrands();
@@ -91,30 +110,28 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Remove(RemoveProductViewModel removeProduct)
         {
-            var result = _productServicesAdmin.RemoveProduct(removeProduct);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            _productServicesAdmin.RemoveProduct(removeProduct);
+            SetSweetAlert("success", "عملیات موفق", "محصول با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
+        #region ProductReview
         [HttpGet]
         public IActionResult ProductReview(int id)
         {
-            var product = _productServicesAdmin.FindProductReviewById(id);
-            if (product == null)
-                product = product ?? new AddOrUpdateProductReviewViewmodel()
-                {
-                    ProductId = id
-                };
-
-            return View(product);
+            var review = _productServicesAdmin.FindProductReviewById(id) ??
+                         new AddOrUpdateProductReviewViewmodel { ProductId = id };
+            return View(review);
         }
 
         [HttpPost]
         public IActionResult ProductReview(AddOrUpdateProductReviewViewmodel reviewViewmodel)
         {
-            var result = _productServicesAdmin.EditProductReview(reviewViewmodel);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            _productServicesAdmin.EditProductReview(reviewViewmodel);
+            SetSweetAlert("success", "عملیات موفق", "بررسی محصول با موفقیت ثبت شد.");
             return RedirectToAction(nameof(Index));
         }
+        #endregion
     }
 }

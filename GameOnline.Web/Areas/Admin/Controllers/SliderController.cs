@@ -1,9 +1,7 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
 using GameOnline.Core.Services.SliderServices.SliderServicesAdmin;
-using GameOnline.Core.ViewModels.BrandViewModels;
 using GameOnline.Core.ViewModels.SliderViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace GameOnline.Web.Areas.Admin.Controllers
 {
@@ -19,7 +17,8 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_sliderServiceAdmin.GetSliders());
+            var model = _sliderServiceAdmin.GetSliders();
+            return View(model);
         }
 
         [HttpGet]
@@ -31,8 +30,14 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(CreateSlidersViewModel createSlider)
         {
-            var result = _sliderServiceAdmin.CreateSlider(createSlider);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
+                return View(createSlider);
+            }
+
+            _sliderServiceAdmin.CreateSlider(createSlider);
+            SetSweetAlert("success", "عملیات موفق", "اسلایدر با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }
 
@@ -42,7 +47,10 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             var slider = _sliderServiceAdmin.GetSliderById(id);
 
             if (slider == null)
-                return NotFound();
+            {
+                SetSweetAlert("error", "خطا", "اسلایدر پیدا نشد.");
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(slider);
         }
@@ -50,8 +58,14 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(EditSlidersViewModel editSlider)
         {
-            var result = _sliderServiceAdmin.EditSlider(editSlider);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
+                return View(editSlider);
+            }
+
+            _sliderServiceAdmin.EditSlider(editSlider);
+            SetSweetAlert("success", "عملیات موفق", "اسلایدر با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }
 
@@ -61,7 +75,10 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             var slider = _sliderServiceAdmin.GetSliderById(id);
 
             if (slider == null)
-                return NotFound();
+            {
+                SetSweetAlert("error", "خطا", "اسلایدر پیدا نشد.");
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(slider);
         }
@@ -69,8 +86,8 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Remove(RemoveSlidersViewModel removeSlider)
         {
-            var result = _sliderServiceAdmin.RemoveSlider(removeSlider);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            _sliderServiceAdmin.RemoveSlider(removeSlider);
+            SetSweetAlert("success", "عملیات موفق", "اسلایدر با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }
     }

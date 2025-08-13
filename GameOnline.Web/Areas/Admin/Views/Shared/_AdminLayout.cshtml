@@ -27,3 +27,20 @@
 
 </body>
 </html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var type = '@TempData["SwalType"]';
+        var title = @Html.Raw(Json.Serialize(TempData["SwalTitle"]));
+        var message = @Html.Raw(Json.Serialize(TempData["SwalMessage"]));
+
+        if (type && title && message) {
+            Swal.fire({
+                icon: type,
+                title: title,
+                text: message,
+                confirmButtonText: 'باشه'
+            });
+        }
+    });
+</script>

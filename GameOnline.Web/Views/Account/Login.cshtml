@@ -17,41 +17,52 @@
 </head>
 
 <body>
-    <div id="main">
-        <div class="col-lg-4 col-md-6 col-xs-12 mx-auto">
-            <div class="account-box">
-                <a href="index.html" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
-                <span class="account-head-line">ورود به دیجی‌استور</span>
-                <div class="content-account">
-                    <form asp-controller="Account" asp-action="LogIn" method="post" id="login">
-                        <label for="email-phone">پست الکترونیک خود را وارد کنید</label>
-                        <input asp-for="Email" class="input-email-account">
-                        <a href="/Recovery" class="account-link-password">رمز خود را فراموش کرده ام</a>
-                        <label for="password">رمز عبور</label>
-                        <input asp-for="Password" class="input-password">
-                        <div class="parent-btn">
-                            <button type="submit" class="dk-btn dk-btn-info">
-                                ورود به دیجی استور
-                                <i class="fa fa-sign-in sign-in"></i>
-                            </button>
-                        </div>
-                        <div class="form-auth-row">
-                            <label for="remember" class="ui-checkbox">
-                                <input asp-for="IsPersistent">
-                                <span class="ui-checkbox-check"></span>
-                            </label>
-                            <label for="remember" class="remember-me">مرا به خاطر داشته باش</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="account-footer">
-                    <span>کاربر جدید هستید؟</span>
-                    <a href="/Register" class="btn-link-register">ثبت‌نام در دیجی‌استور</a>
-                </div>
+<div id="main">
+    <div class="col-lg-4 col-md-6 col-xs-12 mx-auto">
+        <div class="account-box">
+            <a href="index.html" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
+            <span class="account-head-line">ورود به دیجی‌استور</span>
+            <div class="content-account">
+                <form asp-controller="Account" asp-action="LogIn" method="post" id="login">
+                    <label for="email-phone">پست الکترونیک خود را وارد کنید</label>
+                    <input asp-for="Email" class="input-email-account">
+                    <a href="/Recovery" class="account-link-password">رمز خود را فراموش کرده ام</a>
+                    <label for="password">رمز عبور</label>
+                    <input asp-for="Password" class="input-password">
+                    <div class="parent-btn">
+                        <button type="submit" class="dk-btn dk-btn-info">
+                            ورود به دیجی استور
+                            <i class="fa fa-sign-in sign-in"></i>
+                        </button>
+                    </div>
+                    <div class="form-auth-row">
+                        <label for="remember" class="ui-checkbox">
+                            <input asp-for="IsPersistent">
+                            <span class="ui-checkbox-check"></span>
+                        </label>
+                        <label for="remember" class="remember-me">مرا به خاطر داشته باش</label>
+                    </div>
+                </form>
+            </div>
+            <div class="account-footer">
+                <span>کاربر جدید هستید؟</span>
+                <a href="/Register" class="btn-link-register">ثبت‌نام در دیجی‌استور</a>
             </div>
         </div>
     </div>
-    <partial name="_JsPartial" />
+</div>
+<partial name="_JsPartial" />
 </body>
 
 </html>
+@if (TempData["SwalType"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: '@TempData["SwalType"]',
+            title: @Html.Raw(Json.Serialize(TempData["SwalTitle"])),
+            text: @Html.Raw(Json.Serialize(TempData["SwalMessage"])),
+            confirmButtonText: 'باشه'
+        });
+    </script>
+}
