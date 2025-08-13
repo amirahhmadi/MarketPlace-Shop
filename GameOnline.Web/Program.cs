@@ -1,4 +1,4 @@
-using GameOnline.DataBase.Context;
+﻿using GameOnline.DataBase.Context;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Microsoft.EntityFrameworkCore;
@@ -53,19 +53,24 @@ builder.Services.AddTransient<IFaqServiceClient, FaqServiceClient>();
 
 #endregion
 
-const string CoockieName = "GameOnline-Login";
 
 builder.Services.AddAuthentication(options =>
     {
-        options.DefaultAuthenticateScheme = CoockieName;
-        options.DefaultChallengeScheme = CoockieName;
-        options.DefaultSignInScheme = CoockieName;
+        options.DefaultAuthenticateScheme = "GameOnline-Login";
+        options.DefaultSignInScheme = "GameOnline-Login";
+        options.DefaultChallengeScheme = "GameOnline-Login";
     })
-    .AddCookie(CoockieName, options =>
+    .AddCookie("GameOnline-Login", options =>
     {
         options.LoginPath = "/Login";
-        options.LogoutPath = "/LogOut";
-        options.ExpireTimeSpan = TimeSpan.FromDays(31);
+        options.LogoutPath = "/Logout";
+        options.AccessDeniedPath = "/AccessDenied";
+
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // روی HTTPS
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.SlidingExpiration = true;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
 
 var app = builder.Build();

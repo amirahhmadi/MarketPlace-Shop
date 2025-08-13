@@ -214,7 +214,7 @@
 
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <a href="login.html" class="login-link">
+                        <a href="#" class="login-link">
                             <div class="btn-login">
                                 <span class="mdi mdi-account"></span>
                                 <div class="dropdown-menu-login">
@@ -265,10 +265,12 @@
                                             <span class="header-profile-dropdown-action-link">جوایز دیجی‌کلاب</span>
                                         </div>
                                         <div class="header-profile-dropdown-action-container">
-                                            <span class="header-profile-dropdown-action-link">
-                                                خروج از حساب
-                                                کاربری
-                                            </span>
+                                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="header-profile-dropdown-action-link btn-link">
+                                                    خروج از حساب کاربری
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

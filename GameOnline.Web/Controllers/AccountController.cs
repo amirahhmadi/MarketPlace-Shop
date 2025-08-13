@@ -1,15 +1,17 @@
-﻿using GameOnline.Core.ExtenstionMethods;
+﻿using GameOnline.Core.ViewModels.UserViewmodel.Server.Account;
 using GameOnline.Core.Services.UserService.UserServiceAdmin;
-using GameOnline.Core.ViewModels.UserViewmodel.Server.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace GameOnline.Web.Controllers
 {
+    // همه‌ی متدهای POST به‌صورت خودکار AntiForgery رو چک می‌کنن
+    [AutoValidateAntiforgeryToken]
     public class AccountController : BaseController
     {
+        private const string CookieScheme = "GameOnline-Login"; // با Program.cs هماهنگ باشه
         private readonly IAccountServiceAdmin _accountService;
 
         public AccountController(IAccountServiceAdmin accountService)
@@ -17,54 +19,114 @@ namespace GameOnline.Web.Controllers
             _accountService = accountService;
         }
 
-
-        [HttpGet]
-        [Route("Register")]
+        [HttpGet, AllowAnonymous, Route("Register")]
         public IActionResult Register()
         {
-            if (User.Identity.IsAuthenticated)
-            {
+            if (User.Identity?.IsAuthenticated == true)
                 return Redirect("/");
-            }
             return View();
         }
 
-        [HttpPost]
-        [Route("Register")]
-        public IActionResult Register(RegisterViewmodel register)
+        [HttpPost, AllowAnonymous, Route("Register")]
+        public IActionResult Register(RegisterViewmodel model)
         {
-            var result = _accountService.Register(register);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
-            return View();
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = _accountService.Register(model);
+            TempData["Flash"] = JsonConvert.SerializeObject(result); // فقط پیام مختصر
+            return View(); // یا Redirect به صفحه اطلاع‌رسانی
         }
 
-        [HttpGet]
-        [Route("ActiveAccount/{userId}/{activeCode}")]
+        [HttpGet, AllowAnonymous, Route("ActiveAccount/{userId:int}/{activeCode}")]
         public IActionResult ActiveAccount(int userId, string activeCode)
         {
             var result = _accountService.ActiveAccount(userId, activeCode);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
-            return RedirectToAction(nameof(Login));
-        }
-
-        [HttpGet]
-        [Route("Login")]
-        public IActionResult Login()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                return Redirect("/");
-            }
+            TempData["Flash"] = JsonConvert.SerializeObject(result);
             return View();
         }
 
-        [HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> Login(LoginViewmodel login)
+        [HttpGet, AllowAnonymous, Route("Login")]
+        public IActionResult Login(string returnUrl = "/")
         {
-            var result = await _accountService.LogIn(login);
-            TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
+            if (User.Identity?.IsAuthenticated == true)
+                return Redirect("/");
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost, AllowAnonymous, Route("Login")]
+        public async Task<IActionResult> Login(LoginViewmodel model, string returnUrl = "/")
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                return View(model);
+            }
+
+            var result = await _accountService.LogIn(model);
+            TempData["Flash"] = JsonConvert.SerializeObject(result);
+
+            // جلوگیری از Open Redirect
+            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
             return Redirect("/");
+        }
+
+        [HttpPost, Authorize, Route("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var result = await _accountService.LogoutAsync();
+            TempData["Flash"] = JsonConvert.SerializeObject(result);
+            return RedirectToAction(nameof(Login));
+        }
+
+        [HttpGet, AllowAnonymous, Route("Recovery")]
+        public IActionResult Recovery()
+        {
+            if (User.Identity?.IsAuthenticated == true)
+                return Redirect("/");
+            return View();
+        }
+
+        [HttpPost, AllowAnonymous, Route("Recovery")]
+        public IActionResult Recovery(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                ModelState.AddModelError(nameof(email), "ایمیل الزامی است.");
+                return View();
+            }
+
+            var result = _accountService.FindUserByEmailForForgotPassword(email);
+            TempData["Flash"] = JsonConvert.SerializeObject(result);
+            return RedirectToAction(nameof(Login));
+        }
+
+        [HttpGet, AllowAnonymous, Route("ForgotPassword/{userId:int}/{activeCode}")]
+        public IActionResult ForgotPassword(int userId, string activeCode)
+        {
+            if (User.Identity?.IsAuthenticated == true)
+                return Redirect("/");
+
+            var vm = new ForgotPasswordViewmodel
+            {
+                UserId = userId,
+                ActiveCode = activeCode
+            };
+            return View(vm);
+        }
+
+        [HttpPost, AllowAnonymous, Route("ForgotPassword/{userId:int}/{activeCode}")]
+        public IActionResult ForgotPassword(ForgotPasswordViewmodel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = _accountService.RecoveryPassword(model);
+            TempData["Flash"] = JsonConvert.SerializeObject(result);
+            return RedirectToAction(nameof(Login));
         }
     }
 }

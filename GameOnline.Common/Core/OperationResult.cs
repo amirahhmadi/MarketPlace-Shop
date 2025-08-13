@@ -1,4 +1,6 @@
-﻿namespace GameOnline.Common.Core;
+﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace GameOnline.Common.Core;
 
 public class OperationResult<T>
 {
@@ -17,7 +19,7 @@ public class OperationResult<T>
             Data = data
         };
     }
-
+    
     public static OperationResult<T> Error(string message = OperationResultMessage.Error)
     {
         return new OperationResult<T>
@@ -57,6 +59,17 @@ public class OperationResult<T>
         {
             IsSuccess = false,
             Code = OperationCode.Unauthorized,
+            Message = message,
+            Data = default
+        };
+    }
+
+    public static OperationResult<int> Success(string message = OperationResultMessage.Success)
+    {
+        return new OperationResult<int>
+        {
+            IsSuccess = true,
+            Code = OperationCode.Success,
             Message = message,
             Data = default
         };
