@@ -1,0 +1,7 @@
+﻿.hidden-feature {
+    display: none;
+}
+
+    .hidden-feature.show {
+        display: list-item;
+    }

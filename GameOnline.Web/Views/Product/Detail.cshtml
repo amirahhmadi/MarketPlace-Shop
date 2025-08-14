@@ -2,7 +2,6 @@
 @model GameOnline.Core.ViewModels.ProductViewmodel.Client.DetailProductViewmodel
 @{
 }
-
 <main class="contentM">
     <div class="container">
         <div class="product-page">
@@ -304,53 +303,22 @@
                                                 <li class="title-product-features">
                                                     ویژگی‌های محصول
                                                 </li>
-                                                <li>
-                                                    <span>حافظه داخلی: </span>
-                                                    <span>128 گیگابایت</span>
-                                                </li>
-                                                <li>
-                                                    <span>شبکه های ارتباطی: </span>
-                                                    <span>2G،3G،4G</span>
-                                                </li>
-                                                <li>
-                                                    <span>حس‌گرها: </span>
-                                                    <span>
-                                                        قطب‌نما (Compass)،شتاب‌سنج (Accelerometer)،مجاورت
-                                                        (Proximity)،ژیروسکوپ (Gyro)،اثرانگشت زیر صفحه نمایش
-                                                        (FingerPrint|Under-Display)
-                                                    </span>
-                                                </li>
-                                                <li class="product-params-more">
-                                                    <span>مقدار RAM:</span>
-                                                    <span> 6 گیگابایت</span>
-                                                </li>
-                                                <li class="product-params-more">
-                                                    <span>رزولوشن عکس: </span>
-                                                    <span>48 مگاپیکسل</span>
-                                                </li>
-                                                <li class="product-params-more">
-                                                    <span>باتری قابل تعویض: </span>
-                                                    <span>خیر</span>
-                                                </li>
-                                                <li class="product-params-more">
-                                                    <span>بازه‌ی اندازه صفحه نمایش: </span>
-                                                    <span>6.43 اینچ و بزرگتر</span>
-                                                </li>
-                                                <li class="product-params-more">
-                                                    <span>ویژگی‌های خاص: </span>
-                                                    <span>
-                                                        مناسب عکاسی فبلت مجهز به حس‌گر اثرانگشت مناسب عکاسی
-                                                        سلفی
-                                                    </span>
-                                                </li>
-                                                <li class="product-params-more">
-                                                    <span>نسخه سیستم عامل: </span>
-                                                    <span>Android 11</span>
-                                                </li>
+
+                                                @* نمایش 3 ویژگی اول همیشه *@
+                                                @for (int i = 0; i < Model.GetProperty.Count; i++)
+                                                {
+                                                    var item = Model.GetProperty[i];
+                                                    var isHidden = i >= 3 ? "hidden-feature" : ""; // ویژگی‌های بعد از 3 تا مخفی می‌شوند
+                                                    <li class="@isHidden">
+                                                        <span>@item.NameTitle: </span>
+                                                        <span>@item.Value</span>
+                                                    </li>
+                                                }
+
                                                 <li class="product-params-more-handler">
-                                                    <a href="#" class="link-border">
+                                                    <a href="#" class="link-border" id="toggleFeatures">
                                                         <span class="show-more">موارد بیشتر</span>
-                                                        <span class="show-less">بستن</span>
+                                                        <span class="show-less" style="display:none;">بستن</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -1121,4 +1089,5 @@
 
     <partial name="_RequestAjaxPartial" />
     <partial name="_UpdateProductjsPartial" />
+    <partial name="_showMoreText" />
 }

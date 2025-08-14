@@ -28,9 +28,10 @@ namespace GameOnline.Web.Controllers
             detail.GetProductPrice = _productServicesClient.GetProductPriceClient(productId);
             detail.GetSeller = _productServicesClient.GetSellerForProductById(detail.GetProductPrice.GroupBy(x=>x.SellerId).Select(x=>x.Key).ToList());
             detail.GetReview = _productServicesClient.GetReviewForClient(productId);
+            detail.GetProperty = _productServicesClient.GetPropertyForProductClient(productId);
 
             if (detail.GetProductPrice is null || detail.GetProductPrice.Count <= 0)
-                return View("~/Views/Product/NoProduct.cshtml");
+                return View("~/Views/Product/NoProduct.cshtml", detail);
 
             return View(detail);
         }
