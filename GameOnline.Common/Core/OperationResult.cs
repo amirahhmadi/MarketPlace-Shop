@@ -19,7 +19,7 @@ public class OperationResult<T>
             Data = data
         };
     }
-    
+
     public static OperationResult<T> Error(string message = OperationResultMessage.Error)
     {
         return new OperationResult<T>

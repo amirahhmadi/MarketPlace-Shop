@@ -6,10 +6,13 @@ namespace GameOnline.DataBase.Entities.Carts;
 
 public class Cart : BaseEntity
 {
-    public string Province { get; set; }
-    public string City { get; set; }
-    public string FullAddress { get; set; }
+    public string? Province { get; set; }
+    public string? City { get; set; }
+    public string? FullAddress { get; set; }
     public int UserId { get; set; }
+    public int SumOrder { get; set; }
+    public int SumScore { get; set; }
+
     public byte OrderType { get; set; }
 
     [ForeignKey(nameof(UserId))]

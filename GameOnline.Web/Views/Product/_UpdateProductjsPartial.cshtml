@@ -1,109 +1,157 @@
-﻿<script>
+﻿<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script>
     $(function () {
 
         var sellers = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetSeller));
         var ProductPrice = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetProductPrice));
 
+        // وقتی رنگ انتخاب می‌شود
         $('.color-id').click(function () {
             var colorId = $(this).data("id");
-            var getProductByColorId = GetProductByColorId(colorId);
-            var GetSeller = sellers.find(x => x.SellerId == getProductByColorId[0].SellerId);
-            UpdateProduct(getProductByColorId[0], GetSeller, getProductByColorId.length);
-            printSeller(getProductByColorId);
+            var productsByColor = GetProductByColorId(colorId);
+
+            // مرتب‌سازی بر اساس قیمت و سپس کمترین SubmitDate
+            productsByColor.sort((a, b) => {
+                if(a.Price === b.Price){
+                    return (a.SubmitDate ?? 0) - (b.SubmitDate ?? 0);
+                }
+                return a.Price - b.Price;
+            });
+
+            var mainProduct = productsByColor[0];
+            var mainSeller = sellers.find(x => x.SellerId == mainProduct.SellerId);
+
+            UpdateProduct(mainProduct, mainSeller, productsByColor.length);
+            printSeller(productsByColor);
         });
 
+        // گرفتن محصولات بر اساس رنگ
         function GetProductByColorId(ColorId) {
-            var list = [];
-            $.each(ProductPrice, function (index, item) {
-                if (item.ColorId == ColorId)
-                    list.push(item);
-            });
-            return list;
+            return ProductPrice.filter(x => x.ColorId == ColorId);
         }
 
-        function UpdateProduct(products, sellers, sellerCount) {
+        // آپدیت بخش بالای محصول
+        function UpdateProduct(product, seller, sellerCount) {
+            $(".guarantee-name").text(product.GuaranteeName);
 
-            $(".guarantee-name").text(products.GuaranteeName);
-            $(".js-price").text(products.Price.toLocaleString('fa-IR'));
+            const relatedProducts = GetProductByColorId(product.ColorId);
+            const minPrice = Math.min(...relatedProducts.map(p => p.Price));
+            $(".js-price").text(minPrice.toLocaleString('fa-IR'));
+
             $(".length-seller").text(sellerCount);
-            $(".add-product-price-a").attr('href', `AddCart/${products.ProductPriceId}`);
-            if (products.SubmitDate == null) {
+
+            // به‌روز کردن دکمه افزودن به سبد
+            $(".add-product-price-a")
+                .attr('data-product-id', product.ProductPriceId)
+                .attr('href', 'javascript:void(0);');
+
+            if(product.SubmitDate == null){
                 $(".js-inventory").text("موجود در انبار");
             } else {
-                $(".js-inventory").text(" ارسال از " + products.SubmitDate + " روزکاری ");
-
+                $(".js-inventory").text("ارسال از " + product.SubmitDate + " روز کاری");
             }
-
         }
 
+        // چاپ لیست فروشنده‌ها
         function printSeller(products) {
             $(".sellers").html("");
             $(".show-less").hide();
             $(".show-more").show();
-            var inventory_1 = "درانبار موجود است";
+            var inventoryText = "در انبار موجود است";
 
-            for (var i = 0; i < products.length; ++i) {
+            // مرتب‌سازی محصولات بر اساس قیمت و SubmitDate
+            products.sort((a, b) => {
+                if(a.Price === b.Price){
+                    return (a.SubmitDate ?? 0) - (b.SubmitDate ?? 0);
+                }
+                return a.Price - b.Price;
+            });
 
-                var GetSeller = sellers.find(x => x.SellerId == products[i].SellerId);
+            products.forEach((product, index) => {
+                var seller = sellers.find(x => x.SellerId == product.SellerId);
 
-                    var first_div = `
-    <div class="table-suppliers-row ${i == 0 ? "table-suppliers-row-active" : i >= 2 ? "in-filter in-list" : ''}">
-        <div class="table-suppliers-cell table-suppliers-cell-title">
-            <div class="seller-wrapper">
-                <p class="table-suppliers-seller-name">
-                    <span><a href="#">${GetSeller.SellerName}</a></span>
-                </p>
-                <div class="table-suppliers-rating">
-                                            <div class="product-seller-second-line">
-                                                عملکرد:
-                                                <span class="u-text-bold">۵</span>
-                                                از ۵
-                                                <span class="u-divider"></span>
-                                                <span class="u-text-bold">۸۳٪</span>
-                                                رضایت از کالا
-                                            </div>
-                                        </div>
-            </div>
-        </div>
+                var rowClass = index == 0 ? "table-suppliers-row-active" : index >= 2 ? "in-filter in-list" : '';
+                var submitText = product.SubmitDate == null ? inventoryText : "ارسال از " + product.SubmitDate + " روز کاری دیگر";
 
-        <div class="table-suppliers-cell table-suppliers-cell-no-lead-time">
-            <div class="seller-wrapper">
-                <p>${products[i].SubmitDate == null ? inventory_1 : "ارسال از " + products[i].SubmitDate + " روز کاری دیگر "}</p>
-            </div>
-        </div>
-
-        <div class="table-suppliers-cell table-suppliers-cell-guarantee">
-            <div class="seller-wrapper">
-                <span>${products[i].GuaranteeName}</span>
-            </div>
-        </div>
-
-        <div class="table-suppliers-cell table-suppliers-cell-price">
-            <div class="seller-wrapper">
-                <div class="price-secondary">
-                    <div class="price-value">
-                        ${Number(products[i].Price).toLocaleString('fa-IR')}
-                        <span class="price-currency">تومان</span>
+                var html = `
+                <div class="table-suppliers-row ${rowClass}">
+                    <div class="table-suppliers-cell table-suppliers-cell-title">
+                        <div class="seller-wrapper">
+                            <p class="table-suppliers-seller-name">
+                                <span><a href="#">${seller.SellerName}</a></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="table-suppliers-cell table-suppliers-cell-no-lead-time">
+                        <div class="seller-wrapper">
+                            <p>${submitText}</p>
+                        </div>
+                    </div>
+                    <div class="table-suppliers-cell table-suppliers-cell-guarantee">
+                        <div class="seller-wrapper">
+                            <span>${product.GuaranteeName}</span>
+                        </div>
+                    </div>
+                    <div class="table-suppliers-cell table-suppliers-cell-price">
+                        <div class="seller-wrapper">
+                            <div class="price-value">
+                                ${Number(product.Price).toLocaleString('fa-IR')} <span class="price-currency">تومان</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-suppliers-cell table-suppliers-cell-action">
+                        <div class="seller-wrapper">
+                            <a href="javascript:void(0);" class="js-btn-add-to-cart" data-product-id="${product.ProductPriceId}">افزودن به سبد</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+                `;
 
-        <div class="table-suppliers-cell table-suppliers-cell-action">
-            <div class="seller-wrapper">
-                <a href="/AddCart/${products[i].ProductPriceId}" class="js-btn-add-to-cart">افزودن به سبد</a>
-            </div>
-        </div>
-    </div>`;
-
-    $(".sellers").append(first_div);
-
-
-            }
+                $(".sellers").append(html);
+            });
         }
 
-        $('.color-id').first().click();
+        // مدیریت دکمه "مشاهده بیشتر"
+        $(document).on("click", ".show-more", function(e){
+            e.preventDefault();
+            $(".sellers .in-filter").removeClass("in-filter");
+            $(".show-more").hide();
+            $(".show-less").show();
+        });
 
+        // مدیریت دکمه "کمتر"
+        $(document).on("click", ".show-less", function(e){
+            e.preventDefault();
+            $(".sellers .table-suppliers-row").each(function(index){
+                if(index >= 2){
+                    $(this).addClass("in-filter");
+                }
+            });
+            $(".show-less").hide();
+            $(".show-more").show();
+        });
+
+        // افزودن محصول به سبد
+            $(document).on("click", ".btn-add-to-cart, .add-product-price-a", function(e){
+        e.preventDefault();
+        var productId = $(this).data("product-id");
+        if(!productId) return;
+
+        $.ajax({
+            url: "/AddCart/" + productId,
+            type: "GET",
+            success: function(res){
+                console.log("محصول اضافه شد", res);
+                // رفرش صفحه بعد از اضافه شدن محصول
+                location.reload();
+            },
+            error: function(){
+                alert("خطا در افزودن به سبد خرید");
+            }
+        });
     });
 
+        // اجرای اولین رنگ پیش‌فرض
+        $('.color-id').first().click();
+    });
 </script>

@@ -317,8 +317,8 @@
 
                                                 <li class="product-params-more-handler">
                                                     <a href="#" class="link-border" id="toggleFeatures">
-                                                        <span class="show-more">موارد بیشتر</span>
-                                                        <span class="show-less" style="display:none;">بستن</span>
+                                                        <span class="show-moree">موارد بیشتر</span>
+                                                        <span class="show-lesss" style="display:none;">بستن</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -388,7 +388,9 @@
                                                     نفر در حال بازدید این کالا می‌باشند.
                                                 </div>
                                             </div>
-                                            <a class="btn-add-to-cart add-product-price-a">
+                                            <a href="javascript:void(0);"
+                                               class="btn-add-to-cart add-product-price-a"
+                                               data-product-id="@Model.GetProductPrice.FirstOrDefault()?.ProductPriceId">
                                                 <span class="btn-add-to-cart-txt">
                                                     افزودن
                                                     به سبد خرید
@@ -467,12 +469,9 @@
                         <!-- اینجا لیست فروشندگان اضافه می‌شود -->
                     </div>
                     <div class="table-suppliers-more">
-                        <a href="#" class="link-border">
-                            مشاهده
-                            <span class="show-more more-suppliers-count">
-                                ( فروشنــــده / گارانتی بیشتـــــر)
-                            </span>
-                            <span class="show-less">کمتر</span>
+                        <a href="#" class="link-border toggle-sellers">
+                            <span class="show-more more-suppliers-count">مشاهده ( فروشنده / گارانتی بیشتر )</span>
+                            <span class="show-less" style="display:none;">مشاهده کمتر</span>
                         </a>
                     </div>
                 </div>
@@ -1032,7 +1031,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
 
                         <div class="tab-pane fade FAQContent" id="question-and-answer" role="tabpanel"
                              aria-labelledby="question-and-answer-tab">
@@ -1074,8 +1073,13 @@
                                 </div>
                             </div>
                             <div class="mini-buy-box-btn-row">
-                                <a href="#" class="btn btn-danger product-add-to-cart-btn">
-                                    افزودن به سبد خرید
+                                <a href="javascript:void(0);"
+                                   class="btn-add-to-cart add-product-price-a"
+                                   data-product-id="@Model.GetProductPrice.FirstOrDefault()?.ProductPriceId">
+                                    <span class="btn btn-danger product-add-to-cart-btn btn-add-to-cart-txt">
+                                        افزودن
+                                        به سبد خرید
+                                    </span>
                                 </a>
                             </div>
                         </div>

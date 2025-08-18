@@ -2,8 +2,8 @@
     document.addEventListener("DOMContentLoaded", function() {
         const toggleLink = document.getElementById("toggleFeatures");
         const hiddenItems = document.querySelectorAll(".hidden-feature");
-        const showMoreText = toggleLink.querySelector(".show-more");
-        const showLessText = toggleLink.querySelector(".show-less");
+        const showMoreText = toggleLink.querySelector(".show-moree");
+        const showLessText = toggleLink.querySelector(".show-lesss");
 
         toggleLink.addEventListener("click", function(e) {
             e.preventDefault();
@@ -13,8 +13,8 @@
 
             // تغییر متن لینک
             const isVisible = hiddenItems[0].classList.contains("show");
-            showMoreText.style.display = isVisible ? "inline" : "none";
-            showLessText.style.display = isVisible ? "none" : "inline";
+            showMoreText.style.display = isVisible ? "none" : "inline";
+            showLessText.style.display = isVisible ? "inline" : "none";
         });
     });
 </script>

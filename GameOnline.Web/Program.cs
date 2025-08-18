@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using Microsoft.EntityFrameworkCore;
 using GameOnline.Core.Services.BrandServices.BrandServicesAdmin;
+using GameOnline.Core.Services.CartService.CartServiceAdmin;
+using GameOnline.Core.Services.CartService.CartServiceClient;
 using GameOnline.Core.Services.GuaranteeServices.GuaranteeServicesAdmin;
 using GameOnline.Core.Services.SliderServices.SliderServicesAdmin;
 using GameOnline.Core.Services.CategoryServices.CategoryServicesAdmin;
@@ -42,6 +44,8 @@ builder.Services.AddTransient<IPropertyValueServiceAdmin, PropertyValueServiceAd
 builder.Services.AddTransient<IDiscountServicesAdmin, DiscountServicesAdmin>();
 builder.Services.AddTransient<IUserServiceAdmin, UserServiceAdmin>();
 builder.Services.AddTransient<IAccountServiceAdmin, AccountServiceAdmin>();
+builder.Services.AddTransient<ICartServiceAdmin, CartServiceAdmin>();
+builder.Services.AddTransient<ICartServiceClient, CartServiceClient>();
 
 #endregion
 
@@ -70,7 +74,7 @@ builder.Services.AddAuthentication(options =>
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // روی HTTPS
         options.Cookie.SameSite = SameSiteMode.Strict;
         options.SlidingExpiration = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.ExpireTimeSpan = TimeSpan.FromDays(30);
     });
 
 var app = builder.Build();

@@ -18,7 +18,8 @@ public class ProductPrice :BaseEntity
     public int GuaranteeId { get; set; }
     public int ColorId { get; set; }
     public int SellerId { get; set; }
-
+    public DateTime? StartDisCount { get; set; }
+    public DateTime? EndDisCount { get; set; }
 
     [ForeignKey(nameof(ProductId))]
     public Product Product { get; set; }

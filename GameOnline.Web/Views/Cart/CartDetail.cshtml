@@ -1,0 +1,164 @@
+﻿@using GameOnline.Core.ExtenstionMethods
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<GameOnline.Core.ViewModels.CartViewmodel.Client.GetCartDetailsViewmodel>
+@{
+    int sumOrder = 0;
+    int score = 0;
+}
+<main class="contentM">
+    <div class="container">
+        <div class="page-content">
+            <div class="col-lg-4 col-md-4 col-xs-12 pull-right">
+                <div class="checkout-tab">
+                    <div class="checkout-tab-pill listing-active-cart">
+                        سبد خرید
+                        <span class="checkout-tab-counter">@Model.Count()</span>
+                    </div>
+                    <div class="checkout-tab-pill">لیست خرید بعدی</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-tab-main">
+            <div class="col-lg-9 col-md-9 col-xs-12 pull-right">
+                <div class="page-content-cart">
+                    <form action="#">
+                        <div class="header-express">
+                            <span class="checkout-header-title"><i class="fa fa-truck"></i>ارسال عادی</span>
+                            <span class="header-extra-info">
+                                (@Model.Count() کالا)
+                            </span>
+                            <span class="checkout-header-delivery-cost">هزینه ارسال:رایگان</span>
+                        </div>
+
+                        @foreach (var item in Model)
+                        {
+                            <div class="checkout-body">
+                                <a class="remove-from-cart RemoveDetail" data-detailid="@item.CartDetailId">
+                                    <i class="mdi mdi-close RemoveDetail" data-detailid="@item.CartDetailId"></i>
+                                </a>
+                                <a href="/Detail/@item.ProductId" class="col-thumb">
+                                    <img src="@PathTools.PathProductImageClient@item.ProductImg" alt="img-slider">
+                                </a>
+
+                                <div class="checkout-col-desc">
+                                    <a href="/Detail/@item.ProductId"><h3>@item.ProductFaTitle</h3></a>
+                                    <div class="checkout-variant-color">
+                                        <span class="checkout-variant-title">@item.ColorName</span>
+                                        <div class="checkout-variant-shape" style="background-color:@item.ColorCode"></div>
+                                        <div class="checkout-guarantee"><i class="fa fa-check"></i>@item.GuaranteeName</div>
+                                        <div class="checkout-dealer"><i class="fa fa-check"></i>@item.SellerName</div>
+                                    </div>
+
+                                    <div class="quantity">
+                                        @{
+                                            int max = item.ProductMaxUserCount ?? item.ProductCount;
+                                        }
+                                        <input class="UpdateCart" data-max="@max" data-detailid="@item.CartDetailId" type="number" min="1" max="@max" step="1" value="@item.CartCount">
+                                    </div>
+                                    <a href="#" class="add-to-sfl">
+                                        ذخیره در لیست خرید بعدی
+                                        <div class="cart-item-product-price">
+                                            @item.Price.ToString("N0")
+                                            <span>تومان</span>
+                                        </div>
+                                    </a>
+                                    @if (item.DetailType == 1)
+                                    {
+                                        <span class="row alert alert-danger">@item.Message</span>
+                                    }
+                                    else if (item.DetailType == 2)
+                                    {
+                                        <span class="row alert alert-success">@item.Message</span>
+                                    }
+                                </div>
+                            </div>
+                            sumOrder += item.Price * item.CartCount;
+                            score += item.Score * item.CartCount;
+                        }
+                    </form>
+                </div>
+
+                <div class="checkout-to-shipping-sticky">
+                    <a href="/Shopping" class="selenium-next-step-shipping">ادامه فرآیند خرید</a>
+                    <div class="checkout-to-shipping-price-report">
+                        <p>مبلغ قابل پرداخت</p>
+                        <div class="cart-item-product-price">
+                            @sumOrder.ToString("N0") <span>تومان</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-xs-12 pull-left">
+                <div class="page-aside">
+                    <div class="checkout-summary">
+                        <ul class="checkout-summary-summary">
+                            <li><span>مبلغ کل (@Model.Count() کالا)</span><span>@sumOrder.ToString("N0") تومان</span></li>
+                            <li><span>جمع</span><span>@sumOrder.ToString("N0") تومان</span></li>
+                            <li><span style="color: #424750; font-size:14px;">هزینه ارسال</span><span></span></li>
+                            <li><span><i class="fa fa-truck"></i>ارسال عادی</span><span>رایگان</span></li>
+                            <li><span>مبلغ قابل پرداخت</span><span>@sumOrder.ToString("N0") تومان</span></li>
+                            <li class="checkout-digiclub-container">
+                                <span class="checkout-digiclub-row">
+                                    <img src="assets/images/digiclub.png" alt="digiclub">
+                                    <span class="checkout-digiclub-points">امتیاز دیجی‌کلاب</span>
+                                </span>
+                                <span class="checkout-digiclub-row">@score <span class="checkout-bill-currency">امتیاز</span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="checkout-summary-content">
+                        <p>کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش مراحل بعدی را تکمیل کنید.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+@section Scripts
+{
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $(".UpdateCart").change(function () {
+                var count = $(this).val();
+                var detailid = $(this).data("detailid");
+                var max = $(this).data("max");
+
+                if (count > max) {
+                    alert(`حداکثر میتوانید ${max} داخل سبد خرید خود داشته باشید`);
+                    $(this).val(max);
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "/UpdateCart",
+                        data: { count: count, detailid: detailid },
+                        success: function () {
+                            window.location.href = "/CartDetail";
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                            alert("مشکلی پیش آمده است.");
+                        }
+                    });
+                }
+            });
+
+            $(".RemoveDetail").click(function () {
+                var detailid = $(this).data("detailid");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/RemoveDetail",
+                    data: { detailid: detailid },
+                    success: function () {
+                        window.location.href = "/CartDetail";
+                    },
+                });
+            });
+
+        });
+    </script>
+}

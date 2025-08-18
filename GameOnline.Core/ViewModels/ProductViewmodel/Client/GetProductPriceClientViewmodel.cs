@@ -2,6 +2,7 @@
 
 public class GetProductPriceClientViewmodel
 {
+    public int ProductPriceId { get; set; }
     public string GuaranteeName { get; set; }
     public int GuaranteeId { get; set; }
     public string ColorCode { get; set; }

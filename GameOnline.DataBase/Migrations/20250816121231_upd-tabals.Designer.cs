@@ -4,6 +4,7 @@ using GameOnline.DataBase.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOnline.DataBase.Migrations
 {
     [DbContext(typeof(GameOnlineContext))]
-    partial class GameOnlineContextModelSnapshot : ModelSnapshot
+    [Migration("20250816121231_upd-tabals")]
+    partial class updtabals
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,12 +73,14 @@ namespace GameOnline.DataBase.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FullAddress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsRemove")
@@ -88,16 +93,11 @@ namespace GameOnline.DataBase.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Province")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("RemoveDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("SumOrder")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SumScore")
-                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -580,9 +580,6 @@ namespace GameOnline.DataBase.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("EndDisCount")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("GuaranteeId")
                         .HasColumnType("int");
 
@@ -609,9 +606,6 @@ namespace GameOnline.DataBase.Migrations
 
                     b.Property<int?>("SpecialPrice")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("StartDisCount")
-                        .HasColumnType("datetime2");
 
                     b.Property<int?>("SubmitDate")
                         .HasColumnType("int");

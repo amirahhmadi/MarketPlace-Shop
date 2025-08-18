@@ -77,13 +77,12 @@ namespace GameOnline.Core.Services.UserService.UserServiceAdmin
             return OperationResult<int>.Success(user.Id, "ثبت‌نام انجام شد. ایمیل فعال‌سازی ارسال شد.");
         }
 
-        public OperationResult<int> ActiveAccount(int userId, string activeCode)
+        public async Task<OperationResult<int>> ActiveAccount(int userId, string activeCode)
         {
             if (string.IsNullOrWhiteSpace(activeCode))
                 return OperationResult<int>.Error("کد فعال‌سازی نامعتبر است.");
 
             var now = DateTime.UtcNow;
-
             var user = _context.Users
                 .FirstOrDefault(x =>
                     x.Id == userId &&
@@ -99,9 +98,29 @@ namespace GameOnline.Core.Services.UserService.UserServiceAdmin
             user.ActiveCode = NewSecureToken(); // باطل کردن لینک قبلی
             user.ActiveCodeExpiresAt = null;
             user.LastModified = now;
-
             _context.SaveChanges();
-            return OperationResult<int>.Success(user.Id, "حساب کاربری فعال شد.");
+
+            // لاگین خودکار
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.Name ?? " ")
+            };
+
+            var properties = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                AllowRefresh = true,
+                ExpiresUtc = now.AddMinutes(30)
+            };
+
+            await _http.HttpContext!.SignInAsync(
+                CookieScheme,
+                new ClaimsPrincipal(new ClaimsIdentity(claims, CookieScheme)),
+                properties);
+
+            return OperationResult<int>.Success(user.Id, "حساب شما فعال شد و وارد شدید.");
         }
 
         public async Task<OperationResult<int>> LogIn(LoginViewmodel model)

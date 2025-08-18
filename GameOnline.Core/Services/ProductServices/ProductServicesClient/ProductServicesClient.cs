@@ -50,6 +50,7 @@ public class ProductServicesClient : IProductServicesClient
 
                             select new GetProductPriceClientViewmodel
                             {
+                                ProductPriceId = pPrice.Id,
                                 ColorCode = c.Code,
                                 ColorId = c.Id,
                                 Count = pPrice.Count,

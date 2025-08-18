@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using GameOnline.DataBase.Entities.Brands;
+﻿using GameOnline.DataBase.Entities.Brands;
 using GameOnline.DataBase.Entities.Carts;
 using GameOnline.DataBase.Entities.Categories;
 using GameOnline.DataBase.Entities.Colors;
@@ -18,11 +17,9 @@ namespace GameOnline.DataBase.Context;
 
 public class GameOnlineContext : DbContext
 {
-    public GameOnlineContext(DbContextOptions<GameOnlineContext> options) : base(options)
-    {
+    public GameOnlineContext(DbContextOptions<GameOnlineContext> options) : base(options) { }
 
-    }
-
+    // DbSets
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Guarantee> Guarantees { get; set; }
     public DbSet<Slider> Sliders { get; set; }
@@ -39,55 +36,74 @@ public class GameOnlineContext : DbContext
     public DbSet<PropertyNameCategory> PropertyNameCategories { get; set; }
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<Seller> Sellers { get; set; }
-    public DbSet<ProductPrice> ProductPrices { get; set; }
-    public DbSet<Cart> Carts { get; set; }
-    public DbSet<CartDetail> CartDetails { get; set; }
+    public DbSet<ProductPrice?> ProductPrices { get; set; }
+    public DbSet<Cart?> Carts { get; set; }
+    public DbSet<CartDetail?> CartDetails { get; set; }
     public DbSet<User?> Users { get; set; }
     public DbSet<PaymentDetail> PaymentDetails { get; set; }
     public DbSet<Question> Questions { get; set; }
     public DbSet<FAQAnswer> FaqAnswers { get; set; }
-    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // -------------------------
         // Global Query Filters (Soft Delete)
-        modelBuilder.Entity<Brand>().HasQueryFilter(x => x.IsRemove == false);
-        modelBuilder.Entity<Guarantee>().HasQueryFilter(x => x.IsRemove == false);
-        modelBuilder.Entity<Slider>().HasQueryFilter(x => x.IsRemove == false);
-        modelBuilder.Entity<Category>().HasQueryFilter(x => x.IsRemove == false);
-        modelBuilder.Entity<SubCategory>().HasQueryFilter(x => x.IsRemove == false);
-        modelBuilder.Entity<Product>().HasQueryFilter(x => x.IsRemove == false);
+        // -------------------------
+        modelBuilder.Entity<Brand>().HasQueryFilter(x => !x.IsRemove);
+        modelBuilder.Entity<Guarantee>().HasQueryFilter(x => !x.IsRemove);
+        modelBuilder.Entity<Slider>().HasQueryFilter(x => !x.IsRemove);
+        modelBuilder.Entity<Category>().HasQueryFilter(x => !x.IsRemove);
+        modelBuilder.Entity<SubCategory>().HasQueryFilter(x => !x.IsRemove);
+        modelBuilder.Entity<Product>().HasQueryFilter(x => !x.IsRemove);
 
-        // Optional relations to Product for avoiding EF Core warnings
+        modelBuilder.Entity<ProductPrice>().HasQueryFilter(pp =>
+            !pp.IsRemove &&
+            pp.Product != null && !pp.Product.IsRemove);
+
+        modelBuilder.Entity<CartDetail>().HasQueryFilter(cd =>
+            cd.ProductPrice != null && !cd.ProductPrice.IsRemove);
+
+        // اگر لازم داری سوال‌های محصولات حذف‌شده نمایش داده نشن:
+        modelBuilder.Entity<Question>().HasQueryFilter(q =>
+            q.Product != null && !q.Product.IsRemove);
+
+        // -------------------------
+        // Optional Relations (برای رفع EF Warning 10622)
+        // -------------------------
         modelBuilder.Entity<ProductGallery>()
             .HasOne(pg => pg.Product)
-            .WithMany(p => p.ProductGalleries) // فرض بر اینکه این نام navigation هست
+            .WithMany(p => p.ProductGalleries)
             .HasForeignKey(pg => pg.ProductId)
             .IsRequired(false);
 
         modelBuilder.Entity<ProductReview>()
             .HasOne(pr => pr.Product)
-            .WithMany(p => p.ProductReviews) // فرض بر اینکه این navigation هست
+            .WithMany(p => p.ProductReviews)
             .HasForeignKey(pr => pr.ProductId)
             .IsRequired(false);
 
         modelBuilder.Entity<PropertyProduct>()
             .HasOne(pp => pp.Product)
-            .WithMany(p => p.PropertyProducts) // فرض بر اینکه این navigation هست
+            .WithMany(p => p.PropertyProducts)
             .HasForeignKey(pp => pp.ProductId)
             .IsRequired(false);
 
-        // تغییر همه DeleteBehaviorها از Cascade به Restrict
-        var cascadeFKs = modelBuilder.Model.GetEntityTypes()
-            .SelectMany(t => t.GetForeignKeys())
-            .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+        modelBuilder.Entity<ProductPrice>()
+            .HasOne(pp => pp.Guarantee)
+            .WithMany(g => g.ProductPrices)
+            .HasForeignKey(pp => pp.GuaranteeId)
+            .IsRequired(false);
 
-        foreach (var fk in cascadeFKs)
+        // -------------------------
+        // تغییر رفتار Delete به Restrict
+        // -------------------------
+        foreach (var fk in modelBuilder.Model.GetEntityTypes()
+                     .SelectMany(t => t.GetForeignKeys())
+                     .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade))
         {
             fk.DeleteBehavior = DeleteBehavior.Restrict;
         }
 
         base.OnModelCreating(modelBuilder);
     }
-
 }

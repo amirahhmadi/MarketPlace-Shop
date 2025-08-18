@@ -38,20 +38,33 @@ namespace GameOnline.Web.Controllers
             var result = _accountService.Register(model);
 
             if (result.IsSuccess)
+            {
                 SetSweetAlert("success", "ثبت‌نام موفق!", "ایمیل تایید برای شما ارسال شد.");
+                return View(); // یا Redirect به صفحه دیگری
+            }
             else
-                SetSweetAlert("error", "خطا!", result.Message ?? "ثبت‌نام با خطا مواجه شد.");
-
-            return View();
+            {
+                // بررسی ایمیل تکراری
+                if (result.Message?.Contains("ایمیل تکراری") == true)
+                {
+                    SetSweetAlert("error", "خطا!", "این ایمیل قبلاً ثبت شده است.");
+                }
+                else
+                {
+                    SetSweetAlert("error", "خطا!", result.Message ?? "ثبت‌نام با خطا مواجه شد.");
+                }
+                return View(model);
+            }
         }
 
         [HttpGet, AllowAnonymous, Route("ActiveAccount/{userId:int}/{activeCode}")]
-        public IActionResult ActiveAccount(int userId, string activeCode)
+        public async Task<IActionResult> ActiveAccount(int userId, string activeCode)
         {
-            var result = _accountService.ActiveAccount(userId, activeCode);
+            var result = await _accountService.ActiveAccount(userId, activeCode);
+
             SetSweetAlert(result.IsSuccess ? "success" : "error",
-                          result.IsSuccess ? "موفق!" : "خطا!",
-                          result.Message ?? "");
+                result.IsSuccess ? "موفق!" : "خطا!",
+                result.Message ?? "");
             return View();
         }
 
@@ -79,10 +92,18 @@ namespace GameOnline.Web.Controllers
                           result.IsSuccess ? "ورود موفق" : "خطا در ورود",
                           result.Message ?? "");
 
-            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
-                return Redirect(returnUrl);
+            if (result.IsSuccess)
+            {
+                // فقط در صورت موفقیت، ریدایرکت شود
+                if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    return Redirect(returnUrl);
 
-            return Redirect("/");
+                return Redirect("/");
+            }
+
+            // اگر ورود موفق نبود، همان صفحه با مدل نمایش داده شود
+            ViewData["ReturnUrl"] = returnUrl;
+            return View(model);
         }
 
         [HttpPost, Authorize, Route("Logout")]
