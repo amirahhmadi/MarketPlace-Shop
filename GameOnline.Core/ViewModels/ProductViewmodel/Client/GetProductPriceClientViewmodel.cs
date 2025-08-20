@@ -13,6 +13,12 @@ public class GetProductPriceClientViewmodel
     public int? MaxOrderCount { get; set; }
     public int? SubmitDate { get; set; }
     public int SellerId { get; set; }
+    public int MainPrice { get; set; }
+    public int? NewPrice { get; set; }
+    public DateTime? StartDisCount { get; set; }
+    public DateTime? EndDisCount { get; set; }
+    public int? FinalPrice { get; set; }
+    public bool HasDiscount { get; set; }
 }
 
 public class GetSellerClientViewmodel

@@ -2,31 +2,32 @@
 {
     public static class PriceEx
     {
-        public static int? Pricecheck(DateTime? StartDiscount, DateTime? EndDisCount, int? SpecialPrice)
+        public static int? Pricecheck(DateTime? startDiscount, DateTime? endDiscount, int? specialPrice)
         {
-            if (SpecialPrice == null || SpecialPrice <= 0)
+            if (specialPrice == null || specialPrice <= 0)
                 return null;
-            else
-            {
-                if (StartDiscount == null && EndDisCount == null)
-                {
-                    return SpecialPrice;
-                }
-                else
-                {
-                    if (StartDiscount == null && EndDisCount > DateTime.Now)
-                        return SpecialPrice;
 
-                    else if (StartDiscount < DateTime.Now && EndDisCount == null)
-                        return SpecialPrice;
+            var now = DateTime.Now;
 
-                    else if (StartDiscount < DateTime.Now && EndDisCount > DateTime.Now)
-                        return SpecialPrice;
+            // بدون تاریخ شروع و پایان → همیشه تخفیف
+            if (startDiscount == null && endDiscount == null)
+                return specialPrice;
 
-                }
-                return null;
-            }
+            // فقط تاریخ پایان دارد و هنوز نگذشته
+            if (startDiscount == null && endDiscount > now)
+                return specialPrice;
 
+            // فقط تاریخ شروع دارد و شروع شده
+            if (startDiscount < now && endDiscount == null)
+                return specialPrice;
+
+            // بین بازه شروع و پایان
+            if (startDiscount < now && endDiscount > now)
+                return specialPrice;
+
+            // هیچکدام برقرار نیست → تخفیف فعال نیست
+            return null;
         }
+
     }
 }

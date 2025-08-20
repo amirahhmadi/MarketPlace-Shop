@@ -1,4 +1,5 @@
-﻿using GameOnline.DataBase.Entities.Carts;
+﻿using GameOnline.DataBase.Entities.Address;
+using GameOnline.DataBase.Entities.Carts;
 using GameOnline.DataBase.Entities.Comment_FAQ;
 using System;
 using System.Collections.Generic;
@@ -35,5 +36,7 @@ namespace GameOnline.DataBase.Entities.Users
         public List<Cart> Carts { get; set; }
         public List<Question> Questions { get; set; }
         public List<FAQAnswer> FaqAnswers { get; set; }
+        public List<UserAddress> UserAddres { get; set; }
+
     }
 }

@@ -43,29 +43,30 @@ public class ProductServicesClient : IProductServicesClient
     public List<GetProductPriceClientViewmodel> GetProductPriceClient(int productId)
     {
         var productPrice = (from pPrice in _context.ProductPrices
-                            join g in _context.Guarantees on pPrice.GuaranteeId equals g.Id
-                            join c in _context.Colors on pPrice.ColorId equals c.Id
-
-                            where (pPrice.ProductId.Equals(productId) && pPrice.Count > 0)
-
-                            select new GetProductPriceClientViewmodel
-                            {
-                                ProductPriceId = pPrice.Id,
-                                ColorCode = c.Code,
-                                ColorId = c.Id,
-                                Count = pPrice.Count,
-                                MaxOrderCount = pPrice.MaxOrderCount,
-                                Price = pPrice.Price,
-                                SpecialPrice = pPrice.SpecialPrice,
-                                SubmitDate = pPrice.SubmitDate,
-                                SellerId = pPrice.SellerId,
-                                GuaranteeName = g.GuaranteeName,
-                                GuaranteeId = pPrice.GuaranteeId,
-
-                            }).AsNoTracking().ToList();
+            join g in _context.Guarantees on pPrice.GuaranteeId equals g.Id
+            join c in _context.Colors on pPrice.ColorId equals c.Id
+            where (pPrice.ProductId.Equals(productId) && pPrice.Count > 0)
+            select new GetProductPriceClientViewmodel
+            {
+                ProductPriceId = pPrice.Id,
+                ColorCode = c.Code,
+                ColorId = c.Id,
+                Count = pPrice.Count,
+                MaxOrderCount = pPrice.MaxOrderCount,
+                Price = pPrice.Price, // 👈 این همون قیمت اصلیه
+                MainPrice = pPrice.Price, // 👈 اضافه شد (قیمت مرجع)
+                SpecialPrice = pPrice.SpecialPrice,
+                StartDisCount = pPrice.StartDisCount,
+                EndDisCount = pPrice.EndDisCount,
+                SubmitDate = pPrice.SubmitDate,
+                SellerId = pPrice.SellerId,
+                GuaranteeName = g.GuaranteeName,
+                GuaranteeId = pPrice.GuaranteeId,
+            }).AsNoTracking().ToList();
 
         return productPrice;
     }
+
 
     public List<GetPropertyForProductClientViewmodel> GetPropertyForProductClient(int productId)
     {

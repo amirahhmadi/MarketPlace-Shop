@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Enums\" />
+    <Folder Include="Services\AddressService\AddressServiceAdmin\" />
     <Folder Include="Services\BrandServices\BrandServicesClient\" />
     <Folder Include="Services\CategoryServices\CategoryServicesClient\" />
     <Folder Include="Services\ColorServices\ColorServicesClient\" />

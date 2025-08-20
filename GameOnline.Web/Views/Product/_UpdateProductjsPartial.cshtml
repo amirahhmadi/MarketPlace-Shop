@@ -2,6 +2,7 @@
 <script>
     $(function () {
 
+        // داده‌ها از مدل Razor
         var sellers = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetSeller));
         var ProductPrice = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetProductPrice));
 
@@ -10,12 +11,12 @@
             var colorId = $(this).data("id");
             var productsByColor = GetProductByColorId(colorId);
 
-            // مرتب‌سازی بر اساس قیمت و سپس کمترین SubmitDate
+            // مرتب‌سازی بر اساس FinalPrice و سپس کمترین SubmitDate
             productsByColor.sort((a, b) => {
-                if(a.Price === b.Price){
+                if(a.FinalPrice === b.FinalPrice){
                     return (a.SubmitDate ?? 0) - (b.SubmitDate ?? 0);
                 }
-                return a.Price - b.Price;
+                return a.FinalPrice - b.FinalPrice;
             });
 
             var mainProduct = productsByColor[0];
@@ -35,7 +36,7 @@
             $(".guarantee-name").text(product.GuaranteeName);
 
             const relatedProducts = GetProductByColorId(product.ColorId);
-            const minPrice = Math.min(...relatedProducts.map(p => p.Price));
+            const minPrice = Math.min(...relatedProducts.map(p => p.FinalPrice > 0 ? p.FinalPrice : p.MainPrice));
             $(".js-price").text(minPrice.toLocaleString('fa-IR'));
 
             $(".length-seller").text(sellerCount);
@@ -45,11 +46,11 @@
                 .attr('data-product-id', product.ProductPriceId)
                 .attr('href', 'javascript:void(0);');
 
-            if(product.SubmitDate == null){
-                $(".js-inventory").text("موجود در انبار");
-            } else {
-                $(".js-inventory").text("ارسال از " + product.SubmitDate + " روز کاری");
-            }
+            $(".js-inventory").text(
+                product.SubmitDate == null
+                ? "موجود در انبار"
+                : "ارسال از " + product.SubmitDate + " روز کاری"
+            );
         }
 
         // چاپ لیست فروشنده‌ها
@@ -59,12 +60,12 @@
             $(".show-more").show();
             var inventoryText = "در انبار موجود است";
 
-            // مرتب‌سازی محصولات بر اساس قیمت و SubmitDate
+            // مرتب‌سازی محصولات بر اساس FinalPrice و SubmitDate
             products.sort((a, b) => {
-                if(a.Price === b.Price){
+                if(a.FinalPrice === b.FinalPrice){
                     return (a.SubmitDate ?? 0) - (b.SubmitDate ?? 0);
                 }
-                return a.Price - b.Price;
+                return a.FinalPrice - b.FinalPrice;
             });
 
             products.forEach((product, index) => {
@@ -72,6 +73,14 @@
 
                 var rowClass = index == 0 ? "table-suppliers-row-active" : index >= 2 ? "in-filter in-list" : '';
                 var submitText = product.SubmitDate == null ? inventoryText : "ارسال از " + product.SubmitDate + " روز کاری دیگر";
+
+                // مطمئن شدن از FinalPrice معتبر
+                var finalPrice = product.FinalPrice && product.FinalPrice > 0 ? product.FinalPrice : product.MainPrice;
+
+                var priceHtml = product.HasDiscount
+                    ? `<span style="text-decoration:line-through;color:gray">${Number(product.MainPrice).toLocaleString('fa-IR')}</span>
+                       <span style="color:red;font-weight:bold">${Number(finalPrice).toLocaleString('fa-IR')}</span> تومان`
+                    : `<span style="font-weight:bold">${Number(finalPrice).toLocaleString('fa-IR')} تومان</span>`;
 
                 var html = `
                 <div class="table-suppliers-row ${rowClass}">
@@ -95,7 +104,7 @@
                     <div class="table-suppliers-cell table-suppliers-cell-price">
                         <div class="seller-wrapper">
                             <div class="price-value">
-                                ${Number(product.Price).toLocaleString('fa-IR')} <span class="price-currency">تومان</span>
+                                ${priceHtml}
                             </div>
                         </div>
                     </div>
@@ -132,24 +141,23 @@
         });
 
         // افزودن محصول به سبد
-            $(document).on("click", ".btn-add-to-cart, .add-product-price-a", function(e){
-        e.preventDefault();
-        var productId = $(this).data("product-id");
-        if(!productId) return;
+        $(document).on("click", ".btn-add-to-cart, .add-product-price-a, .js-btn-add-to-cart", function(e){
+            e.preventDefault();
+            var productId = $(this).data("product-id");
+            if(!productId) return;
 
-        $.ajax({
-            url: "/AddCart/" + productId,
-            type: "GET",
-            success: function(res){
-                console.log("محصول اضافه شد", res);
-                // رفرش صفحه بعد از اضافه شدن محصول
-                location.reload();
-            },
-            error: function(){
-                alert("خطا در افزودن به سبد خرید");
-            }
+            $.ajax({
+                url: "/AddCart/" + productId,
+                type: "GET",
+                success: function(res){
+                    console.log("محصول اضافه شد", res);
+                    location.reload();
+                },
+                error: function(){
+                    alert("خطا در افزودن به سبد خرید");
+                }
+            });
         });
-    });
 
         // اجرای اولین رنگ پیش‌فرض
         $('.color-id').first().click();

@@ -1,4 +1,5 @@
-﻿using GameOnline.DataBase.Entities.Brands;
+﻿using GameOnline.DataBase.Entities.Address;
+using GameOnline.DataBase.Entities.Brands;
 using GameOnline.DataBase.Entities.Carts;
 using GameOnline.DataBase.Entities.Categories;
 using GameOnline.DataBase.Entities.Colors;
@@ -43,6 +44,9 @@ public class GameOnlineContext : DbContext
     public DbSet<PaymentDetail> PaymentDetails { get; set; }
     public DbSet<Question> Questions { get; set; }
     public DbSet<FAQAnswer> FaqAnswers { get; set; }
+    public DbSet<UserAddress> UserAddresses { get; set; }
+    public DbSet<City> Cities { get; set; }
+    public DbSet<Province> Provinces { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

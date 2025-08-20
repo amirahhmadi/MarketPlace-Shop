@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.AddressService.AddressServiceClient;
 using GameOnline.Core.Services.CartService.CartServiceAdmin;
 using GameOnline.Core.Services.CartService.CartServiceClient;
 using GameOnline.Core.ViewModels.CartViewmodel.Admin;
@@ -13,11 +14,12 @@ namespace GameOnline.Web.Controllers
     {
         private readonly ICartServiceAdmin _cartServiceAdmin;
         private readonly ICartServiceClient _cartServiceClient;
-
-        public CartController(ICartServiceAdmin cartServiceAdmin, ICartServiceClient cartServiceClient)
+        private readonly IAddressServiceClient _addressServiceClient;
+        public CartController(ICartServiceAdmin cartServiceAdmin, ICartServiceClient cartServiceClient, IAddressServiceClient addressServiceClient)
         {
             _cartServiceAdmin = cartServiceAdmin;
             _cartServiceClient = cartServiceClient;
+            _addressServiceClient = addressServiceClient;
         }
 
         // گرفتن یوزر لاگین‌شده
@@ -119,6 +121,20 @@ namespace GameOnline.Web.Controllers
         {
             await _cartServiceClient.RemoveDetailAsync(detailid);
             return new JsonResult("ok");
+        }
+
+        [HttpGet]
+        [Route("Shopping")]
+        [Authorize]
+        public IActionResult Shopping()
+        {
+            var findActiveAddress = _addressServiceClient.GetCartForShopping(CurrentUserId);
+            if (findActiveAddress == null)
+                return Redirect("/");
+
+            findActiveAddress.GetCartDetails = _cartServiceClient.GetCartDetails(CurrentUserId);
+
+            return View(findActiveAddress);
         }
     }
 }

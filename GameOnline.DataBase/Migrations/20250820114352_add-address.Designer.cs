@@ -4,6 +4,7 @@ using GameOnline.DataBase.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOnline.DataBase.Migrations
 {
     [DbContext(typeof(GameOnlineContext))]
-    partial class GameOnlineContextModelSnapshot : ModelSnapshot
+    [Migration("20250820114352_add-address")]
+    partial class addaddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,122 +24,6 @@ namespace GameOnline.DataBase.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("GameOnline.DataBase.Entities.Address.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CityName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRemove")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("RemoveDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("GameOnline.DataBase.Entities.Address.Province", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRemove")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProvinceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RemoveDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Provinces");
-                });
-
-            modelBuilder.Entity("GameOnline.DataBase.Entities.Address.UserAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FullAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRemove")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProvinceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("RemoveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("ProvinceId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserAddresses");
-                });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Brands.Brand", b =>
                 {
@@ -1104,33 +991,6 @@ namespace GameOnline.DataBase.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GameOnline.DataBase.Entities.Address.UserAddress", b =>
-                {
-                    b.HasOne("GameOnline.DataBase.Entities.Address.City", "City")
-                        .WithMany("UserAddres")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("GameOnline.DataBase.Entities.Address.Province", "Province")
-                        .WithMany("UserAddres")
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("GameOnline.DataBase.Entities.Users.User", "User")
-                        .WithMany("UserAddres")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("Province");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("GameOnline.DataBase.Entities.Carts.Cart", b =>
                 {
                     b.HasOne("GameOnline.DataBase.Entities.Users.User", "User")
@@ -1361,16 +1221,6 @@ namespace GameOnline.DataBase.Migrations
                     b.Navigation("PropertyName");
                 });
 
-            modelBuilder.Entity("GameOnline.DataBase.Entities.Address.City", b =>
-                {
-                    b.Navigation("UserAddres");
-                });
-
-            modelBuilder.Entity("GameOnline.DataBase.Entities.Address.Province", b =>
-                {
-                    b.Navigation("UserAddres");
-                });
-
             modelBuilder.Entity("GameOnline.DataBase.Entities.Brands.Brand", b =>
                 {
                     b.Navigation("Products");
@@ -1461,8 +1311,6 @@ namespace GameOnline.DataBase.Migrations
                     b.Navigation("FaqAnswers");
 
                     b.Navigation("Questions");
-
-                    b.Navigation("UserAddres");
                 });
 #pragma warning restore 612, 618
         }
