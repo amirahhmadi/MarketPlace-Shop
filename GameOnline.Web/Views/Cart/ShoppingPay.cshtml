@@ -1,0 +1,190 @@
+﻿@using GameOnline.Core.ExtenstionMethods
+@model IEnumerable<GameOnline.Core.ViewModels.CartViewmodel.Client.GetCartDetailsViewmodel>
+
+@{
+    int sumOrder = Model.Sum(x => x.Price * x.CartCount);
+    int score = Model.Sum(x => x.Score * x.CartCount);
+}
+
+<div class="container">
+    <div class="main-shopping">
+        <div class="content-shopping">
+            <div class="col-lg-9 col-md-9 col-xs-12 pull-right">
+                <!-- عنوان انتخاب شیوه پرداخت -->
+                <div class="headline-checkout-shopping">
+                    <span>انتخاب شیوه پرداخت</span>
+                </div>
+
+                <!-- شیوه‌های پرداخت -->
+                <div class="payment">
+                    <ul class="checkout-paymethod">
+                        <li class="wallet-container">
+                            <div class="checkout-paymethod-item">
+                                <span class="mdi mdi-card-text-outline"></span>
+                                <label class="radio-primary">
+                                    <input type="radio" name="payment-radio" value="wallet">
+                                    <span class="ui-radio-check"></span>
+                                </label>
+                                <div class="checkout-paymethod-title">
+                                    <div class="paymethod-wallet-amount">
+                                        <p class="checkout-paymethod-title-label">پرداخت از کیف پول</p>
+                                        <span>موجودی:</span>
+                                        <span class="wallet-amount">0</span>
+                                        <span class="checkout-paymethod-currency">تومان</span>
+                                    </div>
+                                </div>
+                                <div class="wallet-extra-info">
+                                    نیازمند
+                                    <span class="wallet-needed-money">@sumOrder.ToString("N0")</span> تومان افزایش اعتبار
+                                </div>
+                            </div>
+                        </li>
+                        <li class="wallet-container">
+                            <div class="checkout-paymethod-item">
+                                <span class="mdi mdi-card-text-outline"></span>
+                                <label class="radio-primary">
+                                    <input type="radio" name="payment-radio" value="online" checked="checked">
+                                    <span class="ui-radio-check"></span>
+                                </label>
+                                <div class="checkout-paymethod-title">
+                                    <div class="paymethod-wallet-amount">
+                                        <p class="checkout-paymethod-title-label">پرداخت اینترنتی هوشمند دیجی‌استور</p>
+                                        <span>آنلاین با تمامی کارت‌های بانکی</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- خلاصه سفارش -->
+                <div class="headline-checkout-shopping">
+                    <span>خلاصه سفارش</span>
+                </div>
+                <div class="checkout-order-summary">
+                    <div class="checkout-order-summary-item">
+                        <a class="btn btn-light btn-checkout" data-toggle="collapse" href="#collapseSummary" role="button" aria-expanded="false" aria-controls="collapseSummary">
+                            <header class="checkout-order-summary-header">
+                                <i class="fa fa-chevron-down arrow"></i>
+                                <div class="checkout-order-summary-row">
+                                    <div class="checkout-order-summary-col-post-time">
+                                        مرسوله 1 از 1
+                                        <span>(@Model.Count() کالا)</span>
+                                    </div>
+                                    <div class="checkout-order-summary-col-post-time">
+                                        زمان ارسال
+                                        <span>بازه @Model.FirstOrDefault()?.LastModifiedDate?.AddDays(3).ToPersianDate("dd ms") - @Model.FirstOrDefault()?.LastModifiedDate?.AddDays(10).ToPersianDate("dd ms")</span>
+                                    </div>
+                                    <div class="checkout-order-summary-col-shipping-cost">
+                                        مبلغ مرسوله
+                                        <span>@sumOrder.ToString("N0") تومان</span>
+                                    </div>
+                                </div>
+                            </header>
+                        </a>
+
+                        <div class="collapse" id="collapseSummary">
+                            <div class="checkout-order-summary-content">
+                                <section class="swiper-order-summary row">
+                                    @foreach (var item in Model)
+                                    {
+                                        <div class="col-lg-5 col-md-6 col-xs-12 mb-3">
+                                            <div class="product-box-container">
+                                                <div class="product-box-compact">
+                                                    <a href="/Detail/@item.ProductId">
+                                                        <img src="@PathTools.PathProductImageClient@item.ProductImg" alt="@item.ProductFaTitle">
+                                                    </a>
+                                                    <div class="product-box-title">@item.ProductFaTitle</div>
+                                                    <div class="checkout-order-summary-tagline">
+                                                        تعداد : @item.CartCount عدد
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkout-to-shipping-sticky">
+                        <a href="/PayMentZarinPal" class="selenium-next-step-shipping">ادامه فرآیند خرید</a>
+                        <div class="checkout-to-shipping-price-report">
+                            <p>مبلغ قابل پرداخت</p>
+                            <div class="cart-item-product-price">
+                                @sumOrder.ToString("N0")
+                                <span>تومان</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- استفاده از کارت هدیه و کد تخفیف -->
+                <div class="grid">
+                    <div class="checkout-price-options">
+                        <section class="checkout-price-options-container">
+                            <div class="checkout-price-options-header">
+                                <span>استفاده از کارت هدیه دیجی‌استور</span>
+                            </div>
+                            <div class="checkout-price-options-content">
+                                <p>با ثبت کد کارت هدیه، مبلغ کارت هدیه از “مبلغ قابل پرداخت” کسر می‌شود.</p>
+                            </div>
+                            <div class="checkout-price-options-row">
+                                <div class="checkout-price-options-form-field">
+                                    <input type="text" name="gift-card-serial" class="input-field"
+                                           placeholder="مثلا 1234ABCD5678EFGH0123">
+                                </div>
+                                <button class="checkout-price-options-form-button">
+                                    ثبت کدهدیه
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="checkout-price-options">
+                        <section class="checkout-price-options-container">
+                            <div class="checkout-price-options-header">
+                                <span>استفاده از کد تخفیف دیجی‌استور</span>
+                            </div>
+                            <div class="checkout-price-options-content">
+                                <p>با ثبت کد تخفیف، مبلغ کد تخفیف از “مبلغ قابل پرداخت” کسر می‌شود.</p>
+                            </div>
+                            <div class="checkout-price-options-row">
+                                <div class="checkout-price-options-form-field">
+                                    <input type="text" name="gift-card-serial" class="input-field"
+                                           placeholder="مثلا 837A2CS">
+                                </div>
+                                <button class="checkout-price-options-form-button">
+                                    ثبت کد هدیه
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- سایدبار خلاصه سفارش -->
+            <div class="col-lg-3 col-md-3 col-xs-12 pull-left">
+                <div class="page-aside" style="margin-top: 95px;">
+                    <div class="checkout-summary">
+                        <ul class="checkout-summary-summary">
+                            <li><span>مبلغ کل (@Model.Count() کالا)</span><span>@sumOrder.ToString("N0") تومان</span></li>
+                            <li><span>جمع</span><span>@sumOrder.ToString("N0") تومان</span></li>
+                            <li><span>هزینه ارسال</span><span>رایگان</span></li>
+                            <li><span>مبلغ قابل پرداخت</span><span>@sumOrder.ToString("N0") تومان</span></li>
+                            <li class="checkout-digiclub-container">
+                                <span class="checkout-digiclub-row">
+                                    <img src="assets/images/digiclub.png" alt="digiclub">
+                                    <span>امتیاز دیجی‌کلاب</span>
+                                </span>
+                                <span class="checkout-digiclub-row">@score <span>امتیاز</span></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="checkout-summary-content">
+                        <p>کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش مراحل بعدی را تکمیل کنید.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

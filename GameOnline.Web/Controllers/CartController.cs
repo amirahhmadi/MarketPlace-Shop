@@ -136,5 +136,92 @@ namespace GameOnline.Web.Controllers
 
             return View(findActiveAddress);
         }
+
+        [HttpGet]
+        [Authorize]
+        [Route("Shopping-Pay")]
+        public IActionResult ShoppingPay()
+        {
+            int UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var FindCart = _cartServiceClient.GetCartDetails(UserId);
+            List<GetCartDetailsViewmodel> CheckCart = new List<GetCartDetailsViewmodel>();
+
+            if (FindCart.Count() <= 0)
+                return View("EmptyCart");
+
+            foreach (var item in FindCart)
+            {
+                var MaxUserCount = item.ProductMaxUserCount ?? item.ProductCount;
+                if (item.CartCount > MaxUserCount || item.CartCount > item.ProductCount)
+                {
+                    CheckCart.Add(new GetCartDetailsViewmodel
+                    {
+                        CartDetailId = item.CartDetailId,
+                        IsRemove = true,
+                    });
+                    item.Message = "موجودی این محصول کمتر از درخواست شماس";
+                    item.DetailType = 1;
+                }
+
+                int? Special = PriceEx.Pricecheck(item.StartDisCount, item.EndDisCount, item.SpecialPrice);
+
+                if (Special == null)
+                {
+                    if (item.Price > item.MainPrice)
+                    {
+                        CheckCart.Add(new GetCartDetailsViewmodel
+                        {
+                            CartDetailId = item.CartDetailId,
+                            NewPrice = item.MainPrice,
+                        });
+                        item.Message = $"قیمت محصول به مقدار {(item.Price - item.MainPrice).ToString("N0")} تومان کاهش داشته است";
+                        item.DetailType = 2;
+                        item.Price = item.MainPrice;
+                    }
+                    else if (item.Price < item.MainPrice)
+                    {
+                        CheckCart.Add(new GetCartDetailsViewmodel
+                        {
+                            CartDetailId = item.CartDetailId,
+                            NewPrice = item.MainPrice,
+                        });
+                        item.Message = $"قیمت محصول به مقدار {(item.MainPrice - item.Price).ToString("N0")} تومان افزایش داشته است";
+                        item.DetailType = 1;
+                        item.Price = item.MainPrice;
+                    }
+                }
+                else
+                {
+                    if (item.Price > Special.Value)
+                    {
+                        CheckCart.Add(new GetCartDetailsViewmodel
+                        {
+                            CartDetailId = item.CartDetailId,
+                            NewPrice = Special.Value,
+                        });
+                        item.Message = $"قیمت محصول به مقدار {(item.Price - Special.Value).ToString("N0")} تومان کاهش داشته است";
+                        item.DetailType = 2;
+                        item.Price = Special.Value;
+                    }
+                    else if (item.Price < Special.Value)
+                    {
+                        CheckCart.Add(new GetCartDetailsViewmodel
+                        {
+                            CartDetailId = item.CartDetailId,
+                            NewPrice = Special.Value,
+                        });
+                        item.Message = $"قیمت محصول به مقدار {(Special.Value - item.Price).ToString("N0")} تومان افزایش داشته است";
+                        item.DetailType = 1;
+                        item.Price = Special.Value;
+                    }
+                }
+
+            }
+
+            if (CheckCart.Count() > 0)
+                return RedirectToAction(nameof(CartDetail));
+
+            return View(FindCart);
+        }
     }
 }
