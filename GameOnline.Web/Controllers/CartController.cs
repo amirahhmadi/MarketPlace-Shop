@@ -223,5 +223,54 @@ namespace GameOnline.Web.Controllers
 
             return View(FindCart);
         }
+
+        #region ZarinPal Pay
+        [HttpGet]
+        [Authorize]
+        [Route("PayMentZarinPal")]
+        public async Task<IActionResult> PayMentZarinPal()
+        {
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var findCartId = _cartServiceAdmin.FindCartIdByUserId(userId);
+
+            if (findCartId == null)
+                return Redirect("/Cart/Fail");
+
+            var result = await _cartServiceAdmin.Payment(findCartId.Data);
+
+            if (result != null && result.IsSuccess)
+                return Redirect(result.Data); // لینک درگاه پرداخت
+            else
+                return Redirect("/Cart/Fail");
+        }
+
+        [HttpGet]
+        [Route("veryfication-ZarinPal/{cartId}")]
+        public async Task<IActionResult> Verification(int cartId)
+        {
+            string status = HttpContext.Request.Query["Status"];
+            string authority = HttpContext.Request.Query["Authority"];
+
+            if (string.IsNullOrEmpty(status) || string.IsNullOrEmpty(authority))
+                return Redirect("/Cart/Fail"); // درخواست نامعتبر
+
+            if (status.ToLower() != "ok")
+                return Redirect("/Cart/Fail"); // کاربر پرداخت را لغو کرده
+
+            // Verify واقعی تراکنش
+            var result = await _cartServiceAdmin.VerificationZarinPal(cartId, authority);
+
+            if (result != null && result.IsSuccess)
+            {
+                // پرداخت موفق
+                return View(); // صفحه موفقیت
+            }
+            else
+            {
+                // پرداخت ناموفق
+                return Redirect("/Cart/Fail"); // صفحه خطا
+            }
+        }
+        #endregion
     }
 }

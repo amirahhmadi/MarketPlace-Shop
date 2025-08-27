@@ -188,7 +188,7 @@ namespace GameOnline.Core.Services.UserService.UserServiceAdmin
             {
                 IsPersistent = model.IsPersistent,
                 AllowRefresh = true,
-                ExpiresUtc = now.AddMinutes(30)
+                ExpiresUtc = now.AddDays(30)
             };
 
             await _http.HttpContext!.SignInAsync(
@@ -202,7 +202,7 @@ namespace GameOnline.Core.Services.UserService.UserServiceAdmin
         public async Task<OperationResult<int>> LogoutAsync()
         {
             await _http.HttpContext!.SignOutAsync();
-            return OperationResult<int>.Success();
+            return OperationResult<int>.Success(1);
         }
 
         public OperationResult<int> FindUserByEmailForForgotPassword(string emailRaw)

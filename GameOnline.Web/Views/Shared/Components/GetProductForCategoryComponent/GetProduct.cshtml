@@ -1,0 +1,78 @@
+﻿@using GameOnline.Core.ExtenstionMethods
+@model IEnumerable<GameOnline.Core.ViewModels.ProductViewmodel.Client.GetProductForCategoryViewmodel>
+@{
+}
+@if (Model.Count() > 0 && Model != null)
+{
+    <header class="card-header">
+        <span class="title-one">@Model.FirstOrDefault().CategoryName</span>
+    </header>
+    <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+        <div class="owl-stage-outer">
+            <div class="owl-stage"
+                 style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                @foreach (var productGroup in Model.GroupBy(x => x.ProductId))
+                {
+                    // انتخاب رکورد با کمترین SpecialPrice معتبر (یا MainPrice اگر SpecialPrice نداشته باشد)
+                    var product = productGroup
+                    .OrderBy(p => PriceEx.Pricecheck(p.GetProductPrices.StartDate, p.GetProductPrices.EndDate, p.GetProductPrices.SpecialPrice) ?? p.GetProductPrices.MainPrice)
+                    .First();
+
+                    int? special = PriceEx.Pricecheck(product.GetProductPrices.StartDate, product.GetProductPrices.EndDate, product.GetProductPrices.SpecialPrice);
+                    int mainPrice = product.GetProductPrices.MainPrice ?? 0;
+
+                    <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
+                        <div class="item">
+                            <a href="Detail/@product.ProductId">
+                                <img src="@PathTools.PathProductImageClient@product.ImageName" class="img-fluid" alt="img-slider">
+                            </a>
+                            <h2 class="post-title">
+                                <a href="Detail/@product.ProductId">@product.FaTitle</a>
+                            </h2>
+                            <div class="price">
+                                @if (special == null)
+                                {
+                                    <ins>
+                                        <span>@mainPrice.ToString("N0")<span>تومان</span></span>
+                                    </ins>
+                                }
+                                else
+                                {
+                                    <del>
+                                        <span>@mainPrice.ToString("N0")<span>تومان</span></span>
+                                    </del>
+                                    <ins>
+                                        <span>@special.Value.ToString("N0")<span>تومان</span></span>
+                                    </ins>
+                                }
+                            </div>
+
+                            <div class="actions">
+                                <ul>
+                                    <li class="action-item like">
+                                        <button class="btn btn-light add-product-wishes" type="submit"
+                                                title="علاقه مندی">
+                                            <i class="mdi mdi-heart"></i>
+                                        </button>
+                                    </li>
+                                    <li class="action-item compare">
+                                        <button class="btn btn-light btn-compare" type="submit" title="مقایسه">
+                                            <i class="mdi mdi-compare"></i>
+                                        </button>
+                                    </li>
+                                    <li class="action-item add-to-cart">
+                                        <button class="btn btn-light btn-add-to-cart" type="submit"
+                                                title="سبد خرید">
+                                            <i class="mdi mdi-shopping"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+}

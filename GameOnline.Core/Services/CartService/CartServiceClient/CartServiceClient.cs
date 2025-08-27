@@ -152,6 +152,6 @@ public class CartServiceClient : ICartServiceClient
 
         }
         _context.SaveChanges();
-        return OperationResult<int>.Success();
+        return OperationResult<int>.Success(1);
     }
 }

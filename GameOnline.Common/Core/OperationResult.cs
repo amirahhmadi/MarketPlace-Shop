@@ -63,15 +63,4 @@ public class OperationResult<T>
             Data = default
         };
     }
-
-    public static OperationResult<int> Success(string message = OperationResultMessage.Success)
-    {
-        return new OperationResult<int>
-        {
-            IsSuccess = true,
-            Code = OperationCode.Success,
-            Message = message,
-            Data = default
-        };
-    }
 }

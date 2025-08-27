@@ -30,6 +30,7 @@ builder.Services.AddDbContext<GameOnlineContext>(options =>
 });
 
 #region Admin
+builder.Services.AddHttpClient();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IBrandServiceAdmin, BrandServiceAdmin>();

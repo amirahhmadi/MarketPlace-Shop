@@ -30,6 +30,28 @@ public class ProductServicesClient : IProductServicesClient
                 }).AsNoTracking().SingleOrDefault();
     }
 
+    public List<GetProductForCategoryViewmodel> GetProductForCategory(int categoryId)
+    {
+        return (from p in _context.Products
+            join Pprice in _context.ProductPrices on p.Id equals Pprice.ProductId
+            join c in _context.Categories on p.CategoryId equals c.Id 
+            where p.CategoryId == categoryId
+            select new GetProductForCategoryViewmodel
+            {
+                FaTitle = p.FaTitle,
+                ImageName = p.ImageName,
+                ProductId = p.Id,
+                CategoryName = c.FaTitle,
+                GetProductPrices = new GetProductPriceForProductViewmodel()
+                {
+                    MainPrice = Pprice.Price,
+                    SpecialPrice = Pprice.SpecialPrice,
+                    EndDate = Pprice.EndDisCount,
+                    StartDate = Pprice.StartDisCount
+                }
+            }).AsNoTracking().ToList();
+    }
+
     public List<GetProductGalleriesViewmodel> GetProductGalleries(int productId)
     {
         return _context.ProductGalleries
