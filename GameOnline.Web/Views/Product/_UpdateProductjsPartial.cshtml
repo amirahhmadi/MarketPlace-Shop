@@ -32,26 +32,39 @@
         }
 
         // آپدیت بخش بالای محصول
-        function UpdateProduct(product, seller, sellerCount) {
-            $(".guarantee-name").text(product.GuaranteeName);
+            function UpdateProduct(product, seller, sellerCount) {
+        $(".guarantee-name").text(product.GuaranteeName);
 
-            const relatedProducts = GetProductByColorId(product.ColorId);
-            const minPrice = Math.min(...relatedProducts.map(p => p.FinalPrice > 0 ? p.FinalPrice : p.MainPrice));
-            $(".js-price").text(minPrice.toLocaleString('fa-IR'));
+        const relatedProducts = GetProductByColorId(product.ColorId);
 
-            $(".length-seller").text(sellerCount);
+        // انتخاب محصولی که همون productId هست (تا تخفیفش مشخص باشه)
+        const currentProduct = relatedProducts.find(p => p.ProductPriceId === product.ProductPriceId);
 
-            // به‌روز کردن دکمه افزودن به سبد
-            $(".add-product-price-a")
-                .attr('data-product-id', product.ProductPriceId)
-                .attr('href', 'javascript:void(0);');
+        // قیمت نهایی (اگر FinalPrice داشت می‌گیریم، در غیر این صورت MainPrice)
+        var finalPrice = currentProduct.FinalPrice && currentProduct.FinalPrice > 0
+            ? currentProduct.FinalPrice
+            : currentProduct.MainPrice;
 
-            $(".js-inventory").text(
-                product.SubmitDate == null
+        var priceHtml = currentProduct.HasDiscount
+            ? `<span style="text-decoration:line-through;color:gray">${Number(currentProduct.MainPrice).toLocaleString('fa-IR')}</span>
+               <span style="color:red;font-weight:bold">${Number(finalPrice).toLocaleString('fa-IR')}</span>`
+            : `<span style="font-weight:bold">${Number(finalPrice).toLocaleString('fa-IR')}</span>`;
+
+        $(".js-price").html(priceHtml); // 👈 به جای text از html استفاده می‌کنیم
+
+        $(".length-seller").text(sellerCount);
+
+        // به‌روز کردن دکمه افزودن به سبد
+        $(".add-product-price-a")
+            .attr('data-product-id', product.ProductPriceId)
+            .attr('href', 'javascript:void(0);');
+
+        $(".js-inventory").text(
+            product.SubmitDate == null
                 ? "موجود در انبار"
                 : "ارسال از " + product.SubmitDate + " روز کاری"
-            );
-        }
+        );
+    }
 
         // چاپ لیست فروشنده‌ها
         function printSeller(products) {

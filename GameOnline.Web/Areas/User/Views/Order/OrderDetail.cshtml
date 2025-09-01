@@ -1,0 +1,239 @@
+﻿@using GameOnline.Core.ExtenstionMethods
+@model IEnumerable<GameOnline.Core.ViewModels.UserViewmodel.Client.GetOrderDetailViewmodel>
+
+<div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="profile-navbar">
+        <div class="profile-navbar-back-alignment">
+            <a href="#" class="profile-navbar-btn-back">بازگشت</a>
+            <h4>
+                سفارش DKC-57262997
+                <span>ثبت شده در تاریخ ۸ خرداد ۱۳۹۸</span>
+            </h4>
+        </div>
+        <div class="profile-navbar-invoice">
+            <button class="profile-navbar-btn-invoice">مشاهده فاکتور</button>
+        </div>
+    </div>
+    <div class="profile-stats mt-3">
+
+        <div class="profile-stats-row">
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span> نام و نام خانوادگی :</span>حسن شجاعی</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>شماره تماس تحویل گیرنده: </span>*******0991</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>آدرس تحویل گیرنده:</span>خراسان شمالی، بجنورد</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>تعداد مرسوله:</span>@Model.Count() مرسوله</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>مبلغ قابل پرداخت:</span>0</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                <div class="profile-stats-col">
+                    <p><span>مبلغ کل:</span>@Model.FirstOrDefault().Price.ToString("N0")</p>
+                </div>
+            </div>
+            <!--                    <a href="#" class="link-spoiler-edit"></a>-->
+        </div>
+
+    </div>
+    <div class="headline-profile" style="margin-top:15px;">
+        <span>مرسوله ۱ از ۱</span>
+        <span class="profile-order-cancel-button">
+            لغو دریافت مرسوله
+        </span>
+    </div>
+    <div class="profile-stats profile-order">
+        <div class="profile-order-steps-note">
+            <span>
+                تحویل مرسوله به مشتری
+            </span>
+        </div>
+        <section class="swiper-container-horizontal">
+            <div class="profile-order-steps-container">
+                <div class="profile-order-steps-item @(Model.FirstOrDefault().OrderType >= OrderType.review_queue?"profile-order-steps-item-active":null)">
+                    <img src="/assets/images/svg/profile-order-1.svg" alt="profile">
+                    <span>در صف بررسی</span>
+                </div>
+                <div class="hr @(Model.FirstOrDefault().OrderType >= OrderType.order_confirmation?"profile-order-steps-item-active":null)"></div>
+                <div class="profile-order-steps-item @(Model.FirstOrDefault().OrderType >= OrderType.order_confirmation?"profile-order-steps-item-active":null)">
+                    <img src="/assets/images/svg/profile-order-2.svg" alt="profile">
+                    <span>تایید سفارش</span>
+                </div>
+                <div class="hr @(Model.FirstOrDefault().OrderType >= OrderType.Order_preparation?"profile-order-steps-item-active":null)"></div>
+                <div class="profile-order-steps-item @(Model.FirstOrDefault().OrderType >= OrderType.Order_preparation?"profile-order-steps-item-active":null)">
+                    <img src="/assets/images/svg/profile-order-3.svg" alt="profile">
+                    <span>آماده‌سازی سفارش</span>
+                </div>
+                <div class="hr @(Model.FirstOrDefault().OrderType >= OrderType.Leaving_the_processing_center?"profile-order-steps-item-active":null)"></div>
+                <div class="profile-order-steps-item @(Model.FirstOrDefault().OrderType >= OrderType.Leaving_the_processing_center?"profile-order-steps-item-active":null)">
+                    <img src="/assets/images/svg/profile-order-4.svg" alt="profile">
+                    <span>خروج از مرکز پردازش</span>
+                </div>
+                <div class="hr @(Model.FirstOrDefault().OrderType >= OrderType.Delivery_to_the_post_office?"profile-order-steps-item-active":null)"></div>
+                <div class="profile-order-steps-item @(Model.FirstOrDefault().OrderType >= OrderType.Delivery_to_the_post_office?"profile-order-steps-item-active":null)">
+                    <img src="/assets/images/svg/profile-order-5.svg" alt="profile">
+                    <span>تحویل به پست</span>
+                </div>
+                <div class="hr @(Model.FirstOrDefault().OrderType >= OrderType.Postal_exchange_center?"profile-order-steps-item-active":null)"></div>
+                <div class="profile-order-steps-item @(Model.FirstOrDefault().OrderType >= OrderType.Postal_exchange_center?"profile-order-steps-item-active":null)">
+                    <img src="/assets/images/svg/profile-order-6.svg" alt="profile">
+                    <span>دریافت در مرکز مبادلات پست</span>
+                </div>
+                <div class="hr @(Model.FirstOrDefault().OrderType >= OrderType.Delivery_to_the_customer?"profile-order-steps-item-active":null)"></div>
+                <div class="profile-order-steps-item @(Model.FirstOrDefault().OrderType >= OrderType.Delivery_to_the_customer?"profile-order-steps-item-active":null)">
+                    <img src="/assets/images/svg/profile-order-7.svg" alt="profile">
+                    <span>تحویل مرسوله به مشتری</span>
+                </div>
+            </div>
+        </section>
+        <div class="table-draught">
+            <div class="table-draught-row">
+                <div class="table-draught-col">
+                    کد مرسوله: 34527436
+                    <span> &nbsp; | &nbsp; </span>
+                    بارکد پستی: 1659875072014867556894578
+                </div>
+                <div class="table-draught-col">
+                    زمان
+                    تحویل: بازه شنبه ۱۱ خرداد - شنبه ۱۸ خرداد
+                    <a href="#" class="btn-modify">
+                        تغییر زمان ارسال
+                    </a>
+                </div>
+            </div>
+            <div class="table-draught-row">
+                <div class="table-draught-col">
+                    نحوه ارسال سفارش: پست پیشتاز با ظرفیت اختصاصی برای دیجی
+                    استور
+                </div>
+                <div class="table-draught-col">
+                    هزینه ارسال
+                    : ۸,۰۰۰ تومان
+
+                </div>
+            </div>
+            <div class="table-draught-row">
+                <div class="table-draught-col last-tabel">
+                    مبلغ این
+                    مرسوله: ۴۳,۰۰۰ تومان
+
+                </div>
+            </div>
+        </div>
+        <div class="table-orders">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">تعداد</th>
+                        <th scope="col">قیمت واحد</th>
+                        <th scope="col">قیمت کل</th>
+                        <th scope="col">تخفیف</th>
+                        <th scope="col">قیمت نهایی</th>
+                        <th scope="col">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.GroupBy(x => x.CartId))
+                    {
+                        @foreach (var Detail in item.ToList())
+                        {
+                            var unitPrice = Detail.OrderDetail.OriginalPrice; // قیمت اصلی
+                            var finalUnitPrice = Detail.OrderDetail.Price;    // قیمت با تخفیف
+                            var count = Detail.OrderDetail.Count;
+
+                            var totalPrice = unitPrice * count;         // قیمت کل قبل از تخفیف
+                            var totalFinalPrice = finalUnitPrice * count; // قیمت کل بعد از تخفیف
+                            var discount = totalPrice - totalFinalPrice; // مقدار تخفیف
+
+                            <tr>
+                                <td>
+                                    <img src="@PathTools.PathProductImageClient@Detail.OrderDetail.ImageName"
+                                         style="width:100px; float:right;" alt="@Detail.OrderDetail.FaTitle">
+                                    <h3>@Detail.OrderDetail.FaTitle</h3>
+                                </td>
+                                <td class="order-code">@count</td>
+
+                                <!-- قیمت واحد -->
+                                <td>
+                                    <span style="text-decoration:@(unitPrice != finalUnitPrice ? "line-through" : "none"); color:gray;">
+                                        @unitPrice.ToString("N0") تومان
+                                    </span>
+                                    @if (unitPrice != finalUnitPrice)
+                                    {
+                                        <br />
+                                        <span>@finalUnitPrice.ToString("N0") تومان</span>
+                                    }
+                                </td>
+
+                                <!-- قیمت کل -->
+                                <td>
+                                    <span style="text-decoration:@(discount > 0 ? "line-through" : "none"); color:gray;">
+                                        @totalPrice.ToString("N0") تومان
+                                    </span>
+                                    @if (discount > 0)
+                                    {
+                                        <br />
+                                        <span>@totalFinalPrice.ToString("N0") تومان</span>
+                                    }
+                                </td>
+
+                                <!-- تخفیف -->
+                                <td>@discount.ToString("N0") تومان</td>
+
+                                <!-- قیمت نهایی -->
+                                <td>@totalFinalPrice.ToString("N0") تومان</td>
+
+                                <td class="detail"><i class="fa fa-angle-left"></i></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div class="product-box-profile">
+        @foreach (var item in Model.GroupBy(x => x.CartId))
+        {
+            @foreach (var Detail in item.ToList())
+            {
+                <div class="product-box-content-profile">
+                    <div class="product-box-count">@Detail.OrderDetail.Count</div>
+                    <a href="#" class="product-box-img">
+                        <img src="@PathTools.PathProductImageClient@Detail.OrderDetail.ImageName" alt="profile">
+                    </a>
+                    <div class="product-box-title">
+                        @Detail.OrderDetail.FaTitle
+                    </div>
+                    <div class="product-box-seller">
+                        <span>فروشنده: </span><span class="product-box-seller-name">هیلاتل</span>
+                    </div>
+                    <div class="product-box-seller"><span></span><span>رنگ : مشکی</span></div>
+                    <div class="price-profile">
+                        <div class="price-value-profile">
+                            @Detail.Price.ToString("N0")
+                            <span class="price-currency"> تومان</span>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+    </div>
+</div>

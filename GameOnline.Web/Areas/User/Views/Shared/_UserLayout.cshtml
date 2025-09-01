@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png"
+          href="#">
+    <link rel="apple-touch-icon" sizes="144x144"
+          href="#">
+    <title>فروشگاه اینترنتی دیجی استور</title>
+    <partial name="_CssPartial" />
+</head>
+
+<body>
+    <partial name="_HeaderPartial" />
+    <div class="nav-categories-overlay"></div>
+    <div class="overlay-search-box"></div>
+
+    <main class="contentM">
+        <div class="container">
+            <div class="col-lg-3 col-md-4 col-xs-12 pull-right">
+                <div class="sidebar-wrapper">
+                    <div class="box-sidebar">
+                        <div class="profile-box" style="border: none;">
+                            <img src="/assets/images/profile/1.jpg" class="profile-box-img-banner" alt="profile">
+                        </div>
+                    </div>
+
+                    <partial name="_UserMenuPartial" />
+
+                </div>
+            </div>
+            @RenderBody()
+        </div>
+    </main>
+
+    <partial name="_FooterPartial" />
+    <partial name="_JsPartial" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
+@if (TempData["SwalType"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: '@TempData["SwalType"]',
+            title: @Html.Raw(Json.Serialize(TempData["SwalTitle"])),
+            text: @Html.Raw(Json.Serialize(TempData["SwalMessage"])),
+            confirmButtonText: 'باشه'
+        });
+    </script>
+}

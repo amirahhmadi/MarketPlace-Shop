@@ -1,4 +1,5 @@
-﻿@using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyGroupViewmodel
+﻿@using GameOnline.Core.ViewModels.CategoryViewModels
+@using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyGroupViewmodel
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model GameOnline.Core.ViewModels.PropertyViewmodel.PropertyNameViewmodel.EditPropertyNameViewmodel
 @{
@@ -31,7 +32,7 @@
 
                                     <div class="form-group col-md-6">
                                         <label asp-for="GroupId">گروه</label>
-                                        <select class="form-control" asp-for="GroupId">
+                                        <select class="form-control" asp-for="GroupId" required>
                                             <option disabled>گروه را انتخاب کنید</option>
                                             @foreach (var item in Model.GetPropertyGroups)
                                             {
@@ -41,6 +42,31 @@
                                             }
                                         </select>
                                         <span asp-validation-for="GroupId" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label>انتخاب دسته والد</label>
+                                        <div class="d-flex gap-2 mb-2">
+                                            <button type="button" class="btn btn-success btn-sm add-parent" data-name="Categories">انتخاب</button>
+                                            <select class="form-control" id="ParentList">
+                                                @foreach (var item in ViewBag.AllCategories as List<GetCategoriesViewModels>)
+                                                {
+                                                    <option value="@item.CategoryId">@item.FaTitle</option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <div class="ParentListSelected mt-3">
+                                            @* دسته‌های انتخاب شده قبلی *@
+                                            @foreach (var catId in Model.Categories)
+                                            {
+                                                var cat = (ViewBag.AllCategories as List<GetCategoriesViewModels>).FirstOrDefault(c => c.CategoryId == catId);
+                                                if (cat != null)
+                                                {
+                                                    <span class="selected-item" data-id="@cat.CategoryId">@cat.FaTitle <i class="remove-item">x</i></span>
+                                                }
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -55,3 +81,6 @@
         </div>
     </section>
 </div>
+@section Scripts {
+    <partial name="_MultiSelectJsPartial" />
+}

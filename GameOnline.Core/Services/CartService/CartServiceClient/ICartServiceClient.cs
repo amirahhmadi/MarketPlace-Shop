@@ -10,6 +10,9 @@ public interface ICartServiceClient
     OperationResult<int> UpdateCheckCart(List<GetCartDetailsViewmodel> details);
     void UpdateChangeCart(int detailId, int count);
     public Task RemoveDetailAsync(int detailId);
+
     List<GetOrdersViewmodel> GetOrdersForProfileByUserId(int userId);
+    List<GetOrdersViewmodel> GetOrdersForUserId(int userId);
     List<GetOrderDetailViewmodel> GetOrderDetailForProfileByCartId(int userId, int cartId);
+
 }

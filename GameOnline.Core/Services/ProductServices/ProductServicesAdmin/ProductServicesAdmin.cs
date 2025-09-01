@@ -141,21 +141,37 @@ public class ProductServicesAdmin : IProductServicesAdmin
 
     public List<GetProductViewmodel> GetProducts()
     {
-        var product = (from p in _context.Products
-                       join b in _context.Brands on p.BrandId equals b.Id
-                       join c in _context.Categories on p.CategoryId equals c.Id
+        var products = (from p in _context.Products
+            join b in _context.Brands on p.BrandId equals b.Id
+            join c in _context.Categories on p.CategoryId equals c.Id
+            select new GetProductViewmodel()
+            {
+                BrandName = b.FaTitle,
+                CategoryName = c.FaTitle,
+                FaTitle = p.FaTitle,
+                ImageName = p.ImageName,
+                ProductId = p.Id,
+                IsActive = p.IsActive,
 
-                       select new GetProductViewmodel()
-                       {
-                           BrandName = b.FaTitle,
-                           CategoryName = c.FaTitle,
-                           FaTitle = p.FaTitle,
-                           ImageName = p.ImageName,
-                           ProductId = p.Id,
-                           IsActive = p.IsActive
+                // گرفتن ریویوها
+                AddOrUpdateProductReview = _context.ProductReviews
+                    .Where(r => r.ProductId == p.Id)
+                    .Select(r => new AddOrUpdateProductReviewViewmodel
+                    {
+                        ReviewId = r.Id,
+                        ProductId = r.ProductId,
+                        Review = r.Review,
+                        Positive = r.Positive,
+                        Negative = r.Negative
+                    }).ToList(),
 
-                       }).AsNoTracking().ToList();
-        return product;
+                // گرفتن ویژگی‌ها
+                PropertyProducts = _context.PropertyProducts
+                    .Where(pp => pp.ProductId == p.Id)
+                    .ToList()
+            }).AsNoTracking().ToList();
+
+        return products;
     }
 
     public bool IsProductExist(string faTitle, string enTitle, int excludeId)

@@ -40,18 +40,32 @@ public class PropertyNameServiceAdmin : IPropertyNameServiceAdmin
         var result = _context.PropertyNames.FirstOrDefault(x => x.Id == editPropertyName.PropertyNameId);
         if (result == null)
             return OperationResult<int>.NotFound();
-        
 
         if (IsPropertyNameExist(editPropertyName.GroupId, editPropertyName.PropertyNameTitle, editPropertyName.PropertyNameId))
-        {
             return OperationResult<int>.Duplicate();
+
+        // ویرایش اطلاعات ویژگی
+        result.GroupId = editPropertyName.GroupId;
+        result.Title = editPropertyName.PropertyNameTitle.Trim();
+        result.LastModified = DateTime.Now;
+        _context.PropertyNames.Update(result);
+
+        // حذف دسته‌بندی‌های قدیمی
+        var oldCategories = _context.PropertyNameCategories.Where(x => x.PropertyNameId == result.Id);
+        _context.PropertyNameCategories.RemoveRange(oldCategories);
+
+        // اضافه کردن دسته‌بندی‌های جدید
+        if (editPropertyName.Categories != null && editPropertyName.Categories.Any())
+        {
+            var newCategories = editPropertyName.Categories.Select(catId => new PropertyNameCategory
+            {
+                PropertyNameId = result.Id,
+                CategoryId = catId,
+                CreationDate = DateTime.Now
+            }).ToList();
+            _context.PropertyNameCategories.AddRange(newCategories);
         }
 
-        result.GroupId = editPropertyName.GroupId;
-        result.Title = editPropertyName.PropertyNameTitle;
-        result.LastModified = DateTime.Now;
-
-        _context.PropertyNames.Update(result);
         _context.SaveChanges();
         return OperationResult<int>.Success(result.Id);
     }

@@ -4,7 +4,7 @@
             <div class="col-lg-8 col-md-8 col-xs-12 pull-right">
                 <div class="header-right">
                     <div class="logo">
-                        <a href="#"><img src="/assets/images/logo.png" alt="logo"></a>
+                        <a href="/"><img src="/assets/images/logo.png" alt="logo"></a>
                     </div>
 
                     <div class="col-lg-8 col-md-12 col-xs-12 pull-right">
@@ -70,11 +70,13 @@
 
             <div class="col-lg-4 col-md-4 col-xs-12 pull-left">
                 <div class="header-left">
-                    <div class="mini-cart-header">
-                        @await Component.InvokeAsync("MiniCart")
-                    </div>
+                    
                     @if (User.Identity.IsAuthenticated)
                     {
+                        <div class="mini-cart-header">
+                            @await Component.InvokeAsync("MiniCart")
+                        </div>
+
                         <a href="#" class="login-link">
                             <div class="btn-login">
                                 <span class="mdi mdi-account"></span>
@@ -137,23 +139,26 @@
                                 </div>
                             </div>
                         </a>
+
+                        <div class="header-cart-interest">
+                            <a href="#" class="d-block">
+                                <i class="fa fa-heart"></i>
+                                <span class="counter">3</span>
+                            </a>
+                        </div>
                     }
                     else
                     {
-                        <a href="/Login" class="login-link">
-                            <div class="btn-login">
+                        <div class="user-menu header-left1">
+                            <a asp-controller="Account" asp-action="Login" class="btn-login-outline">
                                 <span class="mdi mdi-account"></span>
-
-                            </div>
-                        </a>
+                                <span>ورود به حساب کاربری</span>
+                            </a>
+                        </div>
                     }
 
-                    <div class="header-cart-interest">
-                        <a href="#" class="d-block">
-                            <i class="fa fa-heart"></i>
-                            <span class="counter">3</span>
-                        </a>
-                    </div>
+
+                    
                     <div class="responsive-header-left">
                         <div class="btn-login-responsive">
                             <span class="mdi mdi-account"></span>

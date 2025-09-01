@@ -72,12 +72,19 @@ public class CartServiceClient : ICartServiceClient
                     LastModifiedDate = c.LastModified,
                     OrderType = c.OrderType,
                     Price = c.SumOrder,
+
                     OrderDetail = new OrderDeatilViewmodel
                     {
                         Count = cd.Count,
+
+                        // قیمت اصلی (مثلا از جدول ProductPrices)
+                        OriginalPrice = Pprice.Price,
+
+                        // قیمت بعد از تخفیف (قیمت نهایی در CartDetails ذخیره شده)
                         Price = cd.Price,
+
                         FaTitle = p.FaTitle,
-                        ImgName = p.ImageName,
+                        ImageName = p.ImageName,
                         ProductId = p.Id
                     }
                 }).AsNoTracking()
@@ -106,6 +113,28 @@ public class CartServiceClient : ICartServiceClient
                     }
                 }).AsNoTracking()
             .ToList();
+    }
+
+    public List<GetOrdersViewmodel> GetOrdersForUserId(int userId)
+    {
+        return (from c in _context.Carts
+            join cd in _context.CartDetails on c.Id equals cd.CartId
+            where (c.UserId.Equals(userId))
+            select new GetOrdersViewmodel()
+            {
+                CreationDate = c.CreationDate,
+                CartId = c.Id,
+                LastModified = c.LastModified,
+                OrderType = c.OrderType,
+                Price = c.SumOrder,
+                sumOrder = new SumOrderProfileViewmodel()
+                {
+                    Price = cd.Price,
+                    Count = cd.Count,
+                    CreationDate = cd.CreationDate,
+                    LastModified = cd.LastModified,
+                }
+            }).AsNoTracking().ToList();
     }
 
     public async Task RemoveDetailAsync(int detailId)

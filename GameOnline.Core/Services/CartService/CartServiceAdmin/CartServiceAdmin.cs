@@ -30,12 +30,11 @@ public class CartServiceAdmin : ICartServiceAdmin
     }
     public OperationResult<int> AddCart(AddCartViewmodel addCart)
     {
-        var findCart = FindCartById(addCart.UserId);
-        int cartId = 0;
-        CartDetail? findCartDetail = null;
-        if (findCart == null)
+        var cart = FindCartByUserId(addCart.UserId); // ✅ اینجا مشکل داشت
+
+        if (cart == null)
         {
-            Cart cart = new Cart()
+            cart = new Cart
             {
                 UserId = addCart.UserId,
                 CreationDate = DateTime.Now,
@@ -43,46 +42,46 @@ public class CartServiceAdmin : ICartServiceAdmin
             };
             _context.Carts.Add(cart);
             _context.SaveChanges();
-            cartId = cart.Id;
         }
         else
         {
-            findCart.LastModified = DateTime.Now;
-            _context.Carts.Update(findCart);
-            findCartDetail = FindCartDetail(findCart.Id, addCart.ProductPriceId);
+            cart.LastModified = DateTime.Now;
+            // نیازی به Update نیست چون EF داره track می‌کنه
         }
-        var findProductPrice = FindProductPriceById(addCart.ProductPriceId);
 
-        if (findCartDetail == null)
+        var productPrice = FindProductPriceById(addCart.ProductPriceId);
+        if (productPrice == null)
+            return OperationResult<int>.Error("محصول یافت نشد");
+
+        var cartDetail = FindCartDetail(cart.Id, addCart.ProductPriceId);
+
+        if (cartDetail == null)
         {
-            findCartDetail = findCartDetail ?? new CartDetail();
-            if (findProductPrice != null)
+            cartDetail = new CartDetail
             {
-                findCartDetail.Price = findProductPrice.Price;
-                findCartDetail.ProductPriceId = findProductPrice.Id;
-                findCartDetail.CartId = findCart == null ? cartId : findCart.Id;
-                findCartDetail.Count = 1;
-                findCartDetail.CreationDate = DateTime.Now;
-                _context.CartDetails.Add(findCartDetail);
-            }
+                Price = productPrice.Price,
+                ProductPriceId = productPrice.Id,
+                CartId = cart.Id,
+                Count = 1,
+                CreationDate = DateTime.Now
+            };
+            _context.CartDetails.Add(cartDetail);
         }
         else
         {
-            if (findCartDetail != null &&
-                findProductPrice.Count > findCartDetail.Count &&
-                findProductPrice.MaxOrderCount > findCartDetail.Count)
+            if (productPrice.Count > cartDetail.Count &&
+                productPrice.MaxOrderCount > cartDetail.Count)
             {
-                findCartDetail.Count += 1;
-                findCartDetail.LastModified = DateTime.Now;
-                findCartDetail.Price = findProductPrice.Price;
-                _context.CartDetails.Update(findCartDetail);
+                cartDetail.Count++;
+                cartDetail.LastModified = DateTime.Now;
+                cartDetail.Price = productPrice.Price;
             }
         }
 
         _context.SaveChanges();
-
         return OperationResult<int>.Success(addCart.UserId);
     }
+
 
     public OperationResult<int> FindCartIdByUserId(int userId)
     {
@@ -91,6 +90,13 @@ public class CartServiceAdmin : ICartServiceAdmin
             .FirstOrDefault(c => c.OrderType == OrderType.Product_selection);
 
         return OperationResult<int>.Success(findcart.Id);
+    }
+
+    public Cart? FindCartByUserId(int userId)
+    {
+        return _context.Carts
+            .Include(c => c.CartDetails)
+            .FirstOrDefault(c => c.UserId == userId && c.OrderType == OrderType.Product_selection);
     }
 
     public CartDetail? FindCartDetail(int cartId, int productPriceId)
@@ -108,20 +114,9 @@ public class CartServiceAdmin : ICartServiceAdmin
 
     public Cart? FindCartById(int cartId)
     {
-        return (from c in _context.Carts
-                join cd in _context.CartDetails on c.Id equals cd.CartId
-                where (c.OrderType == OrderType.Product_selection && c.Id == cartId)
-
-                select new Cart
-                {
-                    Id = c.Id,
-                    OrderType = c.OrderType,
-                    UserId = c.UserId,
-                    CartDetails = c.CartDetails,
-                    SumOrder = c.SumOrder,
-                })
-            .AsNoTracking()
-            .FirstOrDefault();
+        return _context.Carts
+            .Include(c => c.CartDetails)
+            .FirstOrDefault(c => c.Id == cartId && c.OrderType == OrderType.Product_selection);
     }
 
     public async Task<OperationResult<string>> Payment(int cartId)

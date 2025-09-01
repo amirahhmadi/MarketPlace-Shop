@@ -69,6 +69,8 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             }
 
             result.GetPropertyGroups = _propertyGroupServiceAdmin.GetPropertyGroups();
+            ViewBag.AllCategories = _categoryServiceAdmin.GetCategory(); // همه دسته‌ها برای نمایش
+
             return View(result);
         }
 
@@ -79,10 +81,20 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             {
                 SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
                 editPropertyName.GetPropertyGroups = _propertyGroupServiceAdmin.GetPropertyGroups();
+                ViewBag.AllCategories = _categoryServiceAdmin.GetCategory();
                 return View(editPropertyName);
             }
 
-            _propertyNameServiceAdmin.EditPropertyName(editPropertyName);
+            var result = _propertyNameServiceAdmin.EditPropertyName(editPropertyName);
+
+            if (!result.IsSuccess)
+            {
+                SetSweetAlert("error", "خطا", "ویرایش ویژگی با مشکل مواجه شد.");
+                editPropertyName.GetPropertyGroups = _propertyGroupServiceAdmin.GetPropertyGroups();
+                ViewBag.AllCategories = _categoryServiceAdmin.GetCategory();
+                return View(editPropertyName);
+            }
+
             SetSweetAlert("success", "عملیات موفق", "ویژگی با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }

@@ -1,0 +1,87 @@
+﻿@using System.Security.Claims
+<div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="col-lg-6 col-xs-12 pull-right">
+        <div class="headline-profile">
+            <span>اطلاعات شخصی</span>
+        </div>
+        <div class="profile-stats mt-3">
+            <div class="profile-stats-row">
+                <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                    <div class="profile-stats-col">
+                        <p><span> نام و نام خانوادگی :</span>حسن شجاعی</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                    <div class="profile-stats-col">
+                        <p><span>پست الکترونیک :</span>info@digistore.com</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                    <div class="profile-stats-col">
+                        <p><span>شماره تلفن همراه :</span>*******0991</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                    <div class="profile-stats-col">
+                        <p><span>کد ملی :</span>-</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                    <div class="profile-stats-col">
+                        <p><span>دریافت خبرنامه :</span>بله</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-xs-12 pull-right" style="padding:0;">
+                    <div class="profile-stats-col">
+                        <p><span>شماره کارت :</span>-</p>
+                    </div>
+                </div>
+                <div class="profile-stats-action">
+                    <a href="profile-additional-info.html" class="link-spoiler-edit"><i class="fa fa-pencil"></i>ویرایش اطلاعات شخصی</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-xs-12 pull-right">
+        <div class="headline-profile headline-profile-favorites">
+            <span>لیست علاقه مندی</span>
+        </div>
+        <div class="profile-stats mt-3">
+            <div class="profile-recent-fav">
+                <a href="#"><img src="/assets/images/product-slider-2/111472656.jpg" alt="profile"></a>
+                <div class="profile-recent-fav-col">
+                    <a href="#">گوشی موبایل سامسونگ مدل Samsung Galaxy S10 Plus SM...</a>
+                    <div class="profile-recent-fav-price">۱,۷۴۶,۰۰۰تومان</div>
+                    <div class="profile-recent-fav-remove">
+                        <a href="#">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-recent-fav">
+                <a href="#"><img src="/assets/images/product-slider-2/111472656.jpg" alt="profile"></a>
+                <div class="profile-recent-fav-col">
+                    <a href="#">گوشی موبایل سامسونگ مدل Samsung Galaxy S10 Plus SM...</a>
+                    <div class="profile-recent-fav-price">۱,۷۴۶,۰۰۰تومان</div>
+                    <div class="profile-recent-fav-remove">
+                        <a href="#">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-stats-action">
+                <a href="#" class="link-spoiler-edit">
+                    <i class="fa fa-pencil"></i>مشاهده و ویرایش لیست علاقه
+                    مندی
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @await Component.InvokeAsync("GetOrderForUserProfileComponent")
+
+</div>

@@ -5,3 +5,41 @@
     .hidden-feature.show {
         display: list-item;
     }
+
+.btn-login-outline {
+    display: inline-flex; /* به جای flex */
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: #333;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.3s;
+    text-decoration: none;
+    white-space: nowrap; /* جلوگیری از شکستن متن */
+    width: auto; /* کشیده نشه */
+}
+
+    .btn-login-outline:hover {
+        border-color: #888;
+        background: #f9f9f9;
+        text-decoration: none;
+    }
+
+    .btn-login-outline .mdi {
+        font-size: 18px;
+    }
+
+.header-left1 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* می‌فرستد گوشه راست */
+    gap: 15px; /* فاصله بین آیتم‌ها */
+}
+
+    .header-left .user-menu {
+        margin: 0; /* حذف فاصله‌های اضافی */
+    }

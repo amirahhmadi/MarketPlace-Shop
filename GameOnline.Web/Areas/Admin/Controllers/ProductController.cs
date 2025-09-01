@@ -128,10 +128,18 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ProductReview(AddOrUpdateProductReviewViewmodel reviewViewmodel)
         {
+            if (!ModelState.IsValid)
+            {
+                SetSweetAlert("error", "خطا", "اطلاعات وارد شده کامل یا صحیح نیست.");
+                return View(reviewViewmodel);
+            }
+
             _productServicesAdmin.EditProductReview(reviewViewmodel);
+
             SetSweetAlert("success", "عملیات موفق", "بررسی محصول با موفقیت ثبت شد.");
             return RedirectToAction(nameof(Index));
         }
+
         #endregion
     }
 }
