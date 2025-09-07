@@ -20,6 +20,7 @@ using GameOnline.Core.Services.ProductServices.ProductServicesClient;
 using GameOnline.Core.Services.Comment_FAQ.Client;
 using GameOnline.Core.Services.UserService.UserServiceAdmin;
 using GameOnline.Core.Services.AddressService.AddressServiceClient;
+using GameOnline.Core.Services.RoleService.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -47,8 +48,6 @@ builder.Services.AddTransient<IDiscountServicesAdmin, DiscountServicesAdmin>();
 builder.Services.AddTransient<IUserServiceAdmin, UserServiceAdmin>();
 builder.Services.AddTransient<IAccountServiceAdmin, AccountServiceAdmin>();
 builder.Services.AddTransient<ICartServiceAdmin, CartServiceAdmin>();
-builder.Services.AddTransient<ICartServiceClient, CartServiceClient>();
-builder.Services.AddTransient<IAddressServiceClient, AddressServiceClient>();
 
 #endregion
 
@@ -57,6 +56,9 @@ builder.Services.AddTransient<IAddressServiceClient, AddressServiceClient>();
 builder.Services.AddTransient<ISliderServiceClient, SliderServiceClient>();
 builder.Services.AddTransient<IProductServicesClient, ProductServicesClient>();
 builder.Services.AddTransient<IFaqServiceClient, FaqServiceClient>();
+builder.Services.AddTransient<ICartServiceClient, CartServiceClient>();
+builder.Services.AddTransient<IAddressServiceClient, AddressServiceClient>();
+builder.Services.AddTransient<IRoleServiceClient, RoleServiceClient>();
 
 #endregion
 

@@ -1,39 +1,43 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Enums\" />
-    <Folder Include="Services\AddressService\AddressServiceAdmin\" />
-    <Folder Include="Services\BrandServices\BrandServicesClient\" />
-    <Folder Include="Services\CategoryServices\CategoryServicesClient\" />
-    <Folder Include="Services\ColorServices\ColorServicesClient\" />
-    <Folder Include="Services\Comment-FAQ\Server\" />
-    <Folder Include="Services\GalleryServices\GalleryServicesClient\" />
-    <Folder Include="Services\GuaranteeServices\GuaranteeServicesAdmin\" />
-    <Folder Include="Services\GuaranteeServices\GuaranteeServicesClient\" />
-    <Folder Include="Services\GuaranteeServices\" />
-    <Folder Include="Services\UserService\UserServiceClient\" />
-    <Folder Include="ViewModels\Comment-FAQ\Comment\Client\" />
-    <Folder Include="ViewModels\Comment-FAQ\Comment\Server\" />
-    <Folder Include="ViewModels\Comment-FAQ\FAQ\Server\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Enums\" />
+		<Folder Include="Services\AddressService\AddressServiceAdmin\" />
+		<Folder Include="Services\BrandServices\BrandServicesClient\" />
+		<Folder Include="Services\CategoryServices\CategoryServicesClient\" />
+		<Folder Include="Services\ColorServices\ColorServicesClient\" />
+		<Folder Include="Services\Comment-FAQ\Server\" />
+		<Folder Include="Services\GalleryServices\GalleryServicesClient\" />
+		<Folder Include="Services\GuaranteeServices\GuaranteeServicesAdmin\" />
+		<Folder Include="Services\GuaranteeServices\GuaranteeServicesClient\" />
+		<Folder Include="Services\GuaranteeServices\" />
+		<Folder Include="Services\UserService\UserServiceClient\" />
+		<Folder Include="ViewModels\Comment-FAQ\Comment\Client\" />
+		<Folder Include="ViewModels\Comment-FAQ\Comment\Server\" />
+		<Folder Include="ViewModels\Comment-FAQ\FAQ\Server\" />
+		<Folder Include="ViewModels\RoleViewmodel\Client\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.8" />
-    <PackageReference Include="ZarinpalSandbox" Version="2.0.4" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.8" />
+		<PackageReference Include="ZarinpalSandbox" Version="2.0.4" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\GameOnline.Common\GameOnline.Common.csproj" />
-    <ProjectReference Include="..\GameOnline.DataBase\GameOnline.DataBase.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\GameOnline.Common\GameOnline.Common.csproj" />
+		<ProjectReference Include="..\GameOnline.DataBase\GameOnline.DataBase.csproj" />
+	</ItemGroup>
 
 </Project>

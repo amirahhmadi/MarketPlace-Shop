@@ -4,6 +4,7 @@ using GameOnline.DataBase.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameOnline.DataBase.Migrations
 {
     [DbContext(typeof(GameOnlineContext))]
-    partial class GameOnlineContextModelSnapshot : ModelSnapshot
+    [Migration("20250906112035_add-role")]
+    partial class addrole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Address.Province", b =>
@@ -77,7 +80,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Provinces", (string)null);
+                    b.ToTable("Provinces");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Address.UserAddress", b =>
@@ -135,7 +138,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserAddresses", (string)null);
+                    b.ToTable("UserAddresses");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Brands.Brand", b =>
@@ -174,7 +177,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Carts.Cart", b =>
@@ -222,7 +225,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Carts.CartDetail", b =>
@@ -263,7 +266,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("ProductPriceId");
 
-                    b.ToTable("CartDetails", (string)null);
+                    b.ToTable("CartDetails");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Categories.Category", b =>
@@ -311,7 +314,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Categories.SubCategory", b =>
@@ -346,7 +349,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("SubId");
 
-                    b.ToTable("SubCategories", (string)null);
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Colors.Color", b =>
@@ -382,7 +385,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Colors", (string)null);
+                    b.ToTable("Colors");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Comment_FAQ.FAQAnswer", b =>
@@ -424,7 +427,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FaqAnswers", (string)null);
+                    b.ToTable("FaqAnswers");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Comment_FAQ.Question", b =>
@@ -466,7 +469,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Discounts.Discount", b =>
@@ -507,7 +510,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Discounts", (string)null);
+                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Guarantees.Guarantee", b =>
@@ -536,7 +539,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Guarantees", (string)null);
+                    b.ToTable("Guarantees");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Payment.PaymentDetail", b =>
@@ -589,7 +592,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("DisCountId");
 
-                    b.ToTable("PaymentDetails", (string)null);
+                    b.ToTable("PaymentDetails");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Products.Product", b =>
@@ -642,7 +645,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Products.ProductGallery", b =>
@@ -676,7 +679,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductGalleries", (string)null);
+                    b.ToTable("ProductGalleries");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Products.ProductPrice", b =>
@@ -742,7 +745,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("ProductPrices", (string)null);
+                    b.ToTable("ProductPrices");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Products.ProductReview", b =>
@@ -781,7 +784,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductReviews", (string)null);
+                    b.ToTable("ProductReviews");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyGroup", b =>
@@ -810,7 +813,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertyGroups", (string)null);
+                    b.ToTable("PropertyGroups");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyName", b =>
@@ -847,7 +850,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("PropertyNames", (string)null);
+                    b.ToTable("PropertyNames");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyNameCategory", b =>
@@ -882,7 +885,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("PropertyNameId");
 
-                    b.ToTable("PropertyNameCategories", (string)null);
+                    b.ToTable("PropertyNameCategories");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyProduct", b =>
@@ -917,7 +920,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("PropertyValueId");
 
-                    b.ToTable("PropertyProducts", (string)null);
+                    b.ToTable("PropertyProducts");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Properties.PropertyValue", b =>
@@ -951,7 +954,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("PropertyNameId");
 
-                    b.ToTable("PropertyValues", (string)null);
+                    b.ToTable("PropertyValues");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Role.Role", b =>
@@ -980,7 +983,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Role.RolePermission", b =>
@@ -1013,7 +1016,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RolePermissions", (string)null);
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Role.UserRole", b =>
@@ -1048,7 +1051,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles", (string)null);
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Sellers.Seller", b =>
@@ -1091,7 +1094,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sellers", (string)null);
+                    b.ToTable("Sellers");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Sliders.Slider", b =>
@@ -1129,7 +1132,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sliders", (string)null);
+                    b.ToTable("Sliders");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Users.User", b =>
@@ -1198,7 +1201,7 @@ namespace GameOnline.DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("GameOnline.DataBase.Entities.Address.UserAddress", b =>

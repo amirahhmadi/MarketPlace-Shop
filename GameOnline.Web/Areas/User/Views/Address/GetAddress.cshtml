@@ -1,0 +1,67 @@
+﻿@model IEnumerable<GameOnline.Core.ViewModels.UserViewmodel.Client.GetAddressForProfileViewmodel>
+@{
+}
+<div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+    <div class="d-block">
+        <div class="profile-content">
+            <div class="headline-profile">
+                <span>آدرس من</span>
+            </div>
+            @foreach (var item in Model)
+            {
+                <div class="profile-stats">
+                    <div class="profile-address">
+                        <div class="box-header">
+                            <span class="box-title">نشانی ما @(item.IsActive ? "- آدرس فعال" : "")</span>
+                        </div>
+
+                        <div class="profile-address-item">
+                            <div class="profile-address-item-top">
+                                <div class="profile-address-item-title">@item.ProvinceName,@item.CityName</div>
+                                <div class="ui-more">
+                                    <button class="btn-remove-address btn btn-danger" type="submit">حذف</button>
+                                </div>
+                            </div>
+
+                            <div class="profile-address-content">
+                                <ul class="profile-address-info">
+                                    <li>
+                                        <div class="profile-address-info-item location">
+                                            <i class="mdi mdi-map-outline"></i>
+                                            @item.FullAddress
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="profile-address-info-item location">
+                                            <i class="mdi mdi-email-outline"></i>
+                                            @item.PostalCode
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="profile-address-info-item location">
+                                            <i class="mdi mdi-phone"></i>
+                                            @item.Phone
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="profile-address-info-item location">
+                                            <i class="mdi mdi-account"></i>
+                                            @item.UserName
+                                        </div>
+                                    </li>
+                                    <li class="location-link">
+                                        <a href="#" class="edit-address-link" data-toggle="modal" data-target="#modalAddress">
+                                            ویرایش
+                                            نشانی
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

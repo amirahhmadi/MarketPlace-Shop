@@ -105,7 +105,8 @@ namespace GameOnline.Core.Services.UserService.UserServiceAdmin
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.Name ?? " ")
+                new Claim(ClaimTypes.Name, user.Name ?? " "),
+                new Claim(ClaimTypes.MobilePhone ,user.Phone ?? "")
             };
 
             var properties = new AuthenticationProperties
@@ -181,7 +182,9 @@ namespace GameOnline.Core.Services.UserService.UserServiceAdmin
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.Name ?? " ")
+                new Claim(ClaimTypes.Name, user.Name ?? " "),
+                new Claim(ClaimTypes.MobilePhone ,user.Phone ?? "")
+
             };
 
             var properties = new AuthenticationProperties

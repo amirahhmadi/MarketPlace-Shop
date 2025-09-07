@@ -11,5 +11,6 @@ public interface IProductServicesClient
     GetReviewForClientViewmodel? GetReviewForClient(int productId);
     List<GetPropertyForProductClientViewmodel> GetPropertyForProductClient(int productId);
     List<GetProductForCategoryViewmodel> GetProductForCategory(int categoryId);
+    List<GetProductForCategoryViewmodel> GetDiscountedProducts();
 
 }

@@ -6,5 +6,6 @@ public interface IUserServiceAdmin
 {
     public bool ExistEmail(int userId, string email);
     User? FindUserByEmail(string email);
+    User FindUserById(int id);
 
 }

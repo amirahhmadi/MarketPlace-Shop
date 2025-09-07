@@ -9,6 +9,7 @@ using GameOnline.DataBase.Entities.Guarantees;
 using GameOnline.DataBase.Entities.Payment;
 using GameOnline.DataBase.Entities.Products;
 using GameOnline.DataBase.Entities.Properties;
+using GameOnline.DataBase.Entities.Role;
 using GameOnline.DataBase.Entities.Sellers;
 using GameOnline.DataBase.Entities.Sliders;
 using GameOnline.DataBase.Entities.Users;
@@ -47,6 +48,9 @@ public class GameOnlineContext : DbContext
     public DbSet<UserAddress> UserAddresses { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<Province> Provinces { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -97,6 +101,12 @@ public class GameOnlineContext : DbContext
             .WithMany(g => g.ProductPrices)
             .HasForeignKey(pp => pp.GuaranteeId)
             .IsRequired(false);
+
+        modelBuilder.Entity<FAQAnswer>()
+            .HasOne(a => a.Question)
+            .WithMany(q => q.FaqAnswers)
+            .IsRequired(false); // optional
+
 
         // -------------------------
         // تغییر رفتار Delete به Restrict

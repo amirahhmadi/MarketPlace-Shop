@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using GameOnline.Core.Services.CartService.CartServiceClient;
+using GameOnline.DataBase.Entities.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameOnline.Web.Areas.User.Controllers
@@ -20,6 +21,13 @@ namespace GameOnline.Web.Areas.User.Controllers
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var orderDetail = _cartServiceClient.GetOrderDetailForProfileByCartId(userId, cartId);
             return View(orderDetail);
+        }
+
+        [Route("Orders")]
+        public IActionResult Orders()
+        {
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            return View(_cartServiceClient.GetOrdersForProfileByUserId(userId));
         }
     }
 }

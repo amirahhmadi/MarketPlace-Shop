@@ -25,4 +25,12 @@ public class UserServiceAdmin : IUserServiceAdmin
             .AsNoTracking()
             .FirstOrDefault();
     }
+
+    public User FindUserById(int id)
+    {
+        return _context.Users
+            .Where(x => x.Id == id)
+            .AsNoTracking()
+            .FirstOrDefault();
+    }
 }

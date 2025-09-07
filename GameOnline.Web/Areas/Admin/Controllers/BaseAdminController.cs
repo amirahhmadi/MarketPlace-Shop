@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GameOnline.Core.Security;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GameOnline.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [PermissionCheck(1)]
     public class BaseAdminController : Controller
     {
         public void SetSweetAlert(string type, string title, string message)

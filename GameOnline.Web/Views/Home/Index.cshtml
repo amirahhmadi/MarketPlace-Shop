@@ -1,4 +1,6 @@
-﻿@{
+﻿@using GameOnline.Core.ExtenstionMethods
+@model IEnumerable<GameOnline.Core.ViewModels.ProductViewmodel.Client.GetProductForCategoryViewmodel>
+@{
 }
 <main class="contentM">
 
@@ -31,213 +33,48 @@
                                         <div class="owl-stage-outer">
                                             <div class="owl-stage"
                                                  style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
-                                                <div class="owl-item active"
-                                                     style="width: 309.083px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <a href="#">
-                                                            <img src="/assets/images/product-slider-2/Knife.jpg"
-                                                                 class="img-fluid" alt="img-slider">
-                                                        </a>
-                                                        <h2 class="post-title">
-                                                            <a href="#">
-                                                                تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز
-                                                                82
-                                                                اینچ
+                                                @foreach (var item in Model)
+                                                {
+                                                    <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
+                                                        <div class="item">
+                                                            <a href="Detail/@item.ProductId">
+                                                                <img src="@PathTools.PathProductImageClient@item.ImageName"
+                                                                     class="img-fluid" alt="@item.FaTitle">
                                                             </a>
-                                                        </h2>
-                                                        <div class="price">
-                                                            <div class="discount-item">
-                                                                <span>۳۲٪</span>
+
+                                                            <h2 class="post-title">
+                                                                <a href="Detail/@item.ProductId">@item.FaTitle</a>
+                                                            </h2>
+
+                                                            <div class="price">
+                                                                <div class="discount-item">
+                                                                    <span>
+                                                                        @{
+                                                                            var discount = 100 - ((item.GetProductPrices.SpecialPrice.Value * 100) / item.GetProductPrices.MainPrice);
+                                                                        }
+                                                                        @discount ٪
+                                                                    </span>
+                                                                </div>
+
+                                                                <del>
+                                                                    <span>@item.GetProductPrices.MainPrice.Value.ToString("N0") <span>تومان</span></span>
+                                                                </del>
+
+                                                                <ins>
+                                                                    <span>@item.GetProductPrices.SpecialPrice?.ToString("N0") <span>تومان</span></span>
+                                                                </ins>
                                                             </div>
-                                                            <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                            <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                        </div>
-                                                        <div class="product-box-timer">
-                                                            <span class="fa fa-clock-o"></span>
-                                                            <div class="countdown countdown-style-3 h4"
-                                                                 data-date-time="10/10/2025 24:00"
-                                                                 data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
+
+                                                            <div class="product-box-timer">
+                                                                <span class="fa fa-clock-o"></span>
+                                                                <div class="countdown countdown-style-3 h4"
+                                                                     data-date-time="@item.GetProductPrices.EndDate?.ToString("MM/dd/yyyy HH:mm")"
+                                                                     data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="owl-item active"
-                                                     style="width: 309.083px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <a href="#">
-                                                            <img src="/assets/images/product-slider-2/phone.jpg"
-                                                                 class="img-fluid" alt="img-slider">
-                                                        </a>
-                                                        <h2 class="post-title">
-                                                            <a href="#">
-                                                                تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز
-                                                                82
-                                                                اینچ
-                                                            </a>
-                                                        </h2>
-                                                        <div class="price">
-                                                            <div class="discount-item">
-                                                                <span>۳۲٪</span>
-                                                            </div>
-                                                            <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                            <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                        </div>
-                                                        <div class="product-box-timer">
-                                                            <span class="fa fa-clock-o"></span>
-                                                            <div class="countdown countdown-style-3 h4"
-                                                                 data-date-time="10/10/2025 24:00"
-                                                                 data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item active"
-                                                     style="width: 309.083px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <a href="#">
-                                                            <img src="/assets/images/product-slider-2/tishert.jpg"
-                                                                 class="img-fluid" alt="img-slider">
-                                                        </a>
-                                                        <h2 class="post-title">
-                                                            <a href="#">
-                                                                تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز
-                                                                82
-                                                                اینچ
-                                                            </a>
-                                                        </h2>
-                                                        <div class="price">
-                                                            <div class="discount-item">
-                                                                <span>۳۲٪</span>
-                                                            </div>
-                                                            <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                            <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                        </div>
-                                                        <div class="product-box-timer">
-                                                            <span class="fa fa-clock-o"></span>
-                                                            <div class="countdown countdown-style-3 h4"
-                                                                 data-date-time="10/10/2025 24:00"
-                                                                 data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item active"
-                                                     style="width: 309.083px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <a href="#">
-                                                            <img src="/assets/images/product-slider-2/headphone.jpg"
-                                                                 class="img-fluid" alt="img-slider">
-                                                        </a>
-                                                        <h2 class="post-title">
-                                                            <a href="#">
-                                                                تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز
-                                                                82
-                                                                اینچ
-                                                            </a>
-                                                        </h2>
-                                                        <div class="price">
-                                                            <div class="discount-item">
-                                                                <span>۳۲٪</span>
-                                                            </div>
-                                                            <del><span>۴,۵۳۰,۰۰۰<span>تومان</span></span></del>
-                                                            <ins><span>۳,۳۹۵,۰۰۰<span>تومان</span></span></ins>
-                                                        </div>
-                                                        <div class="product-box-timer">
-                                                            <span class="fa fa-clock-o"></span>
-                                                            <div class="countdown countdown-style-3 h4"
-                                                                 data-date-time="10/10/2025 24:00"
-                                                                 data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <a href="#">
-                                                            <img src="/assets/images/product-slider-2/power-bank.jpg"
-                                                                 class="img-fluid" alt="img-slider">
-                                                        </a>
-                                                        <h2 class="post-title">
-                                                            <a href="#">
-                                                                تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز
-                                                                82
-                                                                اینچ
-                                                            </a>
-                                                        </h2>
-                                                        <div class="price">
-                                                            <div class="discount-item">
-                                                                <span>۲۱٪</span>
-                                                            </div>
-                                                            <del><span>۱۵۹,۰۰۰<span>تومان</span></span></del>
-                                                            <ins><span>۱۳۹,۰۰۰<span>تومان</span></span></ins>
-                                                        </div>
-                                                        <div class="product-box-timer">
-                                                            <span class="fa fa-clock-o"></span>
-                                                            <div class="countdown countdown-style-3 h4"
-                                                                 data-date-time="10/10/2025 24:00"
-                                                                 data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <a href="#">
-                                                            <img src="/assets/images/product-slider-2/clock.jpg"
-                                                                 class="img-fluid" alt="img-slider">
-                                                        </a>
-                                                        <h2 class="post-title">
-                                                            <a href="#">
-                                                                تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز
-                                                                82
-                                                                اینچ
-                                                            </a>
-                                                        </h2>
-                                                        <div class="price">
-                                                            <div class="discount-item">
-                                                                <span>۲۶٪</span>
-                                                            </div>
-                                                            <del><span>۱,۵۵۸,۷۰۰<span>تومان</span></span></del>
-                                                            <ins><span>۱,۱۴۹,۰۰۰ <span>تومان</span></span></ins>
-                                                        </div>
-                                                        <div class="product-box-timer">
-                                                            <span class="fa fa-clock-o"></span>
-                                                            <div class="countdown countdown-style-3 h4"
-                                                                 data-date-time="10/10/2025 24:00"
-                                                                 data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="owl-item" style="width: 309.083px; margin-left: 10px;">
-                                                    <div class="item">
-                                                        <a href="#">
-                                                            <img src="/assets/images/product-slider-2/backpack.jpg"
-                                                                 class="img-fluid" alt="img-slider">
-                                                        </a>
-                                                        <h2 class="post-title">
-                                                            <a href="#">
-                                                                تلویزیون ال ای دی هوشمند سامسونگ مدل 82NU8900 سایز
-                                                                82
-                                                                اینچ
-                                                            </a>
-                                                        </h2>
-                                                        <div class="price">
-                                                            <div class="discount-item">
-                                                                <span>۶۷٪</span>
-                                                            </div>
-                                                            <del><span>۸۱۹,۰۰۰<span>تومان</span></span></del>
-                                                            <ins><span>۲۶۹,۹۰۰<span>تومان</span></span></ins>
-                                                        </div>
-                                                        <div class="product-box-timer">
-                                                            <span class="fa fa-clock-o"></span>
-                                                            <div class="countdown countdown-style-3 h4"
-                                                                 data-date-time="10/10/2025 24:00"
-                                                                 data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>
