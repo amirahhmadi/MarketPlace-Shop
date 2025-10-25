@@ -1,20 +1,63 @@
 ﻿using GameOnline.Common.Core;
 using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.ViewModels.CartViewmodel.Admin;
 using GameOnline.Core.ViewModels.CartViewmodel.Client;
 using GameOnline.Core.ViewModels.UserViewmodel.Client;
 using GameOnline.DataBase.Context;
+using GameOnline.DataBase.Entities.Carts;
+using GameOnline.DataBase.Entities.Products;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System.Text;
 
+namespace GameOnline.Core.Services.CartService.Queries;
 
-namespace GameOnline.Core.Services.CartService.CartServiceClient;
-
-public class CartServiceClient : ICartServiceClient
+public class CartServiceQuery : ICartServiceQuery
 {
     private readonly GameOnlineContext _context;
-    public CartServiceClient(GameOnlineContext context)
+    public CartServiceQuery(GameOnlineContext context)
     {
         _context = context;
     }
+
+    public OperationResult<int> FindCartIdByUserId(int userId)
+    {
+        var findcart = _context.Carts
+            .Where(c => c.UserId == userId)
+            .FirstOrDefault(c => c.OrderType == OrderType.Product_selection);
+
+        return OperationResult<int>.Success(findcart.Id);
+    }
+
+    public Cart? FindCartByUserId(int userId)
+    {
+        return _context.Carts
+            .Include(c => c.CartDetails)
+            .FirstOrDefault(c => c.UserId == userId && c.OrderType == OrderType.Product_selection);
+    }
+
+    public CartDetail? FindCartDetail(int cartId, int productPriceId)
+    {
+        return _context.CartDetails
+            .Where(x => x.CartId.Equals(cartId))
+            .FirstOrDefault(x => x.ProductPriceId.Equals(productPriceId));
+    }
+
+    public ProductPrice? FindProductPriceById(int productPriceId)
+    {
+        return _context.ProductPrices
+            .FirstOrDefault(x => x.Id == productPriceId);
+    }
+
+    public Cart? FindCartById(int cartId)
+    {
+        return _context.Carts
+            .Include(c => c.CartDetails)
+            .FirstOrDefault(c => c.Id == cartId && c.OrderType == OrderType.Product_selection);
+    }
+
     public List<GetCartDetailsViewmodel> GetCartDetails(int userId)
     {
         var q = (from c in _context.Carts
@@ -135,52 +178,5 @@ public class CartServiceClient : ICartServiceClient
                     LastModified = cd.LastModified,
                 }
             }).AsNoTracking().ToList();
-    }
-
-    public async Task RemoveDetailAsync(int detailId)
-    {
-        var findDetail = await _context.CartDetails
-            .FirstOrDefaultAsync(x => x.Id == detailId);
-
-        if (findDetail == null) return;
-
-        _context.CartDetails.Remove(findDetail);
-        await _context.SaveChangesAsync();
-    }
-
-    public void UpdateChangeCart(int detailId, int count)
-    {
-        var findDetail = _context.CartDetails
-            .FirstOrDefault(x => x.Id.Equals(detailId));
-
-        findDetail.Count = count;
-        _context.Update(findDetail);
-        _context.SaveChanges();
-    }
-
-    public OperationResult<int> UpdateCheckCart(List<GetCartDetailsViewmodel> details)
-    {
-        var productPriceId = details.Select(x => x.CartDetailId).ToList();
-
-        var findProductPrice = _context.CartDetails
-            .Where(x => productPriceId.Contains(x.Id))
-            .AsNoTracking().ToList();
-
-        foreach (var item in findProductPrice)
-        {
-            var detail = details.Where(x => x.CartDetailId == item.Id).FirstOrDefault();
-            if (detail.IsRemove)
-            {
-                _context.CartDetails.Remove(item);
-            }
-            else
-            {
-                item.Price = detail.NewPrice.Value;
-                _context.CartDetails.Update(item);
-            }
-
-        }
-        _context.SaveChanges();
-        return OperationResult<int>.Success(1);
     }
 }

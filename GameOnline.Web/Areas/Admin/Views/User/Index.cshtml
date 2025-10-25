@@ -1,0 +1,54 @@
+﻿@model IEnumerable<GameOnline.Core.ViewModels.UserViewmodel.Client.GetUsersViewmodel>
+@{
+    ViewData["title"] = "مدیریت کاربران";
+    ViewData["selected"] = "users";
+}
+<div class="content-wrapper" style="min-height: 617.6px;">
+    <section class="content-header">
+        <div class="container-fluid">
+            <a class="btn btn-success" href="/Admin/User/Create">ایجاد کاربر جدید</a>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                @await Component.InvokeAsync("ResultComponents")
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">لیست کاربران</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="example1_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="example1" class="table table-bordered table-striped dataTable" role="grid">
+                                        <thead>
+                                            <tr role="row">
+                                                <th>شناسه</th>
+                                                <th>ایمیل</th>
+                                                <th>عملیات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr role="row" class="odd">
+                                                    <td>@item.UserId</td>
+                                                    <td>@item.Email</td>
+                                                    <td>
+                                                        <a class="btn btn-info" href="/AddOrUpdateUserRole/@item.UserId">مدیریت سطح دسترسی</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

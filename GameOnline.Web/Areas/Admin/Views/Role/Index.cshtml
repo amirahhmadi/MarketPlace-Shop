@@ -1,0 +1,58 @@
+﻿@model IEnumerable<GameOnline.Core.ViewModels.RoleViewmodel.Admin.GetRolesViewmodel>
+@{
+    ViewData["title"] = "مدیریت نقش‌ها";
+    ViewData["selected"] = "roles";
+}
+<div class="content-wrapper" style="min-height: 617.6px;">
+    <section class="content-header">
+        <div class="container-fluid">
+            <a class="btn btn-success" href="/Admin/Role/Create">افزودن نقش جدید</a>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                @await Component.InvokeAsync("ResultComponents")
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">لیست نقش‌ها</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="example1_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="example1" class="table table-bordered table-striped dataTable" role="grid">
+                                        <thead>
+                                            <tr role="row">
+                                                <th>شناسه</th>
+                                                <th>عنوان نقش</th>
+                                                <th>عملیات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr role="row" class="odd">
+                                                    <td>@item.RoleId</td>
+                                                    <td>@item.RoleTitle</td>
+                                                    <td>
+                                                        <a class="btn btn-info" href="/Admin/Role/Edit/@item.RoleId">ویرایش</a>
+                                                        <a class="btn btn-danger" href="/Admin/Role/Remove/@item.RoleId"
+                                                           onclick="return confirm('آیا از حذف این نقش مطمئن هستید؟');">
+                                                            حذف
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

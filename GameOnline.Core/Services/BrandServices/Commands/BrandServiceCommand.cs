@@ -1,24 +1,24 @@
-﻿using GameOnline.Core.ViewModels.BrandViewModels;
+﻿using GameOnline.Common.Core;
+using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.BrandServices.Queries;
+using GameOnline.Core.ViewModels.BrandViewModels;
 using GameOnline.DataBase.Context;
 using GameOnline.DataBase.Entities.Brands;
-using Microsoft.EntityFrameworkCore;
-using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Common.Core;
 
-namespace GameOnline.Core.Services.BrandServices.BrandServicesAdmin;
+namespace GameOnline.Core.Services.BrandServices.Commands;
 
-public class BrandServiceAdmin : IBrandServiceAdmin
+public class BrandServiceCommand : IBrandServiceCommand
 {
     private readonly GameOnlineContext _context;
-
-    public BrandServiceAdmin(GameOnlineContext context)
+    private readonly IBrandServiceQuery _brandQuery;
+    public BrandServiceCommand(GameOnlineContext context, IBrandServiceQuery brandQuery)
     {
         _context = context;
+        _brandQuery = brandQuery;
     }
-
     public OperationResult<int> CreateBrand(CreateBrandsViewModel createBrand)
     {
-        if (IsBrandExist(createBrand.FaTitle,createBrand.EnTitle,0))
+        if (_brandQuery.IsBrandExist(createBrand.FaTitle, createBrand.EnTitle, 0))
         {
             return OperationResult<int>.Duplicate();
         }
@@ -47,7 +47,7 @@ public class BrandServiceAdmin : IBrandServiceAdmin
         if (brand == null)
             return OperationResult<int>.NotFound();
 
-        if (IsBrandExist(editBrand.FaTitle, editBrand.EnTitle, editBrand.BrandId))
+        if (_brandQuery.IsBrandExist(editBrand.FaTitle, editBrand.EnTitle, editBrand.BrandId))
         {
             return OperationResult<int>.Duplicate();
         }
@@ -69,33 +69,6 @@ public class BrandServiceAdmin : IBrandServiceAdmin
 
     }
 
-    public EditBrandsViewModel GetBrandById(int BrandId)
-    {
-        return _context.Brands
-            .Where(x => x.Id == BrandId)
-            .Select(x => new EditBrandsViewModel()
-            {
-                BrandId = x.Id,
-                EnTitle = x.EnTitle,
-                FaTitle = x.FaTitle,
-                Description = x.Description,
-                OldImgName = x.ImageName
-            }).SingleOrDefault();
-    }
-
-    public List<GetBrandsViewModel> GetBrands()
-    {
-        return _context.Brands
-        .Select(x => new GetBrandsViewModel()
-        {
-            BrandId = x.Id,
-            EnTitle = x.EnTitle,
-            FaTitle = x.FaTitle,
-            ImageName = x.ImageName
-        }).AsNoTracking().ToList();
-
-    }
-
     public OperationResult<int> RemoveBrand(RemoveBrandsViewModel removeBrand)
     {
         var brand = _context.Brands
@@ -110,12 +83,5 @@ public class BrandServiceAdmin : IBrandServiceAdmin
         _context.Brands.Update(brand);
         _context.SaveChanges();
         return OperationResult<int>.Success(removeBrand.BrandId);
-    }
-
-    public bool IsBrandExist(string faTitle,string enTitle, int excludeId)
-    {
-        return _context.Brands.Any(x =>
-            (x.FaTitle == faTitle.Trim() || x.EnTitle == enTitle.Trim()) &&
-            x.Id != excludeId);
     }
 }

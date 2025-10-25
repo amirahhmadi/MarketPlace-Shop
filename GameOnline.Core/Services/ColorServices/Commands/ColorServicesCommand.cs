@@ -1,27 +1,25 @@
 ﻿using GameOnline.Common.Core;
-using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Services.ColorServices.Queries;
 using GameOnline.Core.ViewModels.ColorViewModels;
-using GameOnline.Core.ViewModels.GuaranteeViewModels;
 using GameOnline.DataBase.Context;
-using GameOnline.DataBase.Entities.Brands;
 using GameOnline.DataBase.Entities.Colors;
-using GameOnline.DataBase.Entities.Guarantees;
-using Microsoft.EntityFrameworkCore;
 
-namespace GameOnline.Core.Services.ColorServices.ColorServicesAdmin;
+namespace GameOnline.Core.Services.ColorServices.Commands;
 
-public class ColorServicesAdmin : IColorServicesAdmin
+public class ColorServicesCommand : IColorServicesCommand
 {
     private readonly GameOnlineContext _context;
+    private readonly IColorServicesQuery _servicesQuery;
 
-    public ColorServicesAdmin(GameOnlineContext context)
+    public ColorServicesCommand(GameOnlineContext context, IColorServicesQuery servicesQuery)
     {
         _context = context;
+        _servicesQuery = servicesQuery;
     }
 
     public OperationResult<int> CreateColor(CreateColorsViewModel createColors)
     {
-        if (IsColorExist(createColors.ColorCode, createColors.ColorName, 0))
+        if (_servicesQuery.IsColorExist(createColors.ColorCode, createColors.ColorName, 0))
         {
             return OperationResult<int>.Duplicate();
         }
@@ -44,7 +42,7 @@ public class ColorServicesAdmin : IColorServicesAdmin
         if (color == null)
             return OperationResult<int>.NotFound();
 
-        if (IsColorExist(editColors.ColorCode, editColors.ColorName, editColors.ColorId))
+        if (_servicesQuery.IsColorExist(editColors.ColorCode, editColors.ColorName, editColors.ColorId))
         {
             return OperationResult<int>.Duplicate();
         }
@@ -57,36 +55,6 @@ public class ColorServicesAdmin : IColorServicesAdmin
         _context.Colors.Update(color);
         _context.SaveChanges();
         return OperationResult<int>.Success(color.Id);
-    }
-
-    public EditColorsViewModel? GetColorById(int colorId)
-    {
-        return _context.Colors.Where(x => x.Id == colorId)
-            .Select(x => new EditColorsViewModel()
-            {
-                ColorId = x.Id,
-                ColorName = x.ColorName,
-                ColorCode = x.Code,
-                IsActive = x.IsActive
-            }).AsNoTracking().FirstOrDefault();
-    }
-
-    public List<GetColorsViewModel> GetColors()
-    {
-        return _context.Colors.Select(x => new GetColorsViewModel()
-        {
-            ColorId = x.Id,
-            ColorName = x.ColorName,
-            ColorCode = x.Code,
-            IsActive = x.IsActive
-        }).AsNoTracking().ToList();
-    }
-
-    public bool IsColorExist(string colorCode, string colorName, int excludeId)
-    {
-        return _context.Colors.Any(x =>
-            (x.ColorName == colorName.Trim() || x.Code == colorCode.Trim()) &&
-            x.Id != excludeId);
     }
 
     public OperationResult<int> RemoveColor(RemoveColorsViewModel removeColors)

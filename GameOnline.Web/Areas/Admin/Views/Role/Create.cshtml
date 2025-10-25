@@ -1,0 +1,66 @@
+﻿@using GameOnline.Core.Security
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model GameOnline.Core.ViewModels.RoleViewmodel.Admin.CreateRoleViewmodel
+@{
+    ViewData["title"] = "افزودن نقش";
+    ViewData["selected"] = "roles";
+    var listPermission = ViewBag.ListPermission as List<PermissionListEx>;
+}
+<div class="content-wrapper" style="min-height: 617.6px;">
+    <section class="content-header">
+        <div class="container-fluid">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">ایجاد نقش جدید</h3>
+                        </div>
+
+                        <form asp-controller="Role" asp-action="Create" method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="RoleTitle">عنوان نقش</label>
+                                    <input asp-for="RoleTitle" class="form-control">
+                                    <span asp-validation-for="RoleTitle" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <button type="button" class="btn btn-success col-lg-6 add-parent" data-name="ListPermission">
+                                            انتخاب دسترسی
+                                        </button>
+                                    </div>
+                                    <select class="form-control col-lg-8" id="ParentList">
+                                        @foreach (var item in listPermission)
+                                        {
+                                            <option value="@item.PermissionId">@item.PermissionTitle</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="ParentListSelected">
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">ثبت نقش</button>
+                                <a class="btn btn-warning" href="/Admin/Role">بازگشت</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_MultiSelectJsPartial" />
+}

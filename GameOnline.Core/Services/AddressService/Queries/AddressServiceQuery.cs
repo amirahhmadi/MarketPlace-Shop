@@ -1,19 +1,19 @@
-﻿using GameOnline.Core.Services.CartService.CartServiceClient;
+﻿using GameOnline.Core.Services.CartService.Queries;
 using GameOnline.Core.ViewModels.CartViewmodel.Client;
 using GameOnline.Core.ViewModels.UserViewmodel.Client;
 using GameOnline.DataBase.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameOnline.Core.Services.AddressService.AddressServiceClient;
+namespace GameOnline.Core.Services.AddressService.Queries;
 
-public class AddressServiceClient : IAddressServiceClient
+public class AddressServiceQuery : IAddressServiceQuery
 {
     private readonly GameOnlineContext _context;
-    private readonly ICartServiceClient _cartService;
-    public AddressServiceClient(GameOnlineContext context, ICartServiceClient cartService)
+    private readonly ICartServiceQuery _cartQuery;
+    public AddressServiceQuery(GameOnlineContext context, ICartServiceQuery cartService)
     {
         _context = context;
-        _cartService = cartService;
+        _cartQuery = cartService;
     }
 
     public List<GetAddressForProfileViewmodel> GetAddressForProfile(int userId)

@@ -1,4 +1,5 @@
-﻿using GameOnline.DataBase.Context;
+﻿using GameOnline.Core.ViewModels.UserViewmodel.Client;
+using GameOnline.DataBase.Context;
 using GameOnline.DataBase.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,5 +33,17 @@ public class UserServiceAdmin : IUserServiceAdmin
             .Where(x => x.Id == id)
             .AsNoTracking()
             .FirstOrDefault();
+    }
+
+    public List<GetUsersViewmodel> GetUsers()
+    {
+        return _context.Users
+            .Select(x => new GetUsersViewmodel
+            {
+                Email = x.Email,
+                UserId = x.Id
+            })
+            .AsNoTracking()
+            .ToList();
     }
 }

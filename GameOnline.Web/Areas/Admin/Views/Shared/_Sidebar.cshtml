@@ -13,6 +13,9 @@
     var isPropertyNameActive = selected == "propertyname";
     var isPropertyValueActive = selected == "propertyvalue";
     var isPropertyActive = isPropertyGroupActive || isPropertyNameActive || isPropertyValueActive;
+    var isRoleActive = selected == "roles";
+    var isUserActive = selected == "users";
+
 }
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="#" class="brand-link">
@@ -125,6 +128,18 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Role" class="nav-link @(isRoleActive ? "active" : "")">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>نقش ها</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/User" class="nav-link @(isUserActive ? "active" : "")">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>کاربرها</p>
+                        </a>
                     </li>
                 </ul>
             </nav>
