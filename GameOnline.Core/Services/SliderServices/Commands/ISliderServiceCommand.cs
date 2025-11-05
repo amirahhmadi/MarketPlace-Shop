@@ -1,15 +1,11 @@
 ﻿using GameOnline.Common.Core;
-using GameOnline.Core.ViewModels.BrandViewModels;
 using GameOnline.Core.ViewModels.SliderViewModels.Admin;
 
-namespace GameOnline.Core.Services.SliderServices.SliderServicesAdmin;
+namespace GameOnline.Core.Services.SliderServices.Commands;
 
-public interface ISliderServiceAdmin
+public interface ISliderServiceCommand
 {
-    List<GetSlidersViewModel> GetSliders();
     OperationResult<int> CreateSlider(CreateSlidersViewModel createSlider);
-    EditSlidersViewModel? GetSliderById(int sliderId);
     OperationResult<int> EditSlider(EditSlidersViewModel editSlider);
     OperationResult<int> RemoveSlider(RemoveSlidersViewModel removeSlider);
-
 }

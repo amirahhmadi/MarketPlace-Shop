@@ -1,19 +1,15 @@
 ﻿using GameOnline.Common.Core;
 using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.ViewModels.ColorViewModels;
-using GameOnline.Core.ViewModels.GalleryViewmodel;
 using GameOnline.DataBase.Context;
 using GameOnline.DataBase.Entities.Products;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
-namespace GameOnline.Core.Services.GalleryServices.GalleryServicesAdmin;
+namespace GameOnline.Core.Services.GalleryServices.Commands;
 
-public class GalleryServicesAdmin : IGalleryServicesAdmin
+public class GalleryServicesCommand : IGalleryServicesCommand
 {
     private readonly GameOnlineContext _context;
-
-    public GalleryServicesAdmin(GameOnlineContext context)
+    public GalleryServicesCommand(GameOnlineContext context)
     {
         _context = context;
     }
@@ -31,17 +27,6 @@ public class GalleryServicesAdmin : IGalleryServicesAdmin
         _context.ProductGalleries.Add(productGallery);
         _context.SaveChanges();
         return OperationResult<int>.Success(productGallery.Id);
-    }
-
-    public List<GetImageGalleryForProductViewmodel> GetImageGalleryForProductById(int productId)
-    {
-        return _context.ProductGalleries.Where(x => x.ProductId == productId)
-            .Select(x => new GetImageGalleryForProductViewmodel
-            {
-                GalleryId = x.Id,
-                ProductId = x.ProductId,
-                ImageName = x.ImageName
-            }).AsNoTracking().ToList();
     }
 
     public OperationResult<int> RemoveImageFromGallery(int galleryId)

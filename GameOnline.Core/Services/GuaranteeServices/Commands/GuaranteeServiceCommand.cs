@@ -1,23 +1,24 @@
 ﻿using GameOnline.Common.Core;
+using GameOnline.Core.Services.GuaranteeServices.Queries;
 using GameOnline.Core.ViewModels.GuaranteeViewModels;
 using GameOnline.DataBase.Context;
 using GameOnline.DataBase.Entities.Guarantees;
-using Microsoft.EntityFrameworkCore;
 
-namespace GameOnline.Core.Services.GuaranteeServices.GuaranteeServicesAdmin;
+namespace GameOnline.Core.Services.GuaranteeServices.Commands;
 
-public class GuaranteeServiceAdmin : IGuaranteeServiceAdmin
+public class GuaranteeServiceCommand : IGuaranteeServiceCommand
 {
     private readonly GameOnlineContext _context;
-
-    public GuaranteeServiceAdmin(GameOnlineContext context)
+    private readonly IGuaranteeServiceQuery _serviceQuery;
+    public GuaranteeServiceCommand(GameOnlineContext context, IGuaranteeServiceQuery serviceQuery)
     {
         _context = context;
+        _serviceQuery = serviceQuery;
     }
 
     public OperationResult<int> CreateGuarantee(CreateGuaranteesViewModel createGuarantee)
     {
-        if (IsGuaranteeExist(createGuarantee.GuaranteeName, 0))
+        if (_serviceQuery.IsGuaranteeExist(createGuarantee.GuaranteeName, 0))
         {
             return OperationResult<int>.Duplicate();
         }
@@ -39,7 +40,7 @@ public class GuaranteeServiceAdmin : IGuaranteeServiceAdmin
         if (guarantee == null)
             return OperationResult<int>.NotFound();
 
-        if (IsGuaranteeExist(editGuarantee.GuaranteeName, editGuarantee.GuaranteeId))
+        if (_serviceQuery.IsGuaranteeExist(editGuarantee.GuaranteeName, editGuarantee.GuaranteeId))
         {
             return OperationResult<int>.Duplicate();
         }
@@ -51,33 +52,6 @@ public class GuaranteeServiceAdmin : IGuaranteeServiceAdmin
         _context.SaveChanges();
         return OperationResult<int>.Success(guarantee.Id);
 
-    }
-
-    public EditGuaranteesViewModel? GetGuaranteeById(int guaranteeId)
-    {
-        return _context.Guarantees.Where(x => x.Id == guaranteeId)
-            .Select(x => new EditGuaranteesViewModel()
-            {
-                GuaranteeId = x.Id,
-                GuaranteeName = x.GuaranteeName,
-            }).AsNoTracking().FirstOrDefault();
-    }
-
-    public List<GetGuaranteesViewModel> GetGuarantees()
-    {
-        return _context.Guarantees.Select(x => new GetGuaranteesViewModel()
-        {
-            GuaranteeId = x.Id,
-            GuaranteeName = x.GuaranteeName
-        }).AsNoTracking().ToList();
-    }
-
-    public bool IsGuaranteeExist(string guaranteeName, int excludeId)
-    {
-        return _context.Guarantees.Any(x =>
-            x.GuaranteeName == guaranteeName.Trim() &&
-            x.Id != excludeId &&
-            !x.IsRemove);
     }
 
     public OperationResult<int> RemoveGuarantee(RemoveGuaranteesViewModel removeGuarantee)

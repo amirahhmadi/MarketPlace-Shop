@@ -10,6 +10,14 @@ using GameOnline.Core.Services.CategoryServices.Queries;
 using GameOnline.Core.Services.ColorServices.Commands;
 using GameOnline.Core.Services.ColorServices.Queries;
 using GameOnline.Core.Services.Comment_FAQ.Queries.FAQ;
+using GameOnline.Core.Services.DiscountServices.Commands;
+using GameOnline.Core.Services.DiscountServices.Queries;
+using GameOnline.Core.Services.GalleryServices.Commands;
+using GameOnline.Core.Services.GuaranteeServices.Commands;
+using GameOnline.Core.Services.ProductServices.Commands;
+using GameOnline.Core.Services.GalleryServices.Queries;
+using GameOnline.Core.Services.GuaranteeServices.Queries;
+using GameOnline.Core.Services.ProductServices.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -27,6 +35,10 @@ builder.Services.AddTransient<IBrandServiceCommand, BrandServiceCommand>();
 builder.Services.AddTransient<ICartServiceCommand, CartServiceCommand>();
 builder.Services.AddTransient<ICategoryServicesCommand, CategoryServicesCommand>();
 builder.Services.AddTransient<IColorServicesCommand, ColorServicesCommand>();
+builder.Services.AddTransient<IDiscountServicesCommand, DiscountServicesCommand>();
+builder.Services.AddTransient<IGalleryServicesCommand, GalleryServicesCommand>();
+builder.Services.AddTransient<IGuaranteeServiceCommand, GuaranteeServiceCommand>();
+builder.Services.AddTransient<IProductServicesCommand, ProductServicesCommand>();
 
 #endregion
 
@@ -38,6 +50,10 @@ builder.Services.AddTransient<ICartServiceQuery, CartServiceQuery>();
 builder.Services.AddTransient<ICategoryServicesQuery, CategoryServicesQuery>();
 builder.Services.AddTransient<IColorServicesQuery, ColorServicesQuery>();
 builder.Services.AddTransient<IFaqServiceQuery, FaqServiceQuery>();
+builder.Services.AddTransient<IDiscountServicesQuery, DiscountServicesQuery>();
+builder.Services.AddTransient<IGalleryServicesQuery, GalleryServicesQuery>();
+builder.Services.AddTransient<IGuaranteeServiceQuery, GuaranteeServiceQuery>();
+builder.Services.AddTransient<IProductServicesQuery, ProductServicesQuery>();
 
 #endregion
 

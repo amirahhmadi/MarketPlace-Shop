@@ -1,8 +1,9 @@
-﻿using GameOnline.Core.ViewModels.ProductViewmodel.Client;
+﻿using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
+using GameOnline.Core.ViewModels.ProductViewmodel.Client;
 
-namespace GameOnline.Core.Services.ProductServices.ProductServicesClient;
+namespace GameOnline.Core.Services.ProductServices.Queries;
 
-public interface IProductServicesClient
+public interface IProductServicesQuery
 {
     GetDetailProductClientViewmodel? GetDetailProductById(int productId);
     List<GetProductGalleriesViewmodel> GetProductGalleries(int productId);
@@ -12,5 +13,8 @@ public interface IProductServicesClient
     List<GetPropertyForProductClientViewmodel> GetPropertyForProductClient(int productId);
     List<GetProductForCategoryViewmodel> GetProductForCategory(int categoryId);
     List<GetProductForCategoryViewmodel> GetDiscountedProducts();
-
+    List<GetProductViewmodel> GetProducts();
+    EditProductViewmodel? GetProductById(int productId);
+    AddOrUpdateProductReviewViewmodel? FindProductReviewById(int productId);
+    bool IsProductExist(string faTitle, string enTitle, int excludeId);
 }

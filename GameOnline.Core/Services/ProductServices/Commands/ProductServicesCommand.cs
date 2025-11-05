@@ -1,28 +1,26 @@
-﻿using System.Runtime.CompilerServices;
-using GameOnline.Common.Core;
+﻿using GameOnline.Common.Core;
 using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.ViewModels.BrandViewModels;
+using GameOnline.Core.Services.ProductServices.Queries;
 using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
-using GameOnline.Core.ViewModels.ProductViewmodel.Client;
 using GameOnline.DataBase.Context;
-using GameOnline.DataBase.Entities.Brands;
 using GameOnline.DataBase.Entities.Products;
-using Microsoft.EntityFrameworkCore;
 
-namespace GameOnline.Core.Services.ProductServices.ProductServicesAdmin;
+namespace GameOnline.Core.Services.ProductServices.Commands;
 
-public class ProductServicesAdmin : IProductServicesAdmin
+public class ProductServicesCommand : IProductServicesCommand
 {
     private readonly GameOnlineContext _context;
+    private readonly IProductServicesQuery _servicesQuery;
 
-    public ProductServicesAdmin(GameOnlineContext context)
+    public ProductServicesCommand(GameOnlineContext context, IProductServicesQuery servicesQuery)
     {
         _context = context;
+        _servicesQuery = servicesQuery;
     }
 
     public OperationResult<int> CreateProduct(CreateProductViewmodel createProduct)
     {
-        if (IsProductExist(createProduct.FaTitle, createProduct.EnTitle, 0))
+        if (_servicesQuery.IsProductExist(createProduct.FaTitle, createProduct.EnTitle, 0))
         {
             return OperationResult<int>.Duplicate();
         }
@@ -54,7 +52,7 @@ public class ProductServicesAdmin : IProductServicesAdmin
         if (product == null)
             return OperationResult<int>.NotFound();
 
-        if (IsProductExist(editProduct.FaTitle, editProduct.EnTitle, editProduct.ProductId))
+        if (_servicesQuery.IsProductExist(editProduct.FaTitle, editProduct.EnTitle, editProduct.ProductId))
         {
             return OperationResult<int>.Duplicate();
         }
@@ -106,79 +104,6 @@ public class ProductServicesAdmin : IProductServicesAdmin
 
         _context.SaveChanges();
         return OperationResult<int>.Success(productReview.Id);
-    }
-
-    public AddOrUpdateProductReviewViewmodel? FindProductReviewById(int productId)
-    {
-        return _context.ProductReviews
-            .Where(x => x.ProductId == productId)
-            .Select(x => new AddOrUpdateProductReviewViewmodel()
-            {
-                Negative = x.Negative,
-                Positive = x.Positive,
-                ProductId = productId,
-                Review = x.Review,
-                ReviewId = x.Id
-            }).AsNoTracking().FirstOrDefault();
-    }
-
-    public EditProductViewmodel? GetProductById(int productId)
-    {
-        return _context.Products
-            .Where(x => x.Id == productId)
-            .Select(x => new EditProductViewmodel()
-            {
-                ProductId = x.Id,
-                BrandId = x.BrandId,
-                CategoryId = x.CategoryId,
-                FaTitle = x.FaTitle,
-                EnTitle = x.EnTitle,
-                IsActive = x.IsActive,
-                Score = x.Score,
-                OldImage = x.ImageName
-            }).AsNoTracking().FirstOrDefault();
-    }
-
-    public List<GetProductViewmodel> GetProducts()
-    {
-        var products = (from p in _context.Products
-            join b in _context.Brands on p.BrandId equals b.Id
-            join c in _context.Categories on p.CategoryId equals c.Id
-            select new GetProductViewmodel()
-            {
-                BrandName = b.FaTitle,
-                CategoryName = c.FaTitle,
-                FaTitle = p.FaTitle,
-                ImageName = p.ImageName,
-                ProductId = p.Id,
-                IsActive = p.IsActive,
-
-                // گرفتن ریویوها
-                AddOrUpdateProductReview = _context.ProductReviews
-                    .Where(r => r.ProductId == p.Id)
-                    .Select(r => new AddOrUpdateProductReviewViewmodel
-                    {
-                        ReviewId = r.Id,
-                        ProductId = r.ProductId,
-                        Review = r.Review,
-                        Positive = r.Positive,
-                        Negative = r.Negative
-                    }).ToList(),
-
-                // گرفتن ویژگی‌ها
-                PropertyProducts = _context.PropertyProducts
-                    .Where(pp => pp.ProductId == p.Id)
-                    .ToList()
-            }).AsNoTracking().ToList();
-
-        return products;
-    }
-
-    public bool IsProductExist(string faTitle, string enTitle, int excludeId)
-    {
-        return _context.Products.Any(x =>
-            (x.FaTitle == faTitle.Trim() || x.EnTitle == enTitle.Trim()) &&
-            x.Id != excludeId);
     }
 
     public OperationResult<int> RemoveProduct(RemoveProductViewModel removeProduct)
