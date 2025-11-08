@@ -1,29 +1,37 @@
 ﻿using GameOnline.Common.Core;
-using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.ViewModels.GuaranteeViewModels;
+using GameOnline.Core.Services.PropertyService.Queries.PropertyGroup;
 using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyGroupViewmodel;
 using GameOnline.DataBase.Context;
-using GameOnline.DataBase.Entities.Properties;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameOnline.Core.Services.PropertyService.PropertyGroupService;
+namespace GameOnline.Core.Services.PropertyService.Commands.PropertyGroup;
 
-public class PropertyGroupServiceAdmin : IPropertyGroupServiceAdmin
+public interface IPropertyGroupCommand
+{
+    OperationResult<int> CreatePropertyGroup(CreatePropertyGroupsViewmodel createPropertyGroup);
+    OperationResult<int> EditPropertyGroup(EditPropertyGroupsViewmodel editPropertyGroup);
+    OperationResult<int> RemovePropertyGroup(int propertyGroupId);
+}
+
+public class PropertyGroupCommand : IPropertyGroupCommand
 {
     private readonly GameOnlineContext _context;
-    public PropertyGroupServiceAdmin(GameOnlineContext context)
+    private readonly IPropertyGroupQuery _groupQuery;
+
+    public PropertyGroupCommand(GameOnlineContext context, IPropertyGroupQuery groupQuery)
     {
         _context = context;
+        _groupQuery = groupQuery;
     }
 
     public OperationResult<int> CreatePropertyGroup(CreatePropertyGroupsViewmodel createPropertyGroup)
     {
-        if (IsPropertyGroupExist(createPropertyGroup.GroupTitle, 0))
+        if (_groupQuery.IsPropertyGroupExist(createPropertyGroup.GroupTitle, 0))
         {
             return OperationResult<int>.Duplicate();
         }
 
-        PropertyGroup propertyGroup = new PropertyGroup()
+        DataBase.Entities.Properties.PropertyGroup propertyGroup = new DataBase.Entities.Properties.PropertyGroup()
         {
             Title = createPropertyGroup.GroupTitle,
             CreationDate = DateTime.Now
@@ -33,28 +41,13 @@ public class PropertyGroupServiceAdmin : IPropertyGroupServiceAdmin
         return OperationResult<int>.Success(propertyGroup.Id);
     }
 
-    public List<GetPropertyGroupsViewmodel> GetPropertyGroups()
-    {
-        return _context.PropertyGroups.Select(x => new GetPropertyGroupsViewmodel
-        {
-            PropertyGroupId = x.Id,
-            GroupTitle = x.Title,
-        }).AsNoTracking().ToList();
-    }
-
-    public bool IsPropertyGroupExist(string groupTitle, int excludeId)
-    {
-        return _context.PropertyGroups.Any(x =>
-            (x.Title == groupTitle.Trim() && x.Id != excludeId));
-    }
-
     public OperationResult<int> EditPropertyGroup(EditPropertyGroupsViewmodel editPropertyGroup)
     {
         var propertyGroup = _context.PropertyGroups.FirstOrDefault(x => x.Id == editPropertyGroup.PropertyGroupId);
         if (propertyGroup == null)
             return OperationResult<int>.NotFound();
 
-        if (IsPropertyGroupExist(editPropertyGroup.GroupTitle, editPropertyGroup.PropertyGroupId))
+        if (_groupQuery.IsPropertyGroupExist(editPropertyGroup.GroupTitle, editPropertyGroup.PropertyGroupId))
         {
             return OperationResult<int>.Duplicate();
         }
@@ -66,16 +59,6 @@ public class PropertyGroupServiceAdmin : IPropertyGroupServiceAdmin
         _context.SaveChanges();
         return OperationResult<int>.Success(propertyGroup.Id);
 
-    }
-
-    public EditPropertyGroupsViewmodel? GetPropertyGroupById(int propertyGroupId)
-    {
-        return _context.PropertyGroups.Where(x => x.Id == propertyGroupId)
-            .Select(x => new EditPropertyGroupsViewmodel()
-            {
-                PropertyGroupId = x.Id,
-                GroupTitle = x.Title,
-            }).AsNoTracking().FirstOrDefault();
     }
 
     public OperationResult<int> RemovePropertyGroup(int propertyGroupId)

@@ -3,17 +3,25 @@ using GameOnline.DataBase.Context;
 using GameOnline.DataBase.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameOnline.Core.Services.UserService.UserServiceAdmin;
+namespace GameOnline.Core.Services.UserService.Queries;
 
-public class UserServiceAdmin : IUserServiceAdmin
+public interface IUserServiceQuery
+{
+    public bool ExistEmail(int userId, string email);
+    User? FindUserByEmail(string email);
+    User FindUserById(int id);
+    List<GetUsersViewmodel> GetUsers();
+}
+
+public class UserServiceQuery : IUserServiceQuery
 {
     private readonly GameOnlineContext _context;
-    public UserServiceAdmin(GameOnlineContext context)
+    public UserServiceQuery(GameOnlineContext context)
     {
         _context = context;
     }
 
-    public bool ExistEmail(int userId,string email)
+    public bool ExistEmail(int userId, string email)
     {
         return _context.Users
             .Any(x => x.Email == email && x.Id != userId);

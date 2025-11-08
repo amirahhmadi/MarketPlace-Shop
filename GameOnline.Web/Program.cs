@@ -1,4 +1,5 @@
-﻿using GameOnline.DataBase.Context;
+﻿using GameOnline.Core.Services.AccountService.Queries;
+using GameOnline.DataBase.Context;
 using GameOnline.Core.Services.AddressService.Queries;
 using Microsoft.EntityFrameworkCore;
 using GameOnline.Core.Services.BrandServices.Commands;
@@ -18,6 +19,19 @@ using GameOnline.Core.Services.ProductServices.Commands;
 using GameOnline.Core.Services.GalleryServices.Queries;
 using GameOnline.Core.Services.GuaranteeServices.Queries;
 using GameOnline.Core.Services.ProductServices.Queries;
+using GameOnline.Core.Services.PropertyService.Commands.PropertyGroup;
+using GameOnline.Core.Services.PropertyService.Commands.PropertyName;
+using GameOnline.Core.Services.PropertyService.Commands.PropertyValue;
+using GameOnline.Core.Services.PropertyService.Queries.PropertyGroup;
+using GameOnline.Core.Services.PropertyService.Queries.PropertyName;
+using GameOnline.Core.Services.PropertyService.Queries.PropertyValue;
+using GameOnline.Core.Services.RoleService.Queries;
+using GameOnline.Core.Services.SliderServices.Queries;
+using GameOnline.Core.Services.RoleService.Commands;
+using GameOnline.Core.Services.SliderServices.Commands;
+using GameOnline.Core.Services.UserService.Commands;
+using GameOnline.Core.Services.UserService.Queries;
+using GameOnline.Core.Services.AccountService.Commands;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -39,6 +53,13 @@ builder.Services.AddTransient<IDiscountServicesCommand, DiscountServicesCommand>
 builder.Services.AddTransient<IGalleryServicesCommand, GalleryServicesCommand>();
 builder.Services.AddTransient<IGuaranteeServiceCommand, GuaranteeServiceCommand>();
 builder.Services.AddTransient<IProductServicesCommand, ProductServicesCommand>();
+builder.Services.AddTransient<IPropertyGroupCommand, PropertyGroupCommand>();
+builder.Services.AddTransient<IPropertyNameCommand, PropertyNameCommand>();
+builder.Services.AddTransient<IPropertyValueCommand, PropertyValueCommand>();
+builder.Services.AddTransient<IRoleServiceCommand, RoleServiceCommand>();
+builder.Services.AddTransient<ISliderServiceCommand, SliderServiceCommand>();
+builder.Services.AddTransient<IUserServiceCommand, UserServiceCommand>();
+builder.Services.AddTransient<IAccountServiceCommand, AccountServiceCommand>();
 
 #endregion
 
@@ -54,6 +75,13 @@ builder.Services.AddTransient<IDiscountServicesQuery, DiscountServicesQuery>();
 builder.Services.AddTransient<IGalleryServicesQuery, GalleryServicesQuery>();
 builder.Services.AddTransient<IGuaranteeServiceQuery, GuaranteeServiceQuery>();
 builder.Services.AddTransient<IProductServicesQuery, ProductServicesQuery>();
+builder.Services.AddTransient<IPropertyGroupQuery, PropertyGroupQuery>();
+builder.Services.AddTransient<IPropertyNameQuery, PropertyNameQuery>();
+builder.Services.AddTransient<IPropertyValueQuery, PropertyValueQuery>();
+builder.Services.AddTransient<IRoleServiceQuery, RoleServiceQuery>();
+builder.Services.AddTransient<ISliderServiceQuery, SliderServiceQuery>();
+builder.Services.AddTransient<IUserServiceQuery, UserServiceQuery>();
+builder.Services.AddTransient<IAccountServiceQuery, AccountServiceQuery>();
 
 #endregion
 

@@ -41,9 +41,9 @@
                                                     <td>@item.PropertyNameTitle</td>
                                                     <td>@item.GroupTitle</td>
                                                     <td>
-                                                        <a href="/Admin/PropertyName/Edit/@item.PropertyNameId" class="btn btn-warning btn-sm">ویرایش</a>
-                                                        @* <form asp-controller="PropertyName" asp-action="Remove" method="post" style="display:inline;">
-                                                            <input type="hidden" name="PropertyNameId" value="@item.PropertyNameId" />
+                                                        <a href="/Admin/PropertyNameQueryCommand/Edit/@item.PropertyNameId" class="btn btn-warning btn-sm">ویرایش</a>
+                                                        @* <form asp-controller="PropertyNameQueryCommand" asp-action="Remove" method="post" style="display:inline;">
+                                                            <input type="hidden" name="PropertyNameQueryCommandId" value="@item.PropertyNameQueryCommandId" />
                                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('آیا مطمئنید حذف شود؟');">
                                                                 <i class="fa fa-trash"></i> حذف
                                                             </button>

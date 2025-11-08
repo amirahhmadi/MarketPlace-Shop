@@ -39,9 +39,9 @@
                                                     <td>@item.PropertyGroupId</td>
                                                     <td>@item.GroupTitle</td>
                                                     <td>
-                                                        <a href="/Admin/PropertyGroup/Edit/@item.PropertyGroupId" class="btn btn-warning btn-sm">ویرایش</a>
-                                                       @*  <form asp-controller="PropertyGroup" asp-action="Remove" method="post" style="display:inline;">
-                                                            <input type="hidden" name="propertyGroupId" value="@item.PropertyGroupId" />
+                                                        <a href="/Admin/PropertyGroupQueryCommand/Edit/@item.PropertyGroupId" class="btn btn-warning btn-sm">ویرایش</a>
+                                                       @*  <form asp-controller="PropertyGroupQueryCommand" asp-action="Remove" method="post" style="display:inline;">
+                                                            <input type="hidden" name="propertyGroupId" value="@item.PropertyGroupQueryCommandId" />
                                                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('آیا مطمئنید حذف شود؟');">
                                                                 <i class="fa fa-trash"></i> حذف
                                                             </button>

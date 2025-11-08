@@ -41,10 +41,10 @@
                                             <td>@item.Value</td>
                                             <td>@item.PropertyNameTitle</td>
                                             <td>
-                                                <a href="/Admin/PropertyValue/Edit/@item.PropertyValueId" class="btn btn-warning btn-sm">ویرایش</a>
+                                                <a href="/Admin/PropertyValueCommandQuery/Edit/@item.PropertyValueId" class="btn btn-warning btn-sm">ویرایش</a>
 
-                                                @* <form asp-controller="PropertyValue" asp-action="Remove" method="post" style="display:inline;" onsubmit="return confirm('آیا مطمئنید حذف شود؟');">
-                                                    <input type="hidden" name="PropertyValueId" value="@item.PropertyValueId" />
+                                                @* <form asp-controller="PropertyValueCommandQuery" asp-action="Remove" method="post" style="display:inline;" onsubmit="return confirm('آیا مطمئنید حذف شود؟');">
+                                                    <input type="hidden" name="PropertyValueCommandQueryId" value="@item.PropertyValueCommandQueryId" />
                                                     <button type="submit" class="btn btn-danger btn-sm">
                                                         <i class="fa fa-trash"></i> حذف
                                                     </button>
