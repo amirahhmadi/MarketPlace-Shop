@@ -1,18 +1,18 @@
-﻿using GameOnline.Core.Services.ProductServices.ProductServicesClient;
+﻿using GameOnline.Core.Services.ProductServices.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameOnline.Web.ViewComponents;
 
 public class GetProductForCategoryComponent : ViewComponent
 {
-    private readonly IProductServicesClient _productServicesClient;
+    private readonly IProductServicesQuery _productServicesQuery;
 
-    public GetProductForCategoryComponent(IProductServicesClient productServicesClient)
+    public GetProductForCategoryComponent(IProductServicesQuery productServicesQuery)
     {
-        _productServicesClient = productServicesClient;
+        _productServicesQuery = productServicesQuery;
     }
     public async Task<IViewComponentResult> InvokeAsync(int categoryId)
     {
-        return await Task.FromResult(View("GetProduct",_productServicesClient.GetProductForCategory(categoryId)));
+        return await Task.FromResult(View("GetProduct",_productServicesQuery.GetProductForCategory(categoryId)));
     }
 }

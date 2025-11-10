@@ -1,5 +1,5 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.ProductServices.ProductServicesClient;
+using GameOnline.Core.Services.ProductServices.Queries;
 using GameOnline.Core.ViewModels.ProductViewmodel.Client;
 using GameOnline.DataBase.Entities.Products;
 using Microsoft.AspNetCore.Mvc;
@@ -8,24 +8,25 @@ namespace GameOnline.Web.Controllers
 {
     public class ProductController : BaseController
     {
-        private readonly IProductServicesClient _productServicesClient;
-        public ProductController(IProductServicesClient productServicesClient)
+        private readonly IProductServicesQuery _productServicesQuery;
+
+        public ProductController(IProductServicesQuery productServicesQuery)
         {
-            _productServicesClient = productServicesClient;
+            _productServicesQuery = productServicesQuery;
         }
         [HttpGet("/Detail/{productId}")]
         public IActionResult Detail(int productId)
         {
             var detail = new DetailProductViewmodel
             {
-                DetailProduct = _productServicesClient.GetDetailProductById(productId)
+                DetailProduct = _productServicesQuery.GetDetailProductById(productId)
             };
 
             if (detail.DetailProduct == null)
                 return NotFound();
 
-            detail.GetProductGalleries = _productServicesClient.GetProductGalleries(productId);
-            detail.GetProductPrice = _productServicesClient.GetProductPriceClient(productId);
+            detail.GetProductGalleries = _productServicesQuery.GetProductGalleries(productId);
+            detail.GetProductPrice = _productServicesQuery.GetProductPriceClient(productId);
 
             if (detail.GetProductPrice == null || !detail.GetProductPrice.Any())
                 return View("~/Views/Product/NoProduct.cshtml", detail);
@@ -43,15 +44,15 @@ namespace GameOnline.Web.Controllers
                 price.HasDiscount = special.HasValue;
             }
 
-            detail.GetSeller = _productServicesClient.GetSellerForProductById(
+            detail.GetSeller = _productServicesQuery.GetSellerForProductById(
                 detail.GetProductPrice
                     .Select(x => x.SellerId)
                     .Distinct()
                     .ToList()
             );
 
-            detail.GetReview = _productServicesClient.GetReviewForClient(productId);
-            detail.GetProperty = _productServicesClient.GetPropertyForProductClient(productId);
+            detail.GetReview = _productServicesQuery.GetReviewForClient(productId);
+            detail.GetProperty = _productServicesQuery.GetPropertyForProductClient(productId);
 
             return View(detail);
         }
@@ -62,7 +63,7 @@ namespace GameOnline.Web.Controllers
         public IActionResult PropertyProduct(int ProductId, string Producten)
         {
             TempData[ProductEn] = Producten;
-            return View(_productServicesClient.GetPropertyForProductClient(ProductId));
+            return View(_productServicesQuery.GetPropertyForProductClient(ProductId));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.DiscountServices.DiscountServicesAdmin;
+using GameOnline.Core.Services.DiscountServices.Commands;
+using GameOnline.Core.Services.DiscountServices.Queries;
 using GameOnline.Core.ViewModels.DiscountViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,18 +8,14 @@ namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class DiscountController : BaseAdminController
     {
-        private readonly IDiscountServicesAdmin _discountServicesAdmin;
-
-        public DiscountController(IDiscountServicesAdmin discountServicesAdmin)
-        {
-            _discountServicesAdmin = discountServicesAdmin;
-        }
+        private readonly IDiscountServicesCommand _servicesCommand;
+        private readonly IDiscountServicesQuery _servicesQuery;
 
         #region Index
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_discountServicesAdmin.GetDiscount());
+            return View(_servicesQuery.GetDiscount());
         }
         #endregion
 
@@ -38,7 +35,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
                 return View(discountViewModels);
             }
 
-            _discountServicesAdmin.CreateDiscount(discountViewModels);
+            _servicesCommand.CreateDiscount(discountViewModels);
             SetSweetAlert("success", "عملیات موفق", "تخفیف با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }

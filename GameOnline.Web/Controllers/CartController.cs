@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.AddressService.AddressServiceClient;
-using GameOnline.Core.Services.CartService.CartServiceAdmin;
-using GameOnline.Core.Services.CartService.CartServiceClient;
+using GameOnline.Core.Services.AddressService.Queries;
+using GameOnline.Core.Services.CartService.Commands;
+using GameOnline.Core.Services.CartService.Queries;
 using GameOnline.Core.ViewModels.CartViewmodel.Admin;
 using GameOnline.Core.ViewModels.CartViewmodel.Client;
 using Microsoft.AspNetCore.Authorization;
@@ -12,14 +12,14 @@ namespace GameOnline.Web.Controllers
 {
     public class CartController : Controller
     {
-        private readonly ICartServiceAdmin _cartServiceAdmin;
-        private readonly ICartServiceClient _cartServiceClient;
-        private readonly IAddressServiceClient _addressServiceClient;
-        public CartController(ICartServiceAdmin cartServiceAdmin, ICartServiceClient cartServiceClient, IAddressServiceClient addressServiceClient)
+        private readonly ICartServiceQuery _cartServiceQuery;
+        private readonly ICartServiceCommand _cartServiceCommand;
+        private readonly IAddressServiceQuery _addressServiceQuery;
+        public CartController(ICartServiceQuery cartServiceQuery, ICartServiceCommand cartServiceCommand, IAddressServiceQuery addressServiceQuery)
         {
-            _cartServiceAdmin = cartServiceAdmin;
-            _cartServiceClient = cartServiceClient;
-            _addressServiceClient = addressServiceClient;
+            _cartServiceQuery = cartServiceQuery;
+            _cartServiceCommand = cartServiceCommand;
+            _addressServiceQuery = addressServiceQuery;
         }
 
         // گرفتن یوزر لاگین‌شده
@@ -36,7 +36,7 @@ namespace GameOnline.Web.Controllers
                 ProductPriceId = productPriceId
             };
 
-            var result = _cartServiceAdmin.AddCart(addCart);
+            var result = _cartServiceCommand.AddCart(addCart);
             TempData[TempDataName.Result] = Newtonsoft.Json.JsonConvert.SerializeObject(result);
 
             return RedirectToAction(nameof(CartDetail));
@@ -47,7 +47,7 @@ namespace GameOnline.Web.Controllers
         [Route("CartDetail")]
         public IActionResult CartDetail()
         {
-            var findCart = _cartServiceClient.GetCartDetails(CurrentUserId);
+            var findCart = _cartServiceQuery.GetCartDetails(CurrentUserId);
             if (!findCart.Any())
                 return View("EmptyCart");
 
@@ -76,7 +76,7 @@ namespace GameOnline.Web.Controllers
                 CheckAndUpdatePrice(item, newPrice, checkCart);
             }
 
-            _cartServiceClient.UpdateCheckCart(checkCart);
+            _cartServiceCommand.UpdateCheckCart(checkCart);
             return View(findCart);
         }
 
@@ -111,7 +111,7 @@ namespace GameOnline.Web.Controllers
         [Route("UpdateCart")]
         public IActionResult UpdateCart(int count, int detailid)
         {
-            _cartServiceClient.UpdateChangeCart(detailid, count);
+            _cartServiceCommand.UpdateChangeCart(detailid, count);
             return new JsonResult("ok");
         }
 
@@ -119,7 +119,7 @@ namespace GameOnline.Web.Controllers
         [Route("RemoveDetail")]
         public async Task<IActionResult> RemoveDetail(int detailid)
         {
-            await _cartServiceClient.RemoveDetailAsync(detailid);
+            await _cartServiceCommand.RemoveDetailAsync(detailid);
             return new JsonResult("ok");
         }
 
@@ -128,11 +128,11 @@ namespace GameOnline.Web.Controllers
         [Authorize]
         public IActionResult Shopping()
         {
-            var findActiveAddress = _addressServiceClient.GetCartForShopping(CurrentUserId);
+            var findActiveAddress = _addressServiceQuery.GetCartForShopping(CurrentUserId);
             if (findActiveAddress == null)
                 return Redirect("/");
 
-            findActiveAddress.GetCartDetails = _cartServiceClient.GetCartDetails(CurrentUserId);
+            findActiveAddress.GetCartDetails = _cartServiceQuery.GetCartDetails(CurrentUserId);
 
             return View(findActiveAddress);
         }
@@ -143,7 +143,7 @@ namespace GameOnline.Web.Controllers
         public IActionResult ShoppingPay()
         {
             int UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var FindCart = _cartServiceClient.GetCartDetails(UserId);
+            var FindCart = _cartServiceQuery.GetCartDetails(UserId);
             List<GetCartDetailsViewmodel> CheckCart = new List<GetCartDetailsViewmodel>();
 
             if (FindCart.Count() <= 0)
@@ -231,12 +231,12 @@ namespace GameOnline.Web.Controllers
         public async Task<IActionResult> PayMentZarinPal()
         {
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var findCartId = _cartServiceAdmin.FindCartIdByUserId(userId);
+            var findCartId = _cartServiceQuery.FindCartIdByUserId(userId);
 
             if (findCartId == null)
                 return Redirect("/Cart/Fail");
 
-            var result = await _cartServiceAdmin.Payment(findCartId.Data);
+            var result = await _cartServiceCommand.Payment(findCartId.Data);
 
             if (result != null && result.IsSuccess)
                 return Redirect(result.Data); // لینک درگاه پرداخت
@@ -258,7 +258,7 @@ namespace GameOnline.Web.Controllers
                 return Redirect("/Cart/Fail"); // کاربر پرداخت را لغو کرده
 
             // Verify واقعی تراکنش
-            var result = await _cartServiceAdmin.VerificationZarinPal(cartId, authority);
+            var result = await _cartServiceCommand.VerificationZarinPal(cartId, authority);
 
             if (result != null && result.IsSuccess)
             {

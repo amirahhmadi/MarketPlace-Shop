@@ -1,5 +1,6 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.BrandServices.BrandServicesAdmin;
+using GameOnline.Core.Services.BrandServices.Commands;
+using GameOnline.Core.Services.BrandServices.Queries;
 using GameOnline.Core.ViewModels.BrandViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -8,17 +9,19 @@ namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class BrandController : BaseAdminController
     {
-        private readonly IBrandServiceAdmin _brandServiceAdmin;
+        private readonly IBrandServiceQuery _serviceQuery;
+        private readonly IBrandServiceCommand _serviceCommand;
 
-        public BrandController(IBrandServiceAdmin brandServiceAdmin)
+        public BrandController(IBrandServiceQuery serviceQuery, IBrandServiceCommand serviceCommand)
         {
-            _brandServiceAdmin = brandServiceAdmin;
+            _serviceQuery = serviceQuery;
+            _serviceCommand = serviceCommand;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_brandServiceAdmin.GetBrands());
+            return View(_serviceQuery.GetBrands());
         }
 
         [HttpGet]
@@ -30,7 +33,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(CreateBrandsViewModel createBrand)
         {
-            var result = _brandServiceAdmin.CreateBrand(createBrand);
+            var result = _serviceCommand.CreateBrand(createBrand);
 
             TempData["SwalType"] = result.IsSuccess ? "success" : "error";
             TempData["SwalTitle"] = result.IsSuccess ? "عملیات موفق" : "خطا";
@@ -42,7 +45,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var brand = _brandServiceAdmin.GetBrandById(id);
+            var brand = _serviceQuery.GetBrandById(id);
 
             if (brand == null)
                 return NotFound();
@@ -53,7 +56,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(EditBrandsViewModel editBrand)
         {
-            var result = _brandServiceAdmin.EditBrand(editBrand);
+            var result = _serviceCommand.EditBrand(editBrand);
 
             TempData["SwalType"] = result.IsSuccess ? "success" : "error";
             TempData["SwalTitle"] = result.IsSuccess ? "عملیات موفق" : "خطا";
@@ -65,7 +68,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Remove(int id)
         {
-            var brand = _brandServiceAdmin.GetBrandById(id);
+            var brand = _serviceQuery.GetBrandById(id);
 
             if (brand == null)
                 return NotFound();
@@ -76,7 +79,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Remove(RemoveBrandsViewModel removeBrand)
         {
-            var result = _brandServiceAdmin.RemoveBrand(removeBrand);
+            var result = _serviceCommand.RemoveBrand(removeBrand);
 
             TempData["SwalType"] = result.IsSuccess ? "success" : "error";
             TempData["SwalTitle"] = result.IsSuccess ? "عملیات موفق" : "خطا";

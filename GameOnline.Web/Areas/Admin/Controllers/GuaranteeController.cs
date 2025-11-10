@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.Services.GuaranteeServices.GuaranteeServicesAdmin;
+﻿using GameOnline.Core.Services.GuaranteeServices.Commands;
+using GameOnline.Core.Services.GuaranteeServices.Queries;
 using GameOnline.Core.ViewModels.GuaranteeViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,18 +7,14 @@ namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class GuaranteeController : BaseAdminController
     {
-        private readonly IGuaranteeServiceAdmin _guaranteeServiceAdmin;
-
-        public GuaranteeController(IGuaranteeServiceAdmin guaranteeServiceAdmin)
-        {
-            _guaranteeServiceAdmin = guaranteeServiceAdmin;
-        }
+        private readonly IGuaranteeServiceCommand _serviceCommand;
+        private readonly IGuaranteeServiceQuery _serviceQuery;
 
         #region Index
         [HttpGet]
         public IActionResult Index()
         {
-            var model = _guaranteeServiceAdmin.GetGuarantees();
+            var model = _serviceQuery.GetGuarantees();
             return View(model);
         }
         #endregion
@@ -38,7 +35,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
                 return View(createGuarantee);
             }
 
-            _guaranteeServiceAdmin.CreateGuarantee(createGuarantee);
+            _serviceCommand.CreateGuarantee(createGuarantee);
             SetSweetAlert("success", "عملیات موفق", "گارانتی با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }
@@ -48,7 +45,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var guarantee = _guaranteeServiceAdmin.GetGuaranteeById(id);
+            var guarantee = _serviceQuery.GetGuaranteeById(id);
             if (guarantee == null)
             {
                 SetSweetAlert("error", "خطا", "گارانتی پیدا نشد.");
@@ -66,7 +63,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
                 return View(editGuarantee);
             }
 
-            _guaranteeServiceAdmin.EditGuarantee(editGuarantee);
+            _serviceCommand.EditGuarantee(editGuarantee);
             SetSweetAlert("success", "عملیات موفق", "گارانتی با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }
@@ -76,7 +73,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Remove(int id)
         {
-            var guarantee = _guaranteeServiceAdmin.GetGuaranteeById(id);
+            var guarantee = _serviceQuery.GetGuaranteeById(id);
             if (guarantee == null)
             {
                 SetSweetAlert("error", "خطا", "گارانتی پیدا نشد.");
@@ -88,7 +85,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Remove(RemoveGuaranteesViewModel removeGuarantees)
         {
-            _guaranteeServiceAdmin.RemoveGuarantee(removeGuarantees);
+            _serviceCommand.RemoveGuarantee(removeGuarantees);
             SetSweetAlert("success", "عملیات موفق", "گارانتی با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }

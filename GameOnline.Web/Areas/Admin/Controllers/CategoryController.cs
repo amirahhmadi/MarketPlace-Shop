@@ -1,5 +1,6 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.CategoryServices.CategoryServicesAdmin;
+using GameOnline.Core.Services.CategoryServices.Commands;
+using GameOnline.Core.Services.CategoryServices.Queries;
 using GameOnline.Core.ViewModels.CategoryViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -8,17 +9,20 @@ namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class CategoryController : BaseAdminController
     {
-        private readonly ICategoryServiceAdmin _categoryServiceAdmin;
-        public CategoryController(ICategoryServiceAdmin categoryServicesAdmin)
+        private readonly ICategoryServicesCommand _servicesCommand;
+        private readonly ICategoryServicesQuery _servicesQuery;
+
+        public CategoryController(ICategoryServicesCommand servicesCommand, ICategoryServicesQuery servicesQuery)
         {
-            _categoryServiceAdmin = categoryServicesAdmin;
+            _servicesCommand = servicesCommand;
+            _servicesQuery = servicesQuery;
         }
 
         #region Index
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_categoryServiceAdmin.GetCategory());
+            return View(_servicesQuery.GetCategory());
         }
         #endregion
 
@@ -26,7 +30,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.ParentList = _categoryServiceAdmin.GetCategoriesForParentList(0);
+            ViewBag.ParentList = _servicesQuery.GetCategoriesForParentList(0);
             return View();
         }
 
@@ -35,17 +39,17 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.ParentList = _categoryServiceAdmin.GetCategoriesForParentList(0);
+                ViewBag.ParentList = _servicesQuery.GetCategoriesForParentList(0);
                 SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
                 return View();
             }
 
-            var result = _categoryServiceAdmin.CreateCategory(createCategory);
+            var result = _servicesCommand.CreateCategory(createCategory);
 
             if (result != null && createCategory.AddOrEditParent != null)
             {
                 createCategory.AddOrEditParent.SubId = result.Data;
-                var resultParent = _categoryServiceAdmin.AddOrEditParentCategory(createCategory.AddOrEditParent);
+                var resultParent = _servicesCommand.AddOrEditParentCategory(createCategory.AddOrEditParent);
                 TempData[TempDataName.ResultParent] = JsonConvert.SerializeObject(resultParent);
             }
 
@@ -58,24 +62,24 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var category = _categoryServiceAdmin.GetCategoryById(id);
+            var category = _servicesQuery.GetCategoryById(id);
             if (category == null)
                 return NotFound();
 
-            ViewBag.Parents = _categoryServiceAdmin.GetParentCategoryForAddOrRemoveSub(id);
-            ViewBag.ParentList = _categoryServiceAdmin.GetCategoriesForParentList(id);
+            ViewBag.Parents = _servicesQuery.GetParentCategoryForAddOrRemoveSub(id);
+            ViewBag.ParentList = _servicesQuery.GetCategoriesForParentList(id);
             return View(category);
         }
 
         [HttpPost]
         public IActionResult Edit(EditCategoriesViewModels editCategory)
         {
-            var result = _categoryServiceAdmin.EditCategory(editCategory);
+            var result = _servicesCommand.EditCategory(editCategory);
 
             if (result != null && editCategory.AddOrEditParent != null)
             {
                 editCategory.AddOrEditParent.SubId = result.Data;
-                var resultParent = _categoryServiceAdmin.AddOrEditParentCategory(editCategory.AddOrEditParent);
+                var resultParent = _servicesCommand.AddOrEditParentCategory(editCategory.AddOrEditParent);
                 TempData[TempDataName.ResultParent] = JsonConvert.SerializeObject(resultParent);
             }
 
@@ -88,7 +92,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Remove(int id)
         {
-            var category = _categoryServiceAdmin.GetCategoryById(id);
+            var category = _servicesQuery.GetCategoryById(id);
             if (category == null)
                 return NotFound();
 
@@ -98,7 +102,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Remove(RemoveCategoriesViewModels removeCategory)
         {
-            var result = _categoryServiceAdmin.RemoveCategory(removeCategory);
+            var result = _servicesCommand.RemoveCategory(removeCategory);
             SetSweetAlert("success", "عملیات موفق", "دسته‌بندی با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }

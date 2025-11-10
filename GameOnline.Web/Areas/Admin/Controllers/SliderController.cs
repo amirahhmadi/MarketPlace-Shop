@@ -1,5 +1,6 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.SliderServices.SliderServicesAdmin;
+using GameOnline.Core.Services.SliderServices.Commands;
+using GameOnline.Core.Services.SliderServices.Queries;
 using GameOnline.Core.ViewModels.SliderViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,17 +8,19 @@ namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class SliderController : BaseAdminController
     {
-        private readonly ISliderServiceAdmin _sliderServiceAdmin;
+        private readonly ISliderServiceCommand _serviceCommand;
+        private readonly ISliderServiceQuery _serviceQuery;
 
-        public SliderController(ISliderServiceAdmin sliderServiceAdmin)
+        public SliderController(ISliderServiceCommand serviceCommand, ISliderServiceQuery serviceQuery)
         {
-            _sliderServiceAdmin = sliderServiceAdmin;
+            _serviceCommand = serviceCommand;
+            _serviceQuery = serviceQuery;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var model = _sliderServiceAdmin.GetSliders();
+            var model = _serviceQuery.GetSliders();
             return View(model);
         }
 
@@ -36,7 +39,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
                 return View(createSlider);
             }
 
-            _sliderServiceAdmin.CreateSlider(createSlider);
+            _serviceCommand.CreateSlider(createSlider);
             SetSweetAlert("success", "عملیات موفق", "اسلایدر با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }
@@ -44,7 +47,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var slider = _sliderServiceAdmin.GetSliderById(id);
+            var slider = _serviceQuery.GetSliderById(id);
 
             if (slider == null)
             {
@@ -64,7 +67,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
                 return View(editSlider);
             }
 
-            _sliderServiceAdmin.EditSlider(editSlider);
+            _serviceCommand.EditSlider(editSlider);
             SetSweetAlert("success", "عملیات موفق", "اسلایدر با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }
@@ -72,7 +75,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Remove(int id)
         {
-            var slider = _sliderServiceAdmin.GetSliderById(id);
+            var slider = _serviceQuery.GetSliderById(id);
 
             if (slider == null)
             {
@@ -86,7 +89,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Remove(RemoveSlidersViewModel removeSlider)
         {
-            _sliderServiceAdmin.RemoveSlider(removeSlider);
+            _serviceCommand.RemoveSlider(removeSlider);
             SetSweetAlert("success", "عملیات موفق", "اسلایدر با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }

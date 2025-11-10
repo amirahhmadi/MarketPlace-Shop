@@ -1,16 +1,16 @@
-﻿using GameOnline.Core.Services.CartService.CartServiceClient;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using GameOnline.Core.Services.CartService.Queries;
 
 namespace GameOnline.Web.ViewComponents;
 
 public class MiniCartMobileViewComponent : ViewComponent
 {
-    private readonly ICartServiceClient _cartServiceClient;
+    private readonly ICartServiceQuery _cartServiceQuery;
 
-    public MiniCartMobileViewComponent(ICartServiceClient cartServiceClient)
+    public MiniCartMobileViewComponent(ICartServiceQuery cartServiceQuery)
     {
-        _cartServiceClient = cartServiceClient;
+        _cartServiceQuery = cartServiceQuery;
     }
 
     public IViewComponentResult Invoke()
@@ -19,7 +19,7 @@ public class MiniCartMobileViewComponent : ViewComponent
             return View("MiniCartMobile", new List<GameOnline.Core.ViewModels.CartViewmodel.Client.GetCartDetailsViewmodel>());
 
         int userId = int.Parse(UserClaimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier));
-        var cart = _cartServiceClient.GetCartDetails(userId);
+        var cart = _cartServiceQuery.GetCartDetails(userId);
 
         return View("MiniCartMobile", cart);
     }

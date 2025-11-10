@@ -1,4 +1,4 @@
-﻿using GameOnline.Core.Services.Comment_FAQ.Client;
+﻿using GameOnline.Core.Services.Comment_FAQ.Queries.FAQ;
 using GameOnline.Core.ViewModels.Comment_FAQ.FAQ.Client;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,10 +6,11 @@ namespace GameOnline.Web.Controllers
 {
     public class FaqController : BaseController
     {
-        private readonly IFaqServiceClient _faqServiceClient;
-        public FaqController(IFaqServiceClient faqServiceClient)
+        private readonly IFaqServiceQuery _faqServiceQuery;
+
+        public FaqController(IFaqServiceQuery faqServiceQuery)
         {
-            _faqServiceClient = faqServiceClient;
+            _faqServiceQuery = faqServiceQuery;
         }
 
         [HttpPost]
@@ -17,7 +18,7 @@ namespace GameOnline.Web.Controllers
         public IActionResult Question(int productId, string Producten)
         {
             TempData[ProductEn] = Producten;
-            return View(_faqServiceClient.GetQuestionsForClient(productId));
+            return View(_faqServiceQuery.GetQuestionsForClient(productId));
         }
     }
 }

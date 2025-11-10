@@ -1,21 +1,21 @@
-﻿using GameOnline.Core.Services.CartService.CartServiceClient;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using GameOnline.Core.Services.CartService.Queries;
 
 namespace GameOnline.Web.ViewComponents.UserProfileComponent;
 
 public class GetOrderForUserProfileComponent : ViewComponent
 {
-    private readonly ICartServiceClient _cartServiceClient;
+    private readonly ICartServiceQuery _cartServiceQuery;
 
-    public GetOrderForUserProfileComponent(ICartServiceClient cartServiceClient)
+    public GetOrderForUserProfileComponent(ICartServiceQuery cartServiceQuery)
     {
-        _cartServiceClient = cartServiceClient;
+        _cartServiceQuery = cartServiceQuery;
     }
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var user = User as ClaimsPrincipal;
         int userId = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
-        return await Task.FromResult(View("GetOrderForUserProfile", _cartServiceClient.GetOrdersForProfileByUserId(userId)));
+        return await Task.FromResult(View("GetOrderForUserProfile", _cartServiceQuery.GetOrdersForProfileByUserId(userId)));
     }
 }

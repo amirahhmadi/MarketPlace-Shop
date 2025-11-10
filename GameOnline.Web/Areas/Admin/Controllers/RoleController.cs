@@ -1,7 +1,7 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
 using GameOnline.Core.Security;
-using GameOnline.Core.Services.RoleService.Admin;
-using GameOnline.Core.Services.RoleService.Client;
+using GameOnline.Core.Services.RoleService.Commands;
+using GameOnline.Core.Services.RoleService.Queries;
 using GameOnline.Core.ViewModels.RoleViewmodel.Admin;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -10,16 +10,12 @@ namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class RoleController : BaseAdminController
     {
-        private readonly IRoleServiceAdmin _roleServiceAdmin;
-
-        public RoleController(IRoleServiceAdmin roleServiceAdmin)
-        {
-            _roleServiceAdmin = roleServiceAdmin;
-        }
+        private IRoleServiceCommand _roleCommand;
+        private IRoleServiceQuery _roleQuery;
 
         public IActionResult Index()
         {
-            return View(_roleServiceAdmin.GetRoles());
+            return View(_roleQuery.GetRoles());
         }
 
         #region Create
@@ -33,7 +29,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(CreateRoleViewmodel createRole)
         {
-            var result = _roleServiceAdmin.CreateRole(createRole);
+            var result = _roleCommand.CreateRole(createRole);
             TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToAction(nameof(Index));
         }
@@ -45,7 +41,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [Route("AddOrUpdateUserRole/{userId}")]
         public IActionResult AddOrUpdateUserRole(int userId)
         {
-            ViewBag.ListRole = _roleServiceAdmin.GetRoles();
+            ViewBag.ListRole = _roleQuery.GetRoles();
             return View();
         }
 
@@ -53,7 +49,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [Route("AddOrUpdateUserRole/{userId}")]
         public IActionResult AddOrUpdateUserRole(AddRoleForUserViewmodel addRoleForUser)
         {
-            var result = _roleServiceAdmin.AddOrUpdateRoleForUser(addRoleForUser);
+            var result = _roleCommand.AddOrUpdateRoleForUser(addRoleForUser);
             TempData[TempDataName.Result] = JsonConvert.SerializeObject(result);
             return RedirectToPage("/Admin/User");
         }

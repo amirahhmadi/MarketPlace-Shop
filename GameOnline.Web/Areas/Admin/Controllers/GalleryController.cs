@@ -1,24 +1,20 @@
-﻿using GameOnline.Core.Services.GalleryServices.GalleryServicesAdmin;
+﻿using GameOnline.Core.Services.GalleryServices.Commands;
+using GameOnline.Core.Services.GalleryServices.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class GalleryController : BaseAdminController
     {
-        private readonly IGalleryServicesAdmin _galleryServicesAdmin;
-
-        public GalleryController(IGalleryServicesAdmin galleryServicesAdmin)
-        {
-            _galleryServicesAdmin = galleryServicesAdmin;
-        }
-
+        private readonly IGalleryServicesCommand _servicesCommand;
+        private readonly IGalleryServicesQuery _servicesQuery;
         #region Index
         [HttpGet]
         public IActionResult Index(int id)
         {
             TempData["ProductId"] = id;
             ViewBag.ProductId = id;
-            var model = _galleryServicesAdmin.GetImageGalleryForProductById(id);
+            var model = _servicesQuery.GetImageGalleryForProductById(id);
             return View(model);
         }
         #endregion
@@ -33,7 +29,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index), new { id = productId });
             }
 
-            _galleryServicesAdmin.CreateImageForGallery(productId, imageName);
+            _servicesCommand.CreateImageForGallery(productId, imageName);
             SetSweetAlert("success", "عملیات موفق", "تصویر با موفقیت اضافه شد.");
             return RedirectToAction(nameof(Index), new { id = productId });
         }
@@ -43,7 +39,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Remove(int galleryId, int productId)
         {
-            _galleryServicesAdmin.RemoveImageFromGallery(galleryId);
+            _servicesCommand.RemoveImageFromGallery(galleryId);
             SetSweetAlert("success", "عملیات موفق", "تصویر با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index), new { id = productId });
         }

@@ -1,5 +1,6 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.ColorServices.ColorServicesAdmin;
+using GameOnline.Core.Services.ColorServices.Commands;
+using GameOnline.Core.Services.ColorServices.Queries;
 using GameOnline.Core.ViewModels.ColorViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,18 +8,20 @@ namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class ColorController : BaseAdminController
     {
-        private readonly IColorServicesAdmin _colorServicesAdmin;
+        private readonly IColorServicesCommand _servicesCommand;
+        private readonly IColorServicesQuery _servicesQuery;
 
-        public ColorController(IColorServicesAdmin colorServicesAdmin)
+        public ColorController(IColorServicesCommand servicesCommand, IColorServicesQuery servicesQuery)
         {
-            _colorServicesAdmin = colorServicesAdmin;
+            _servicesCommand = servicesCommand;
+            _servicesQuery = servicesQuery;
         }
 
         #region Index
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_colorServicesAdmin.GetColors());
+            return View(_servicesQuery.GetColors());
         }
         #endregion
 
@@ -38,7 +41,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
                 return View(createColors);
             }
 
-            _colorServicesAdmin.CreateColor(createColors);
+            _servicesCommand.CreateColor(createColors);
             SetSweetAlert("success", "عملیات موفق", "رنگ با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }
@@ -48,7 +51,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var color = _colorServicesAdmin.GetColorById(id);
+            var color = _servicesQuery.GetColorById(id);
             if (color == null)
                 return NotFound();
 
@@ -64,7 +67,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
                 return View(editColors);
             }
 
-            _colorServicesAdmin.EditColor(editColors);
+            _servicesCommand.EditColor(editColors);
             SetSweetAlert("success", "عملیات موفق", "رنگ با موفقیت ویرایش شد.");
             return RedirectToAction(nameof(Index));
         }
@@ -74,7 +77,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Remove(int id)
         {
-            var color = _colorServicesAdmin.GetColorById(id);
+            var color = _servicesQuery.GetColorById(id);
             if (color == null)
                 return NotFound();
 
@@ -91,7 +94,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Remove(RemoveColorsViewModel removeColors)
         {
-            _colorServicesAdmin.RemoveColor(removeColors);
+            _servicesCommand.RemoveColor(removeColors);
             SetSweetAlert("success", "عملیات موفق", "رنگ با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }

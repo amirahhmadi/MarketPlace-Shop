@@ -1,9 +1,10 @@
 ﻿using GameOnline.Core.ViewModels.UserViewmodel.Server.Account;
-using GameOnline.Core.Services.UserService.UserServiceAdmin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using GameOnline.Core.Services.AccountService.Commands;
+using GameOnline.Core.Services.AccountService.Queries;
 
 namespace GameOnline.Web.Controllers
 {
@@ -11,11 +12,13 @@ namespace GameOnline.Web.Controllers
     public class AccountController : BaseController
     {
         private const string CookieScheme = "GameOnline-Login";
-        private readonly IAccountServiceAdmin _accountService;
+        private readonly IAccountServiceQuery _accountServiceQuery;
+        private readonly IAccountServiceCommand _accountServiceCommand;
 
-        public AccountController(IAccountServiceAdmin accountService)
+        public AccountController(IAccountServiceQuery accountServiceQuery, IAccountServiceCommand accountServiceCommand)
         {
-            _accountService = accountService;
+            _accountServiceQuery = accountServiceQuery;
+            _accountServiceCommand = accountServiceCommand;
         }
 
         [HttpGet, AllowAnonymous, Route("Register")]
@@ -35,7 +38,7 @@ namespace GameOnline.Web.Controllers
                 return View(model);
             }
 
-            var result = _accountService.Register(model);
+            var result = _accountServiceCommand.Register(model);
 
             if (result.IsSuccess)
             {
@@ -60,7 +63,7 @@ namespace GameOnline.Web.Controllers
         [HttpGet, AllowAnonymous, Route("ActiveAccount/{userId:int}/{activeCode}")]
         public async Task<IActionResult> ActiveAccount(int userId, string activeCode)
         {
-            var result = await _accountService.ActiveAccount(userId, activeCode);
+            var result = await _accountServiceCommand.ActiveAccount(userId, activeCode);
 
             SetSweetAlert(result.IsSuccess ? "success" : "error",
                 result.IsSuccess ? "موفق!" : "خطا!",
@@ -87,7 +90,7 @@ namespace GameOnline.Web.Controllers
                 return View(model);
             }
 
-            var result = await _accountService.LogIn(model);
+            var result = await _accountServiceQuery.LogIn(model);
             SetSweetAlert(result.IsSuccess ? "success" : "error",
                           result.IsSuccess ? "ورود موفق" : "خطا در ورود",
                           result.Message ?? "");
@@ -109,7 +112,7 @@ namespace GameOnline.Web.Controllers
         [HttpPost, Authorize, Route("Logout")]
         public async Task<IActionResult> Logout()
         {
-            var result = await _accountService.LogoutAsync();
+            var result = await _accountServiceQuery.LogoutAsync();
             SetSweetAlert(result.IsSuccess ? "success" : "error",
                           result.IsSuccess ? "خروج موفق" : "خطا در خروج",
                           result.Message ?? "");
@@ -133,7 +136,7 @@ namespace GameOnline.Web.Controllers
                 return View();
             }
 
-            var result = _accountService.FindUserByEmailForForgotPassword(email);
+            var result = _accountServiceQuery.FindUserByEmailForForgotPassword(email);
             SetSweetAlert(result.IsSuccess ? "success" : "error",
                           result.IsSuccess ? "ایمیل ارسال شد" : "خطا",
                           result.Message ?? "");
@@ -160,7 +163,7 @@ namespace GameOnline.Web.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = _accountService.RecoveryPassword(model);
+            var result = _accountServiceCommand.RecoveryPassword(model);
             SetSweetAlert(result.IsSuccess ? "success" : "error",
                           result.IsSuccess ? "رمز عبور تغییر کرد" : "خطا",
                           result.Message ?? "");

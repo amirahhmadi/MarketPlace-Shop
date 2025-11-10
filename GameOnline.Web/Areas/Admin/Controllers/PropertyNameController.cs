@@ -1,7 +1,10 @@
 ﻿using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.CategoryServices.CategoryServicesAdmin;
-using GameOnline.Core.Services.PropertyService.PropertyGroupService;
-using GameOnline.Core.Services.PropertyService.PropertyNameService;
+using GameOnline.Core.Services.CategoryServices.Commands;
+using GameOnline.Core.Services.CategoryServices.Queries;
+using GameOnline.Core.Services.PropertyService.Commands.PropertyGroup;
+using GameOnline.Core.Services.PropertyService.Commands.PropertyName;
+using GameOnline.Core.Services.PropertyService.Queries.PropertyGroup;
+using GameOnline.Core.Services.PropertyService.Queries.PropertyName;
 using GameOnline.Core.ViewModels.PropertyViewmodel.PropertyNameViewmodel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,24 +12,28 @@ namespace GameOnline.Web.Areas.Admin.Controllers
 {
     public class PropertyNameController : BaseAdminController
     {
-        private readonly IPropertyNameServiceAdmin _propertyNameServiceAdmin;
-        private readonly IPropertyGroupServiceAdmin _propertyGroupServiceAdmin;
-        private readonly ICategoryServiceAdmin _categoryServiceAdmin;
+        private readonly IPropertyNameCommand _propertyNameCommand;
+        private readonly IPropertyNameQuery _propertyNameQuery;
+        private readonly IPropertyGroupCommand _propertyGroupCommand;
+        private readonly IPropertyGroupQuery _propertyGroupQuery;
+        private readonly ICategoryServicesCommand _categoryServicesCommand;
+        private readonly ICategoryServicesQuery _categoryServicesQuery;
 
-        public PropertyNameController(IPropertyNameServiceAdmin propertyNameServiceAdmin,
-                                      IPropertyGroupServiceAdmin propertyGroupServiceAdmin,
-                                      ICategoryServiceAdmin categoryServiceAdmin)
+        public PropertyNameController(IPropertyNameCommand propertyNameCommand, IPropertyNameQuery propertyNameQuery, IPropertyGroupCommand propertyGroupCommand, IPropertyGroupQuery propertyGroupQuery, ICategoryServicesCommand categoryServicesCommand, ICategoryServicesQuery categoryServicesQuery)
         {
-            _propertyNameServiceAdmin = propertyNameServiceAdmin;
-            _propertyGroupServiceAdmin = propertyGroupServiceAdmin;
-            _categoryServiceAdmin = categoryServiceAdmin;
+            _propertyNameCommand = propertyNameCommand;
+            _propertyNameQuery = propertyNameQuery;
+            _propertyGroupCommand = propertyGroupCommand;
+            _propertyGroupQuery = propertyGroupQuery;
+            _categoryServicesCommand = categoryServicesCommand;
+            _categoryServicesQuery = categoryServicesQuery;
         }
 
         #region Index
         [HttpGet]
         public IActionResult Index()
         {
-            var model = _propertyNameServiceAdmin.GetPropertyName();
+            var model = _propertyNameQuery.GetPropertyName();
             return View(model);
         }
         #endregion
@@ -35,8 +42,8 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.Groups = _propertyGroupServiceAdmin.GetPropertyGroups();
-            ViewBag.Category = _categoryServiceAdmin.GetCategory();
+            ViewBag.Groups = _propertyGroupQuery.GetPropertyGroups();
+            ViewBag.Category = _categoryServicesQuery.GetCategory();
             return View();
         }
 
@@ -46,12 +53,12 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
-                ViewBag.Groups = _propertyGroupServiceAdmin.GetPropertyGroups();
-                ViewBag.Category = _categoryServiceAdmin.GetCategory();
+                ViewBag.Groups = _propertyGroupQuery.GetPropertyGroups();
+                ViewBag.Category = _categoryServicesQuery.GetCategory();
                 return View(createPropertyName);
             }
 
-            _propertyNameServiceAdmin.CreatePropertyName(createPropertyName);
+            _propertyNameCommand.CreatePropertyName(createPropertyName);
             SetSweetAlert("success", "عملیات موفق", "ویژگی با موفقیت ایجاد شد.");
             return RedirectToAction(nameof(Index));
         }
@@ -61,15 +68,15 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var result = _propertyNameServiceAdmin.GetPropertyNameById(id);
+            var result = _propertyNameQuery.GetPropertyNameById(id);
             if (result == null)
             {
                 SetSweetAlert("error", "خطا", "ویژگی پیدا نشد.");
                 return RedirectToAction(nameof(Index));
             }
 
-            result.GetPropertyGroups = _propertyGroupServiceAdmin.GetPropertyGroups();
-            ViewBag.AllCategories = _categoryServiceAdmin.GetCategory(); // همه دسته‌ها برای نمایش
+            result.GetPropertyGroups = _propertyGroupQuery.GetPropertyGroups();
+            ViewBag.AllCategories = _categoryServicesQuery.GetCategory(); // همه دسته‌ها برای نمایش
 
             return View(result);
         }
@@ -80,18 +87,18 @@ namespace GameOnline.Web.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 SetSweetAlert("error", "خطا", "اطلاعات وارد شده صحیح نیست.");
-                editPropertyName.GetPropertyGroups = _propertyGroupServiceAdmin.GetPropertyGroups();
-                ViewBag.AllCategories = _categoryServiceAdmin.GetCategory();
+                editPropertyName.GetPropertyGroups = _propertyGroupQuery.GetPropertyGroups();
+                ViewBag.AllCategories = _categoryServicesQuery.GetCategory();
                 return View(editPropertyName);
             }
 
-            var result = _propertyNameServiceAdmin.EditPropertyName(editPropertyName);
+            var result = _propertyNameCommand.EditPropertyName(editPropertyName);
 
             if (!result.IsSuccess)
             {
                 SetSweetAlert("error", "خطا", "ویرایش ویژگی با مشکل مواجه شد.");
-                editPropertyName.GetPropertyGroups = _propertyGroupServiceAdmin.GetPropertyGroups();
-                ViewBag.AllCategories = _categoryServiceAdmin.GetCategory();
+                editPropertyName.GetPropertyGroups = _propertyGroupQuery.GetPropertyGroups();
+                ViewBag.AllCategories = _categoryServicesQuery.GetCategory();
                 return View(editPropertyName);
             }
 
@@ -104,7 +111,7 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Remove(int propertyNameId)
         {
-            _propertyNameServiceAdmin.RemovePropertyName(propertyNameId);
+            _propertyNameCommand.RemovePropertyName(propertyNameId);
             SetSweetAlert("success", "عملیات موفق", "ویژگی با موفقیت حذف شد.");
             return RedirectToAction(nameof(Index));
         }

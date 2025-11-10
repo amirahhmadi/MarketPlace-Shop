@@ -1,6 +1,7 @@
 ﻿using GameOnline.Common.Core;
 using GameOnline.Core.ExtenstionMethods;
-using GameOnline.Core.Services.UserService.UserServiceAdmin;
+using GameOnline.Core.Services.UserService.Commands;
+using GameOnline.Core.Services.UserService.Queries;
 using GameOnline.Core.ViewModels.RoleViewmodel.Admin;
 using GameOnline.DataBase.Context;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +11,12 @@ namespace GameOnline.Core.Services.RoleService.Queries;
 public class RoleServiceQuery : IRoleServiceQuery
 {
     private readonly GameOnlineContext _context;
-    private readonly IUserServiceAdmin _userServiceAdmin;
-    public RoleServiceQuery(GameOnlineContext context, IUserServiceAdmin userServiceAdmin)
+    private readonly IUserServiceQuery _userServiceQuery;
+
+    public RoleServiceQuery(GameOnlineContext context, IUserServiceQuery userServiceQuery)
     {
         _context = context;
-        _userServiceAdmin = userServiceAdmin;
+        _userServiceQuery = userServiceQuery;
     }
 
     public List<GetRolesViewmodel> GetRoles()
@@ -38,7 +40,7 @@ public class RoleServiceQuery : IRoleServiceQuery
 
     public OperationResult<bool> CheckPermission(int permissionId, int userId)
     {
-        var findUser = _userServiceAdmin.FindUserById(userId);
+        var findUser = _userServiceQuery.FindUserById(userId);
         if (findUser == null || findUser.IsRemove || findUser.Type == AccountType.NotActive || findUser.Type == AccountType.Ban)
         {
             return new OperationResult<bool>

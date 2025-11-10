@@ -1,8 +1,9 @@
-﻿using GameOnline.Core.Services.RoleService.Client;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
+using GameOnline.Core.Services.RoleService.Commands;
+using GameOnline.Core.Services.RoleService.Queries;
 
 namespace GameOnline.Core.Security
 {
@@ -17,8 +18,8 @@ namespace GameOnline.Core.Security
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var roleServiceClient = (IRoleServiceClient)
-                context.HttpContext.RequestServices.GetService(typeof(IRoleServiceClient));
+            var roleServiceClient = (IRoleServiceQuery)
+                context.HttpContext.RequestServices.GetService(typeof(IRoleServiceQuery));
 
             if (context.HttpContext.User.Identity?.IsAuthenticated != true)
             {
