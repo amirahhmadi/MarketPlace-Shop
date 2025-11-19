@@ -8,6 +8,10 @@ namespace GameOnline.Web.Areas.User.Controllers
     {
         private readonly IAddressServiceQuery _addressServiceQuery;
 
+        public AddressController(IAddressServiceQuery addressServiceQuery)
+        {
+            _addressServiceQuery = addressServiceQuery;
+        }
         [Route("GetAddress")]
         public IActionResult GetAddress()
         {

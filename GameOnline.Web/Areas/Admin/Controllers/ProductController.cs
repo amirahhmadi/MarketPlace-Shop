@@ -20,6 +20,16 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         private readonly ICategoryServicesCommand _categoryCommand;
         private readonly ICategoryServicesQuery _categoryQuery;
 
+        public ProductController(IProductServicesCommand productCommand, IProductServicesQuery productQuery, IBrandServiceCommand brandCommand, IBrandServiceQuery brandQuery, ICategoryServicesCommand categoryCommand, ICategoryServicesQuery categoryQuery)
+        {
+            _productCommand = productCommand;
+            _productQuery = productQuery;
+            _brandCommand = brandCommand;
+            _brandQuery = brandQuery;
+            _categoryCommand = categoryCommand;
+            _categoryQuery = categoryQuery;
+        }
+
         #region Index
         [HttpGet]
         public IActionResult Index()

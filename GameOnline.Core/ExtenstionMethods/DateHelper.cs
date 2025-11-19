@@ -135,5 +135,15 @@ namespace GameOnline.Core.ExtenstionMethods
                 (year, month, day, new PersianCalendar());
 
         }
+
+        public static string SpecialDisCount(this DateTime? date)
+        {
+            if (!date.HasValue)
+                return "-";
+
+            var dt = date.Value;
+
+            return $"{dt.Month:00}/{dt.Day:00}/{dt.Year:0000} {dt.Hour:00}:{dt.Minute:00}:{dt.Second:0000}";
+        }
     }
 }

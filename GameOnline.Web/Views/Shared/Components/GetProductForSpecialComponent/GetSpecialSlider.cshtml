@@ -1,0 +1,71 @@
+﻿@using GameOnline.Core.ExtenstionMethods
+@model IEnumerable<GameOnline.Core.ViewModels.SliderViewModels.Queries.SpecialSliderViewmodel>
+
+<section class="section-slider amazing-section mb-3 mt-4" style="background: rgb(239, 57, 78);">
+    <div class="container-amazing">
+        <div class="container-main">
+            <div>
+                <div class="col-lg-3 display-md-none pull-right">
+                    <div class="amazing-product text-center mt-5">
+                        <a href="#">
+                            <img src="/assets/images/amazing/amazing.png" alt="amazing">
+                        </a>
+                        <a href="#" class="view-all-amazing-btn">
+                            مشاهده همه
+                            <i class="uil uil-angle-left"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-12 pull-left">
+                    <div class="section-slider-content">
+                        <div class="section-slider-product slider-amazing mt-3">
+                            <div class="widget widget-product card" style="margin:0;">
+                                <header class="card-header card-header-amazing">
+                                    <span class="title-one">پیشنهاد شگفت انگیز</span>
+                                    <a class="card-title pull-left">مشاهده همه</a>
+                                </header>
+                                <div class="product-carousel owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                                    <div class="owl-stage-outer">
+                                        <div class="owl-stage"
+                                             style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 2234px;">
+                                            @foreach (var item in Model)
+                                            {
+                                                <div class="owl-item active" style="width: 309.083px; margin-left: 10px;">
+                                                    <div class="item">
+                                                        <a href="Detail/@item.ProductId">
+                                                            <img src="@PathTools.PathProductImageClient@item.ImgName"
+                                                                 class="img-fluid" alt="@item.FaTitle">
+                                                        </a>
+
+                                                        <h2 class="post-title">
+                                                            <a href="Detail/@item.ProductId">@item.FaTitle</a>
+                                                        </h2>
+
+                                                        <div class="price">
+                                                            <div class="discount-item">
+                                                                <span>%@(((item.MinePrice - item.SpecialPrice) * 100 / item.MinePrice).ToString("F0"))</span>
+                                                            </div>
+                                                            <del><span>@item.MinePrice.ToString("N0")<span>تومان</span></span></del>
+                                                            <ins><span>@item.SpecialPrice.ToString("N0")<span>تومان</span></span></ins>
+                                                        </div>
+                                                        <div class="product-box-timer">
+                                                            <span class="fa fa-clock-o"></span>
+                                                            <div class="countdown countdown-style-3 h4"
+                                                                 data-date-time="@item.EndDisCount"
+                                                                 data-labels='{"label-second": "", "label-minute": "", "label-hour": ""}'>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

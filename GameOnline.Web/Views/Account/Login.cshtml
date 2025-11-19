@@ -23,7 +23,7 @@
             <a href="index.html" class="logo-account"><img src="/assets/images/logo-login.png" alt="logo"></a>
             <span class="account-head-line">ورود به دیجی‌استور</span>
             <div class="content-account">
-                <form asp-controller="Account" asp-action="LogIn" method="post" id="login">
+                <form asp-controller="Account" asp-action="Login" method="post" id="login">
                     <label for="email-phone">پست الکترونیک خود را وارد کنید</label>
                     <input asp-for="Email" class="input-email-account">
                     <a href="/Recovery" class="account-link-password">رمز خود را فراموش کرده ام</a>
@@ -37,8 +37,7 @@
                     </div>
                     <div class="form-auth-row">
                         <label for="remember" class="ui-checkbox">
-                            <input asp-for="IsPersistent">
-                            <span class="ui-checkbox-check"></span>
+                            <input asp-for="IsPersistent" type="checkbox" value="true" />                            <span class="ui-checkbox-check"></span>
                         </label>
                         <label for="remember" class="remember-me">مرا به خاطر داشته باش</label>
                     </div>

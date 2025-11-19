@@ -7,10 +7,36 @@
 <head>
     <partial name="_cssPartial" />
 </head>
+<header class="shopping-page">
+    <div class="container">
+        <div class="header-shopping-logo">
+            <a href="#"><img src="/assets/images/logo.png" alt="logo"></a>
+        </div>
+    </div>
 
+    <div class="container">
+        <div class="row">
+            <ul class="checkout-steps">
+                <li class="is-completed is-completed-active">
+                    <a href="shopping.html" class="checkout-steps-item-link active-link-shopping">
+                        <span>اطلاعات ارسال</span>
+                    </a>
+                </li>
+                <li class="is-completed is-completed-active">
+                    <a href="shopping-payment.html" class="checkout-steps-item-link active-link-shopping">
+                        <span>پرداخت</span>
+                    </a>
+                </li>
+                <li class="is-active">
+                    <a href="shopping-no-complate-buy.html" class="checkout-steps-item-link active-link-shopping">
+                        <span>اتمام خرید و ارسال</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
 <body>
-
-
     <div class="container">
         <div class="main-shopping">
             <div class="col-12 text-center">
@@ -46,7 +72,7 @@
                                 <a href="#" class="processing">در حال پردازش</a>
                                 است.جزئیات این سفارش را می توانید
                                 با کلیک بر روی دکمه
-                                <a href="#" class="link-border">پیگیری سفارش</a>
+                                <a href="/OrderDetail" class="link-border">پیگیری سفارش</a>
                                 مشاهده نمایید.
                             </div>
                             <div class="parent-btn btn-following-order">

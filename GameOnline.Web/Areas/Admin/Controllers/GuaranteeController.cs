@@ -10,6 +10,12 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         private readonly IGuaranteeServiceCommand _serviceCommand;
         private readonly IGuaranteeServiceQuery _serviceQuery;
 
+        public GuaranteeController(IGuaranteeServiceCommand serviceCommand, IGuaranteeServiceQuery serviceQuery)
+        {
+            _serviceCommand = serviceCommand;
+            _serviceQuery = serviceQuery;
+        }
+
         #region Index
         [HttpGet]
         public IActionResult Index()

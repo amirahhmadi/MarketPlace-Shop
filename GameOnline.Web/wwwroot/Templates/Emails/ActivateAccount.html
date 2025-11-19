@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فعالسازی حساب کاربری</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            font-family: 'Tahoma', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .email-wrapper {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #007BFF 0%, #00C6FF 100%);
+            color: #fff;
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+            .header img {
+                width: 80px;
+                border-radius: 10px;
+                margin-bottom: 10px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+                margin: 0;
+            }
+
+        .content {
+            padding: 30px;
+            color: #333;
+            line-height: 1.9;
+            font-size: 15px;
+        }
+
+            .content p {
+                margin-bottom: 15px;
+            }
+
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white !important;
+            text-decoration: none;
+            padding: 14px 35px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+
+        .link {
+            word-break: break-all;
+            color: #007BFF;
+            font-size: 13px;
+        }
+
+        .footer {
+            background: #f9fafb;
+            text-align: center;
+            padding: 15px;
+            color: #888;
+            font-size: 12px;
+        }
+
+        @media (max-width:600px) {
+            .content {
+                padding: 20px;
+                font-size: 14px;
+            }
+
+            .btn {
+                padding: 12px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="header">
+            <img src="https://yourdomain.com/assets/logo.png" alt="Logo">
+            <h1>به جمع ما خوش آمدید!</h1>
+        </div>
+        <div class="content">
+            <p>سلام {{Name}} 🌸</p>
+            <p>از ثبت‌نام شما در وب‌سایت ما سپاسگزاریم.</p>
+            <p>برای فعال‌سازی حساب خود، لطفاً روی دکمه زیر کلیک کنید:</p>
+
+            <div class="button-container">
+                <a href="{{Link}}" class="btn">فعالسازی حساب</a>
+            </div>
+
+            <p>اگر دکمه بالا کار نکرد، می‌توانید از لینک زیر استفاده کنید:</p>
+            <p class="link">{{Link}}</p>
+
+            <p style="color:#999; font-size:13px;">
+                ⏰ این لینک تا <strong>۱۰ دقیقه آینده</strong> معتبر است.
+            </p>
+        </div>
+        <div class="footer">
+            <p>© {{Year}} GameOnline — تمامی حقوق محفوظ است.</p>
+        </div>
+    </div>
+</body>
+</html>

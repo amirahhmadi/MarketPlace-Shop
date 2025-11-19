@@ -10,11 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GameOnline.Web.Controllers
 {
-    public class CartController : Controller
+    public class CartController : BaseController
     {
         private readonly ICartServiceQuery _cartServiceQuery;
         private readonly ICartServiceCommand _cartServiceCommand;
         private readonly IAddressServiceQuery _addressServiceQuery;
+
         public CartController(ICartServiceQuery cartServiceQuery, ICartServiceCommand cartServiceCommand, IAddressServiceQuery addressServiceQuery)
         {
             _cartServiceQuery = cartServiceQuery;
@@ -130,8 +131,10 @@ namespace GameOnline.Web.Controllers
         {
             var findActiveAddress = _addressServiceQuery.GetCartForShopping(CurrentUserId);
             if (findActiveAddress == null)
-                return Redirect("/");
-
+            {
+                SetSweetAlert("error", "خطا", "برای ادامه آدرسی را ثبت کنید");
+                return RedirectToAction(nameof(CartDetail));
+            }
             findActiveAddress.GetCartDetails = _cartServiceQuery.GetCartDetails(CurrentUserId);
 
             return View(findActiveAddress);
@@ -224,7 +227,6 @@ namespace GameOnline.Web.Controllers
             return View(FindCart);
         }
 
-        #region ZarinPal Pay
         [HttpGet]
         [Authorize]
         [Route("PayMentZarinPal")]
@@ -234,14 +236,14 @@ namespace GameOnline.Web.Controllers
             var findCartId = _cartServiceQuery.FindCartIdByUserId(userId);
 
             if (findCartId == null)
-                return Redirect("/Cart/Fail");
+                return View("Fail");
 
             var result = await _cartServiceCommand.Payment(findCartId.Data);
 
             if (result != null && result.IsSuccess)
                 return Redirect(result.Data); // لینک درگاه پرداخت
             else
-                return Redirect("/Cart/Fail");
+                return View("Fail");
         }
 
         [HttpGet]
@@ -252,10 +254,10 @@ namespace GameOnline.Web.Controllers
             string authority = HttpContext.Request.Query["Authority"];
 
             if (string.IsNullOrEmpty(status) || string.IsNullOrEmpty(authority))
-                return Redirect("/Cart/Fail"); // درخواست نامعتبر
+                return View("Fail"); // درخواست نامعتبر
 
             if (status.ToLower() != "ok")
-                return Redirect("/Cart/Fail"); // کاربر پرداخت را لغو کرده
+                return View("Fail"); // کاربر پرداخت را لغو کرده
 
             // Verify واقعی تراکنش
             var result = await _cartServiceCommand.VerificationZarinPal(cartId, authority);
@@ -268,9 +270,8 @@ namespace GameOnline.Web.Controllers
             else
             {
                 // پرداخت ناموفق
-                return Redirect("/Cart/Fail"); // صفحه خطا
+                return View("Fail"); // صفحه خطا
             }
         }
-        #endregion
     }
 }

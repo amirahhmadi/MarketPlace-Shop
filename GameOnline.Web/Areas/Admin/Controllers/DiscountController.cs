@@ -11,6 +11,12 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         private readonly IDiscountServicesCommand _servicesCommand;
         private readonly IDiscountServicesQuery _servicesQuery;
 
+        public DiscountController(IDiscountServicesCommand servicesCommand, IDiscountServicesQuery servicesQuery)
+        {
+            _servicesCommand = servicesCommand;
+            _servicesQuery = servicesQuery;
+        }
+
         #region Index
         [HttpGet]
         public IActionResult Index()

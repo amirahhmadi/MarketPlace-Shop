@@ -13,6 +13,11 @@ namespace GameOnline.Web.Areas.Admin.Controllers
         private IRoleServiceCommand _roleCommand;
         private IRoleServiceQuery _roleQuery;
 
+        public RoleController(IRoleServiceCommand roleCommand, IRoleServiceQuery roleQuery)
+        {
+            _roleCommand = roleCommand;
+            _roleQuery = roleQuery;
+        }
         public IActionResult Index()
         {
             return View(_roleQuery.GetRoles());

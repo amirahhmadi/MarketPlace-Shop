@@ -22,4 +22,29 @@ public static class SendEmail
         mailClient.Send(message);
         return true;
     }
+    public static class EmailTemplateHelper
+    {
+        public static string GetTemplate(string fileName, Dictionary<string, string>? values = null)
+        {
+            // مسیر پوشه قالب‌ها (داخل wwwroot/Templates/Emails)
+            var basePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Templates", "Emails");
+            var filePath = Path.Combine(basePath, fileName);
+
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException($"فایل قالب ایمیل یافت نشد: {filePath}");
+
+            var content = File.ReadAllText(filePath);
+
+            // جایگزینی مقادیر داخل قالب
+            if (values != null)
+            {
+                foreach (var kvp in values)
+                {
+                    content = content.Replace($"{{{kvp.Key}}}", kvp.Value);
+                }
+            }
+
+            return content;
+        }
+    }
 }

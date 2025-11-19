@@ -110,10 +110,7 @@
                 </div>
                 <div class="table-draught-col">
                     زمان
-                    تحویل: بازه شنبه ۱۱ خرداد - شنبه ۱۸ خرداد
-                    <a href="#" class="btn-modify">
-                        تغییر زمان ارسال
-                    </a>
+                    تحویل: @Model.FirstOrDefault()?.LastModifiedDate?.AddDays(3).ToPersianDate("dd ms") - @Model.FirstOrDefault()?.LastModifiedDate?.AddDays(10).ToPersianDate("dd ms")
                 </div>
             </div>
             <div class="table-draught-row">
@@ -130,7 +127,7 @@
             <div class="table-draught-row">
                 <div class="table-draught-col last-tabel">
                     مبلغ این
-                    مرسوله: ۴۳,۰۰۰ تومان
+                    مرسوله: @Model.FirstOrDefault().Price.ToString("N0") تومان
 
                 </div>
             </div>
@@ -145,7 +142,6 @@
                         <th scope="col">قیمت کل</th>
                         <th scope="col">تخفیف</th>
                         <th scope="col">قیمت نهایی</th>
-                        <th scope="col">عملیات</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -199,7 +195,6 @@
                                 <!-- قیمت نهایی -->
                                 <td>@totalFinalPrice.ToString("N0") تومان</td>
 
-                                <td class="detail"><i class="fa fa-angle-left"></i></td>
                             </tr>
                         }
                     }
