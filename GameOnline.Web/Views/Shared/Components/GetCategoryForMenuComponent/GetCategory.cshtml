@@ -1,0 +1,213 @@
+﻿@model IEnumerable<GameOnline.Core.ViewModels.CategoryViewModels.GetCategoriesForMenuViewmodel>
+@{
+}
+<nav class="main-menu">
+    <ul class="new-list-menu">
+        <li class="item-list-menu megamenu-1 category nav-overlay">
+            <a href="#"
+               class="list-category first after" style="font-weight: bold;">
+                <i class="mdi mdi-menu"></i>
+                دسته بندی کالاها
+            </a>
+
+            <ul class="list-menu-level-2">
+                @foreach (var item in Model.Where(x => x.IsMine == true).GroupBy(x => x.CategoryId))
+                {
+                    <li class="item-menu-2">
+                        <a href="#" class="list-category-menu-2">
+                            <i class="mdi mdi-monitor"></i>@item.FirstOrDefault().FaTitle
+                        </a>
+
+                        <ul class="megamenu-level-3 row">
+                            <li class="list-category">
+                                <a href="#" class="list-category-megamenu">همه دسته بندی های @item.FirstOrDefault().FaTitle</a>
+                            </li>
+                            @foreach (var parentItem in Model.Where(x => x.ParentId == item.Key).GroupBy(x => x.CategoryId))
+                            {
+                                <li class="item-megamenu-title">
+                                    <a href="#"
+                                       class="list-category-megamenu-3">
+                                        <span>
+                                            @parentItem.FirstOrDefault().FaTitle<i class="fa fa-angle-left"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                               @foreach (var subitem in Model.Where(x => x.ParentId == parentItem.Key).GroupBy(x=>x.CategoryId))
+                                {
+                                    <li class="item-megamenu-item">
+                                        <a href="#" class="list-category-megamenu-3">
+                                           @subitem.FirstOrDefault().FaTitle
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </li>
+        <li class="item-list-menu megamenu-1">
+            <a href="#" class="list-category first after"
+               style="font-weight: bold;"><i class="mdi mdi-store text-warning"></i> سوپر مارکت</a>
+        </li>
+        <li class="item-list-menu megamenu-1 nav-overlay">
+            <a href="#" class="list-category first after"
+               style="font-weight: bold;"><i class="mdi mdi-sale text-danger"></i> تخفیف و پیشنهاد ها</a>
+            <ul class="list-menu-level-2 list-menu-discounts-offers">
+                <li class="discounts-offers-list-item">
+                    <ul>
+                        <li class="discounts-offers-item">
+                            <a href="#" class="list-category-megamenu-3">
+                                <span>
+                                    مشاهده همه تخفیف‌ها و
+                                    پیشنهادها<i class="fa fa-angle-left"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span>
+                                    کالاهای
+                                    شگفت‌انگیز<i class="fa fa-angle-left"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span>
+                                    شگفت‌انگیز
+                                    سوپرمارکتی<i class="fa fa-angle-left"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span>
+                                    فروش
+                                    ویژه<i class="fa fa-angle-left"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span class="medium-display-title">کالای دیجیتال</span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span class="medium-display-title">کالای دیجیتال</span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span class="medium-display-title">کالای دیجیتال</span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span class="medium-display-title">کالای دیجیتال</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="discounts-offers-list-item">
+                    <ul>
+                        <li class="discounts-offers-item sublist-option">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span class="medium-display-title">
+                                    بسته های لوازم تحریر کمتر از ۱۰۰ هزار
+                                    تومان
+                                </span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item sublist-option">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span class="medium-display-title">
+                                    ابزار دستی کمتر از ۱۰۰ هزار تومان
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <span class="sublist-divider"></span>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span>
+                                    با هر
+                                    خرید هدیه بگیرید!
+                                </span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span>
+                                    تخفیف
+                                    پایان فصل
+                                </span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span>
+                                    کارت
+                                    هدیه
+                                    خرید از دیجی‌کالا
+                                </span>
+                            </a>
+                        </li>
+                        <li class="discounts-offers-item">
+                            <a href="#"
+                               class="list-category-megamenu-3 list-category-megamenu-3-medium">
+                                <span>
+                                    تازه‌های
+                                    فروشنده‌های جدید
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="discounts-offers-list-item main-banner">
+                    <a href="#">
+                        <img src="/assets/images/banner.jpg" alt="banner">
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="item-list-menu megamenu-1">
+            <a href="#" class="list-category first after">
+                <i class="mdi mdi-marker-check text-success"></i>
+                دیجی استور من
+            </a>
+        </li>
+        <li class="item-list-menu megamenu-1">
+            <a href="#" class="list-category first after">
+                <i class="mdi mdi-plus-outline text-primary"></i>
+                دیجی پلاس
+            </a>
+        </li>
+        <li class="item-list-menu megamenu-1 item-set">
+            <a href="#" class="list-category first after">
+                سوالی
+                دارید؟
+            </a>
+        </li>
+        <li class="item-list-menu megamenu-1 item-set">
+            <a href="#" class="list-category first after">
+                فروشنده
+                شوید
+            </a>
+        </li>
+    </ul>
+</nav>

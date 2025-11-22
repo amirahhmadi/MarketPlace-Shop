@@ -11,4 +11,5 @@ public interface ICategoryServicesQuery
     List<GetParentCategoryForAddOrRemoveSubViewmodel> GetParentCategoryForAddOrRemoveSub(int subId);
     bool IsCategoryExist(string faTitle, string enTitle, int excludeId);
     List<SubCategory> GetAllParentBySubId(int subId);
+    List<GetCategoriesForMenuViewmodel> GetCategoriesForMenu();
 }

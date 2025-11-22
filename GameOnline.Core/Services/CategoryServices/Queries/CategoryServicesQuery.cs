@@ -67,15 +67,15 @@ public class CategoryServicesQuery : ICategoryServicesQuery
     public List<GetParentCategoryForAddOrRemoveSubViewmodel> GetParentCategoryForAddOrRemoveSub(int subId)
     {
         var q = (from c in _context.Categories
-                join s in _context.SubCategories on c.Id equals s.ParentId
+                 join s in _context.SubCategories on c.Id equals s.ParentId
 
-                where s.SubId == subId
+                 where s.SubId == subId
 
-                select new GetParentCategoryForAddOrRemoveSubViewmodel
-                {
-                    CategoryId = c.Id,
-                    FaTitle = c.FaTitle,
-                })
+                 select new GetParentCategoryForAddOrRemoveSubViewmodel
+                 {
+                     CategoryId = c.Id,
+                     FaTitle = c.FaTitle,
+                 })
             .AsNoTracking()
             .ToList();
         return q;
@@ -94,5 +94,21 @@ public class CategoryServicesQuery : ICategoryServicesQuery
         return _context.Categories.Any(x =>
             (x.FaTitle == faTitle.Trim() || x.EnTitle == enTitle.Trim()) &&
             x.Id != excludeId);
+    }
+
+    public List<GetCategoriesForMenuViewmodel> GetCategoriesForMenu()
+    {
+        var menu = (from c in _context.Categories
+                    join sub in _context.SubCategories on c.Id equals sub.SubId
+                    into ss from sub in ss.DefaultIfEmpty()
+                    where c.IsActive == true && c.IsRemove == false
+                    select new GetCategoriesForMenuViewmodel()
+                    {
+                        CategoryId = c.Id,
+                        ParentId = sub.ParentId,
+                        FaTitle = c.FaTitle,
+                        IsMine = c.IsMine
+                    }).ToList();
+        return menu;
     }
 }

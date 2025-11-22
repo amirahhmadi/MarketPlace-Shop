@@ -11,7 +11,6 @@
 		<Folder Include="Services\AccountService\Queries\" />
 		<Folder Include="Services\AddressService\Commands\" />
 		<Folder Include="Services\BrandServices\Queries\" />
-		<Folder Include="Services\CategoryServices\CategoryServicesAdmin\" />
 		<Folder Include="Services\Comment-FAQ\Commands\" />
 		<Folder Include="Services\GalleryServices\Commands\" />
 		<Folder Include="Services\ProductServices\Commands\" />
