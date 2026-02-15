@@ -1,5 +1,6 @@
 ﻿@using GameOnline.Core.ExtenstionMethods
 @model GameOnline.Core.ViewModels.ProductViewmodel.Client.DetailProductViewmodel
+@Html.AntiForgeryToken()
 @{
 }
 <main class="contentM">
@@ -54,12 +55,15 @@
                         </div>
                         <div class="gallery-item">
                             <ul class="gallery-options">
-                                <li class="option-wishes">
-                                    <button class="btn-option btn-option-wishes">
-                                        <i class="mdi mdi-heart-outline"></i>
-                                        <span class="tooltip-short">افزودن به علاقه‌مندی</span>
-                                    </button>
-                                </li>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li class="option-wishes">
+                                        <button onclick="ClickFaviorate()" class="btn-option btn-option-wishes">
+                                            <i class="mdi mdi-heart-outline"></i>
+                                            <span class="tooltip-short">افزودن به علاقه‌مندی</span>
+                                        </button>
+                                    </li>
+                                }
                                 <li class="option-social">
                                     <button class="btn-option btn-option-social" data-toggle="modal"
                                             data-target="#exampleModalCenter">
@@ -1094,4 +1098,76 @@
     <partial name="_RequestAjaxPartial" />
     <partial name="_UpdateProductjsPartial" />
     <partial name="_showMoreText" />
+
+    <script>
+                $(function () {
+            // بررسی اینکه کاربر وارد شده
+            $.ajax({
+                type: "POST",
+                url: "/CheckAuthorize",
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (isAuthorized) {
+                    if (isAuthorized) {
+                        // اگر وارد شده، وضعیت علاقه‌مندی را چک کن
+                        ChangeFaviorate();
+                    }
+                }
+            });
+        });
+
+                function ChangeFaviorate() {
+            $.ajax({
+                type: "POST",
+                url: "/CheckFaviorateProduct",
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                data: { productId: '@Model.DetailProduct.ProductId' },
+                success: function (isFavorited) {
+                    if (isFavorited) {
+                        $(".mdi-heart-outline").addClass("text-danger");
+                    } else {
+                        $(".mdi-heart-outline").removeClass("text-danger");
+                    }
+                }
+            });
+        }
+
+                function ClickFaviorate() {
+            $.ajax({
+                type: "POST",
+                url: "/CheckAuthorize",
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (e) {
+                    if (e) {
+                        AddOrRemoveFaviorate();
+                    } else {
+                        window.location.href = "/Login";
+                    }
+                }
+            });
+        }
+
+                function AddOrRemoveFaviorate() {
+            $.ajax({
+                type: "POST",
+                url: "/AddOrRemoveFaviorate",
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                data: { productId: '@Model.DetailProduct.ProductId' },
+                success: function (e) {
+                    if (e.isSuccess) {
+                        $(".mdi-heart-outline").addClass("text-danger");
+                    } else {
+                        $(".mdi-heart-outline").removeClass("text-danger");
+                    }
+                }
+            });
+        }
+    </script>
 }

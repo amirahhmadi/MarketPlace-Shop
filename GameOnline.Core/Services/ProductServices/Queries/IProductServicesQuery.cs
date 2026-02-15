@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
+﻿using GameOnline.Common.Core;
+using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
 using GameOnline.Core.ViewModels.ProductViewmodel.Client;
 
 namespace GameOnline.Core.Services.ProductServices.Queries;
@@ -17,4 +18,5 @@ public interface IProductServicesQuery
     EditProductViewmodel? GetProductById(int productId);
     AddOrUpdateProductReviewViewmodel? FindProductReviewById(int productId);
     bool IsProductExist(string faTitle, string enTitle, int excludeId);
+    OperationResult<bool> CheckFavoriteProduct(int userId,int productId);
 }

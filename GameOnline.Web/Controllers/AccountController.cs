@@ -169,5 +169,12 @@ namespace GameOnline.Web.Controllers
                           result.Message ?? "");
             return RedirectToAction(nameof(Login));
         }
+
+        [HttpPost ,Route("CheckAuthorize")]
+        public IActionResult CheckAuthorize()
+        {
+            return Json(User.Identity.IsAuthenticated);
+        }
+
     }
 }

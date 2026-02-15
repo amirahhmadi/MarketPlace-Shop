@@ -9,4 +9,5 @@ public interface IProductServicesCommand
     OperationResult<int> EditProduct(EditProductViewmodel editProduct);
     OperationResult<int> RemoveProduct(RemoveProductViewModel removeProduct);
     OperationResult<int> EditProductReview(AddOrUpdateProductReviewViewmodel reviewViewmodel);
+    OperationResult<bool> AddProductFavorite(int userId, int productId);
 }

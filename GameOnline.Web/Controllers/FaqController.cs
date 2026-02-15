@@ -17,7 +17,8 @@ namespace GameOnline.Web.Controllers
         [Route("Question/{productId}/{Producten}")]
         public IActionResult Question(int productId, string Producten)
         {
-            TempData[ProductEn] = Producten;
+            TempData["ProductEn"] = Producten;
+
             return View(_faqServiceQuery.GetQuestionsForClient(productId));
         }
     }

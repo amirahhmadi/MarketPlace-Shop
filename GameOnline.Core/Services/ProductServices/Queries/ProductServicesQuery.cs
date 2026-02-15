@@ -1,4 +1,5 @@
-﻿using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
+﻿using GameOnline.Common.Core;
+using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
 using GameOnline.Core.ViewModels.ProductViewmodel.Client;
 using GameOnline.DataBase.Context;
 using Microsoft.EntityFrameworkCore;
@@ -227,5 +228,15 @@ public class ProductServicesQuery : IProductServicesQuery
         return _context.Products.Any(x =>
             (x.FaTitle == faTitle.Trim() || x.EnTitle == enTitle.Trim()) &&
             x.Id != excludeId);
+    }
+
+    public OperationResult<bool> CheckFavoriteProduct(int userId, int productId)
+    {
+        var findProductFavorite = _context.ProductFavorites.Any(x => x.UserId == userId && x.ProductId == productId);
+        return new OperationResult<bool>
+        {
+            IsSuccess = true,
+            Data = findProductFavorite
+        };
     }
 }

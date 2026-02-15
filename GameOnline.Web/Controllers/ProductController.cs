@@ -1,4 +1,7 @@
-﻿using GameOnline.Core.ExtenstionMethods;
+﻿using System.Security.Claims;
+using GameOnline.Core.ExtenstionMethods;
+using GameOnline.Core.Security;
+using GameOnline.Core.Services.ProductServices.Commands;
 using GameOnline.Core.Services.ProductServices.Queries;
 using GameOnline.Core.ViewModels.ProductViewmodel.Client;
 using GameOnline.DataBase.Entities.Products;
@@ -9,11 +12,14 @@ namespace GameOnline.Web.Controllers
     public class ProductController : BaseController
     {
         private readonly IProductServicesQuery _productServicesQuery;
+        private readonly IProductServicesCommand _productServicesCommand;
 
-        public ProductController(IProductServicesQuery productServicesQuery)
+        public ProductController(IProductServicesQuery productServicesQuery, IProductServicesCommand productServicesCommand)
         {
             _productServicesQuery = productServicesQuery;
+            _productServicesCommand = productServicesCommand;
         }
+
         [HttpGet("/Detail/{productId}")]
         public IActionResult Detail(int productId)
         {
@@ -64,6 +70,30 @@ namespace GameOnline.Web.Controllers
         {
             TempData[ProductEn] = Producten;
             return View(_productServicesQuery.GetPropertyForProductClient(ProductId));
+        }
+
+        [HttpPost, Route("AddOrRemoveFaviorate")]
+        public IActionResult AddOrRemoveFavorite(int productId)
+        {
+            if (User.Identity.IsAuthenticated == false)
+            {
+                return Json(false);
+            }
+
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = _productServicesCommand.AddProductFavorite(userId, productId);
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        [Route("CheckFaviorateProduct")]
+        public IActionResult CheckFaviorateProduct(int productId)
+        {
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var check = _productServicesQuery.CheckFavoriteProduct(userId, productId);
+
+            return Json(check.Data);
         }
     }
 }

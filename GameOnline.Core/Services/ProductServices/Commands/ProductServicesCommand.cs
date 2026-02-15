@@ -4,6 +4,7 @@ using GameOnline.Core.Services.ProductServices.Queries;
 using GameOnline.Core.ViewModels.ProductViewmodel.Admin;
 using GameOnline.DataBase.Context;
 using GameOnline.DataBase.Entities.Products;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameOnline.Core.Services.ProductServices.Commands;
 
@@ -17,6 +18,48 @@ public class ProductServicesCommand : IProductServicesCommand
         _context = context;
         _servicesQuery = servicesQuery;
     }
+
+    public OperationResult<bool> AddProductFavorite(int userId, int productId)
+    {
+        var findFavorite = _servicesQuery.CheckFavoriteProduct(userId, productId);
+
+        if (findFavorite.Data)
+        {
+            var favorite = _context.ProductFavorites
+                .Where(x => x.UserId == userId && x.ProductId == productId)
+                .FirstOrDefault();
+
+            _context.ProductFavorites.Remove(favorite);
+            _context.SaveChanges();
+
+            return new OperationResult<bool>
+            {
+                Code = OperationCode.Success,
+                IsSuccess = false,
+                Message = OperationResultMessage.Error
+            };
+        }
+        else
+        {
+            ProductFavorite favorite = new ProductFavorite()
+            {
+                UserId = userId,
+                ProductId = productId,
+                CreationDate = DateTime.Now,
+            };
+
+            _context.ProductFavorites.Add(favorite);
+            _context.SaveChanges();
+
+            return new OperationResult<bool>
+            {
+                Code = OperationCode.Success,
+                IsSuccess = true,
+                Message = OperationResultMessage.Success,
+            };
+        }
+    }
+
 
     public OperationResult<int> CreateProduct(CreateProductViewmodel createProduct)
     {

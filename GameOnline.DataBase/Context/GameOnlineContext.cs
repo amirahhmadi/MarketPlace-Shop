@@ -31,6 +31,7 @@ public class GameOnlineContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductGallery> ProductGalleries { get; set; }
     public DbSet<ProductReview> ProductReviews { get; set; }
+    public DbSet<ProductFavorite> ProductFavorites { get; set; }
     public DbSet<PropertyGroup> PropertyGroups { get; set; }
     public DbSet<PropertyName> PropertyNames { get; set; }
     public DbSet<PropertyValue> PropertyValues { get; set; }
