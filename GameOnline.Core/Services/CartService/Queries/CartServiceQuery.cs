@@ -92,7 +92,8 @@ public class CartServiceQuery : ICartServiceQuery
                     StartDisCount = pPrice.StartDisCount,
                     EndDisCount = pPrice.EndDisCount,
                     LastModifiedDate = c.LastModified,
-                    Score = product.Score
+                    Score = product.Score,
+                    SumOrderCart = c.SumOrder
                 })
             .AsNoTracking()
             .ToList();

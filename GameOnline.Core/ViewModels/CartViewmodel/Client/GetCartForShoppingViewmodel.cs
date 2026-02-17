@@ -9,7 +9,7 @@
         public string ProvinceName { get; set; }
         public string CityName { get; set; }
         public string FullAddress { get; set; }
-        public List<GetCartDetailsViewmodel> GetCartDetails { get; set; }
 
+        public List<GetCartDetailsViewmodel> GetCartDetails { get; set; }
     }
 }

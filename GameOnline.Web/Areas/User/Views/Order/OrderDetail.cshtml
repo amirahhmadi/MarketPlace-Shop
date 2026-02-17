@@ -120,14 +120,14 @@
                 </div>
                 <div class="table-draught-col">
                     هزینه ارسال
-                    : ۸,۰۰۰ تومان
+                    : ۸,۰۰۰ ریال
 
                 </div>
             </div>
             <div class="table-draught-row">
                 <div class="table-draught-col last-tabel">
                     مبلغ این
-                    مرسوله: @Model.FirstOrDefault().Price.ToString("N0") تومان
+                    مرسوله: @Model.FirstOrDefault().Price.ToString("N0") ریال
 
                 </div>
             </div>
@@ -168,32 +168,32 @@
                                 <!-- قیمت واحد -->
                                 <td>
                                     <span style="text-decoration:@(unitPrice != finalUnitPrice ? "line-through" : "none"); color:gray;">
-                                        @unitPrice.ToString("N0") تومان
+                                        @unitPrice.ToString("N0") ریال
                                     </span>
                                     @if (unitPrice != finalUnitPrice)
                                     {
                                         <br />
-                                        <span>@finalUnitPrice.ToString("N0") تومان</span>
+                                        <span>@finalUnitPrice.ToString("N0") ریال</span>
                                     }
                                 </td>
 
                                 <!-- قیمت کل -->
                                 <td>
                                     <span style="text-decoration:@(discount > 0 ? "line-through" : "none"); color:gray;">
-                                        @totalPrice.ToString("N0") تومان
+                                        @totalPrice.ToString("N0") ریال
                                     </span>
                                     @if (discount > 0)
                                     {
                                         <br />
-                                        <span>@totalFinalPrice.ToString("N0") تومان</span>
+                                        <span>@totalFinalPrice.ToString("N0") ریال</span>
                                     }
                                 </td>
 
                                 <!-- تخفیف -->
-                                <td>@discount.ToString("N0") تومان</td>
+                                <td>@discount.ToString("N0") ریال</td>
 
                                 <!-- قیمت نهایی -->
-                                <td>@totalFinalPrice.ToString("N0") تومان</td>
+                                <td>@totalFinalPrice.ToString("N0") ریال</td>
 
                             </tr>
                         }
@@ -223,7 +223,7 @@
                     <div class="price-profile">
                         <div class="price-value-profile">
                             @Detail.Price.ToString("N0")
-                            <span class="price-currency"> تومان</span>
+                            <span class="price-currency"> ریال</span>
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 {
     public class GetCartDetailsViewmodel
     {
+        public int SumOrderCart { get; set; }
         public int? SpecialPrice { get; set; }
         public int ProductId { get; set; }
         public int CartId { get; set; }

@@ -28,7 +28,7 @@
                             <td>@orderCount</td>
                             <td class="order-code">DKC-@item.FirstOrDefault().CartId</td>
                             <td>@item.FirstOrDefault().CreationDate.ToPersianDate("dd ms Y")</td>
-                            <td>@item.FirstOrDefault().Price.ToString("N0") تومان</td>
+                            <td>@item.FirstOrDefault().Price.ToString("N0") ریال</td>
                             <td class="text-success">
                                 @switch (item.FirstOrDefault().OrderType)
                                 {

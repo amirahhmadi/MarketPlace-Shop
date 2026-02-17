@@ -1,10 +1,25 @@
 ﻿@using GameOnline.Core.ExtenstionMethods
 @using GameOnline.Core.ViewModels.CartViewmodel.Client
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model GetCartForShoppingViewmodel
+
 @{
-    int sumOrder = 0;
-    int score = 0;
+    // جمع کل بدون هزینه ارسال
+    int sumOrderWithoutDelivery = Model.GetCartDetails.Sum(x => x.Price * x.CartCount);
+
+    // هزینه ارسال بر اساس جمع کل
+    int deliveryCost = sumOrderWithoutDelivery.Cost(); // متد Cost روی جمع کل سبد
+    string displayCost = deliveryCost > 0 ? deliveryCost.ToString("N0") : "رایگان";
+
+    // جمع کل نهایی با هزینه ارسال
+    int sumOrder = sumOrderWithoutDelivery + deliveryCost;
+
+    // امتیاز کل
+    int score = Model.GetCartDetails.Sum(x => x.Score * x.CartCount);
+
+    // آیتم اول برای زمان تقریبی تحویل
+    var firstCartItem = Model.GetCartDetails.FirstOrDefault();
+    string startDate = firstCartItem?.LastModifiedDate?.AddDays(3).ToPersianDate("dd ms") ?? "نامشخص";
+    string endDate = firstCartItem?.LastModifiedDate?.AddDays(7).ToPersianDate("dd ms") ?? "نامشخص";
 }
 <div class="container">
     <div class="main-shopping">
@@ -22,15 +37,9 @@
                                         گیرنده:
                                         <span class="full-name">@Model.UserName</span>
                                         <a href="#" class="edit-address-btn" data-toggle="modal"
-                                           data-target="#modalAddress">
-                                            اصلاح این
-                                            آدرس
-                                        </a>
+                                           data-target="#modalAddress">اصلاح این آدرس</a>
                                         <a href="#" class="checkout-contact-location" data-toggle="modal"
-                                           data-target="#modalAddress">
-                                            تغییر آدرس
-                                            ارسال
-                                        </a>
+                                           data-target="#modalAddress">تغییر آدرس ارسال</a>
                                     </li>
                                     <li class="checkout-contact-item">
                                         <div class="checkout-contact-item-mobile">
@@ -40,7 +49,6 @@
                                         <div class="checkout-contact-item-message">
                                             کد پستی:
                                             <span class="post-code">@Model.PostalCode</span>
-                                            <br>
                                         </div>
                                         <span class="address-part">@Model.ProvinceName - @Model.CityName - @Model.FullAddress</span>
                                     </li>
@@ -49,19 +57,17 @@
                                     <i class="fa fa-check"></i>
                                 </div>
                             </div>
-
                         </div>
                     </div>
+
                     <form action="#" id="shipping-data-form">
                         <div class="normal-delivery">
                             <div class="checkout-pack">
                                 <div class="checkout-pack-header">
-                                    <span class="checkout-time-table-shipping-lead-time">
-                                        آماده ارسال
-                                    </span>
+                                    <span class="checkout-time-table-shipping-lead-time">آماده ارسال</span>
                                 </div>
                                 <div class="checkout-time-table-shipping-type">
-                                    <i class="fa fa-truck"></i>ارسال عادی
+                                    <i class="fa fa-truck"></i> ارسال عادی
                                 </div>
                                 <div class="checkout-pack-row row">
                                     @foreach (var item in Model.GetCartDetails)
@@ -79,10 +85,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        sumOrder += item.Price * item.CartCount;
-                                        score += item.Score * item.CartCount;
                                     }
                                 </div>
+
                                 <div class="shipment-submit-type">
                                     <div class="checkout-time-table">
                                         <div class="additional-options-action-bar">
@@ -90,11 +95,13 @@
                                                 <label class="checkout-additional-options-checkbox-image"></label>
                                             </div>
                                             <div class="checkout-additional-options-action-container">
-                                                <div class="action-title">زمان تقریبی تحویل از @Model.GetCartDetails.FirstOrDefault().LastModifiedDate?.AddDays(3).ToPersianDate("dd ms") تا @Model.GetCartDetails.FirstOrDefault().LastModifiedDate?.AddDays(7).ToPersianDate("dd ms")</div>
+                                                <div class="action-title">
+                                                    زمان تقریبی تحویل از @startDate تا @endDate
+                                                </div>
                                                 <ul class="action-description">
                                                     <li>پست پیشتاز با ظرفیت اختصاصی برای دیجی استور</li>
                                                     <li class="package-shipping-cost">
-                                                        هزینه ارسال : رایگان
+                                                        هزینه ارسال : @displayCost
                                                     </li>
                                                 </ul>
                                             </div>
@@ -105,19 +112,9 @@
                         </div>
                     </form>
                 </div>
+
                 <div class="headline-checkout-shopping">
                     <span>صدور فاکتور</span>
-                </div>
-                <div class="checkout-invoice">
-                    <div class="checkout-invoice-headline">
-                        <div class="form-auth-row">
-                            <label class="ui-checkbox">
-                                <input type="checkbox" value="1" name="login" id="remember">
-                                <span class="ui-checkbox-check"></span>
-                            </label>
-                            <label for="remember" class="remember-me">درخواست ارسال فاکتور خرید</label>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="checkout-to-shipping-sticky">
@@ -125,19 +122,9 @@
                     <div class="checkout-to-shipping-price-report">
                         <p>مبلغ قابل پرداخت</p>
                         <div class="cart-item-product-price">
-                            @sumOrder.ToString("N0")
-                            <span>تومان</span>
+                            @sumOrder.ToString("N0") <span>ریال</span>
                         </div>
                     </div>
-                </div>
-
-                <div class="checkout-actions">
-                    <a href="cart.html" class="btn-link-spoiler">
-                        « بازگشت به سبد خرید
-                    </a>
-                    <a href="shopping-payment.html" class="save-shipping-data">
-                        تایید و ادامه ثبت سفارش »
-                    </a>
                 </div>
             </div>
 
@@ -145,11 +132,10 @@
                 <div class="page-aside" style="margin-top: 95px;">
                     <div class="checkout-summary">
                         <ul class="checkout-summary-summary">
-                            <li><span>مبلغ کل (@Model.GetCartDetails.Count کالا)</span><span>@sumOrder.ToString("N0") تومان</span></li>
-                            <li><span>جمع</span><span>@sumOrder.ToString("N0") تومان</span></li>
-                            <li><span style="color: #424750; font-size:14px;">هزینه ارسال</span><span></span></li>
-                            <li><span><i class="fa fa-truck"></i>ارسال عادی</span><span>رایگان</span></li>
-                            <li><span>مبلغ قابل پرداخت</span><span>@sumOrder.ToString("N0") تومان</span></li>
+                            <li><span>مبلغ کل (@Model.GetCartDetails.Count کالا)</span><span>@sumOrderWithoutDelivery.ToString("N0") ریال</span></li>
+                            <li><span style="color: #424750; font-size:14px;">هزینه ارسال</span><span>@displayCost</span></li>
+                            <li><span>جمع</span><span>@sumOrder.ToString("N0") ریال</span></li>
+                            <li><span>مبلغ قابل پرداخت</span><span>@sumOrder.ToString("N0") ریال</span></li>
                             <li class="checkout-digiclub-container">
                                 <span class="checkout-digiclub-row">
                                     <img src="assets/images/digiclub.png" alt="digiclub">
@@ -159,120 +145,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="checkout-summary-content">
-                        <p>کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش مراحل بعدی را تکمیل کنید.</p>
-                    </div>
                 </div>
-            </div>
-
-            <footer class="footer-light">
-                <div class="container">
-                    <div class="footer-checkout-col">
-                        <div class="footer-checkout-col-phone">
-                            <span class="mdi mdi-phone"></span>شماره تماس :
-                            <a href="#">
-                                ۶۱۹۳۰۰۰۰
-                                - ۰۲۱
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="footer-checkout-col">
-                        <div class="footer-checkout-col-phone">
-                            <span class="mdi mdi-email-outline"></span>شماره تماس :
-                            <a href="#">info@digistore.com</a>
-                        </div>
-                    </div>
-
-                    <p class="title-footer">استفاده از کارت هدیه یا کد تخفیف، درصفحه ی پرداخت امکان پذیر است.</p>
-
-                    <p class="copy-right-footer-light">Copyright © 2006 - 2019 DigiStore.com</p>
-                </div>
-            </footer>
-        </div>
-    </div>
-</div>
-<!-- modal -->
-<div class="modal fade" id="modalAddress" tabindex="-1" aria-labelledby="modalAddress" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalAddress">ویرایش آدرس</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="middle-container">
-                    <form action="#" class="form-checkout">
-                        <div class="form-checkout-headline">ویرایش آدرس</div>
-                        <div class="form-checkout-row">
-                            <label for="name">
-                                نام و نام خانوادگی تحویل گیرنده <span class="required-star"
-                                                                      style="color:red;">*</span>
-                            </label>
-                            <input type="text" id="name" class="input-name-checkout"
-                                   placeholder="نام تحویل گیرنده را وارد نمایید">
-                            <label for="phone-number">
-                                شماره موبایل <span class="required-star"
-                                                   style="color:red;">*</span>
-                            </label>
-                            <input type="text" id="phone-number" class="input-name-checkout"
-                                   placeholder="09xxxxxxxxx" style="text-align:left;">
-                            <label for="fixed-number">
-                                شماره تلفن ثابت <span class="required-star"
-                                                      style="color:red;">*</span>
-                            </label>
-                            <input type="text" id="fixed-number" class="input-name-checkout" placeholder="021xxxxxx"
-                                   style="text-align:left;">
-
-                            <div class="form-checkout-valid-row">
-                                <label for="province">
-                                    استان <span class="required-star"
-                                                style="color:red;"></span>
-                                </label>
-                                <select name="province" id="province">
-                                    <option value="date-desc" selected="selected">
-                                        شهر مورد نظر خود را انتخاب
-                                        کنید
-                                    </option>
-                                    <option value="date-asc">تهران</option>
-                                    <option value="rate">مشهد</option>
-                                    <option value="views">اصفهان</option>
-                                    <option value="comments">شیراز</option>
-                                </select>
-                            </div>
-
-                            <div class="form-checkout-valid-row">
-                                <label for="city">
-                                    شهر
-                                    <span class="required-star" style="color:red;">*</span>
-                                </label>
-                                <select name="city" id="city">
-                                    <option value="date-desc" selected="selected">
-                                        شهر مورد نظر خود را انتخاب
-                                        کنید
-                                    </option>
-                                    <option value="date-asc">آشخانه</option>
-                                    <option value="rate">شیروان</option>
-                                    <option value="views">اسفراین</option>
-                                    <option value="comments">جاجرم</option>
-                                </select>
-                            </div>
-
-                            <label for="address">
-                                آدرس
-                                <span class="required-star" style="color:red;">*</span>
-                            </label>
-                            <input type="text" id="address" class="input-name-checkout"
-                                   placeholder="آدرس خود را وارد نمایید" style="height:80px;">
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">بازگشت</button>
-                <button type="button" class="btn btn-primary mr-2">ثبت آدرس</button>
             </div>
         </div>
     </div>

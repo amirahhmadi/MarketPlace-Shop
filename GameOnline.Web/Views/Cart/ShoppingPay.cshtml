@@ -2,8 +2,24 @@
 @model IEnumerable<GameOnline.Core.ViewModels.CartViewmodel.Client.GetCartDetailsViewmodel>
 
 @{
-    int sumOrder = Model.Sum(x => x.Price * x.CartCount);
+    var firstItem = Model.FirstOrDefault();
+
+    // جمع کل بدون هزینه ارسال
+    int sumOrderWithoutDelivery = Model.Sum(x => x.Price * x.CartCount);
+
+    // هزینه ارسال بر اساس جمع کل
+    int deliveryCost = sumOrderWithoutDelivery.Cost(); // اگر جمع ≥ 250000 رایگان می‌شود
+    string displayCost = deliveryCost > 0 ? deliveryCost.ToString("N0") : "رایگان";
+
+    // جمع کل نهایی با احتساب ارسال
+    int sumOrder = sumOrderWithoutDelivery + deliveryCost;
+
+    // امتیاز کل
     int score = Model.Sum(x => x.Score * x.CartCount);
+
+    // زمان تقریبی تحویل
+    string startDate = firstItem?.LastModifiedDate?.AddDays(3).ToPersianDate("dd ms") ?? "نامشخص";
+    string endDate = firstItem?.LastModifiedDate?.AddDays(10).ToPersianDate("dd ms") ?? "نامشخص";
 }
 
 <div class="container">
@@ -30,12 +46,12 @@
                                         <p class="checkout-paymethod-title-label">پرداخت از کیف پول</p>
                                         <span>موجودی:</span>
                                         <span class="wallet-amount">0</span>
-                                        <span class="checkout-paymethod-currency">تومان</span>
+                                        <span class="checkout-paymethod-currency">ریال</span>
                                     </div>
                                 </div>
                                 <div class="wallet-extra-info">
                                     نیازمند
-                                    <span class="wallet-needed-money">@sumOrder.ToString("N0")</span> تومان افزایش اعتبار
+                                    <span class="wallet-needed-money">@sumOrder.ToString("N0")</span> ریال افزایش اعتبار
                                 </div>
                             </div>
                         </li>
@@ -73,11 +89,11 @@
                                     </div>
                                     <div class="checkout-order-summary-col-post-time">
                                         زمان ارسال
-                                        <span>بازه @Model.FirstOrDefault()?.LastModifiedDate?.AddDays(3).ToPersianDate("dd ms") - @Model.FirstOrDefault()?.LastModifiedDate?.AddDays(10).ToPersianDate("dd ms")</span>
+                                        <span>بازه @startDate - @endDate</span>
                                     </div>
                                     <div class="checkout-order-summary-col-shipping-cost">
                                         مبلغ مرسوله
-                                        <span>@sumOrder.ToString("N0") تومان</span>
+                                        <span>@sumOrderWithoutDelivery.ToString("N0") ریال</span>
                                     </div>
                                 </div>
                             </header>
@@ -112,8 +128,7 @@
                         <div class="checkout-to-shipping-price-report">
                             <p>مبلغ قابل پرداخت</p>
                             <div class="cart-item-product-price">
-                                @sumOrder.ToString("N0")
-                                <span>تومان</span>
+                                @sumOrder.ToString("N0") <span>ریال</span>
                             </div>
                         </div>
                     </div>
@@ -135,7 +150,7 @@
                                            placeholder="مثلا 1234ABCD5678EFGH0123">
                                 </div>
                                 <button class="checkout-price-options-form-button">
-                                    ثبت کدهدیه
+                                    ثبت کد هدیه
                                 </button>
                             </div>
                         </section>
@@ -150,11 +165,11 @@
                             </div>
                             <div class="checkout-price-options-row">
                                 <div class="checkout-price-options-form-field">
-                                    <input type="text" name="gift-card-serial" class="input-field"
+                                    <input type="text" name="discount-code" class="input-field"
                                            placeholder="مثلا 837A2CS">
                                 </div>
                                 <button class="checkout-price-options-form-button">
-                                    ثبت کد هدیه
+                                    ثبت کد تخفیف
                                 </button>
                             </div>
                         </section>
@@ -167,10 +182,10 @@
                 <div class="page-aside" style="margin-top: 95px;">
                     <div class="checkout-summary">
                         <ul class="checkout-summary-summary">
-                            <li><span>مبلغ کل (@Model.Count() کالا)</span><span>@sumOrder.ToString("N0") تومان</span></li>
-                            <li><span>جمع</span><span>@sumOrder.ToString("N0") تومان</span></li>
-                            <li><span>هزینه ارسال</span><span>رایگان</span></li>
-                            <li><span>مبلغ قابل پرداخت</span><span>@sumOrder.ToString("N0") تومان</span></li>
+                            <li><span>مبلغ کل (@Model.Count() کالا)</span><span>@sumOrderWithoutDelivery.ToString("N0") ریال</span></li>
+                            <li><span>هزینه ارسال</span><span>@displayCost</span></li>
+                            <li><span>جمع</span><span>@sumOrder.ToString("N0") ریال</span></li>
+                            <li><span>مبلغ قابل پرداخت</span><span>@sumOrder.ToString("N0") ریال</span></li>
                             <li class="checkout-digiclub-container">
                                 <span class="checkout-digiclub-row">
                                     <img src="assets/images/digiclub.png" alt="digiclub">

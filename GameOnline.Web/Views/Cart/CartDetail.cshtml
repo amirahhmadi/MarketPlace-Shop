@@ -1,10 +1,26 @@
 ﻿@using GameOnline.Core.ExtenstionMethods
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IEnumerable<GameOnline.Core.ViewModels.CartViewmodel.Client.GetCartDetailsViewmodel>
+
 @{
-    int sumOrder = 0;
+    // جمع کل بدون هزینه ارسال
+    int sumOrderWithoutDelivery = Model.Sum(x => x.Price * x.CartCount);
+
+    // هزینه ارسال بر اساس جمع کل
+    int deliveryCost = sumOrderWithoutDelivery.Cost();
+    string displayCost = deliveryCost > 0 ? deliveryCost.ToString("N0") : "رایگان";
+
+    // جمع کل نهایی
+    int sumOrder = sumOrderWithoutDelivery + deliveryCost;
+
+    // محاسبه امتیاز
     int score = 0;
+    foreach (var item in Model)
+    {
+        score += item.Score * item.CartCount;
+    }
 }
+
 <main class="contentM">
     <div class="container">
         <div class="page-content">
@@ -24,11 +40,9 @@
                 <div class="page-content-cart">
                     <form action="#">
                         <div class="header-express">
-                            <span class="checkout-header-title"><i class="fa fa-truck"></i>ارسال عادی</span>
-                            <span class="header-extra-info">
-                                (@Model.Count() کالا)
-                            </span>
-                            <span class="checkout-header-delivery-cost">هزینه ارسال:رایگان</span>
+                            <span class="checkout-header-title"><i class="fa fa-truck"></i> ارسال عادی</span>
+                            <span class="header-extra-info">(@Model.Count() کالا)</span>
+                            <span class="checkout-header-delivery-cost">هزینه ارسال: @displayCost</span>
                         </div>
 
                         @foreach (var item in Model)
@@ -59,8 +73,7 @@
                                     <a href="#" class="add-to-sfl">
                                         ذخیره در لیست خرید بعدی
                                         <div class="cart-item-product-price">
-                                            @item.Price.ToString("N0")
-                                            <span>تومان</span>
+                                            @item.Price.ToString("N0") <span>ریال</span>
                                         </div>
                                     </a>
                                     @if (item.DetailType == 1)
@@ -73,8 +86,6 @@
                                     }
                                 </div>
                             </div>
-                            sumOrder += item.Price * item.CartCount;
-                            score += item.Score * item.CartCount;
                         }
                     </form>
                 </div>
@@ -84,7 +95,7 @@
                     <div class="checkout-to-shipping-price-report">
                         <p>مبلغ قابل پرداخت</p>
                         <div class="cart-item-product-price">
-                            @sumOrder.ToString("N0") <span>تومان</span>
+                            @sumOrder.ToString("N0") <span>ریال</span>
                         </div>
                     </div>
                 </div>
@@ -94,11 +105,11 @@
                 <div class="page-aside">
                     <div class="checkout-summary">
                         <ul class="checkout-summary-summary">
-                            <li><span>مبلغ کل (@Model.Count() کالا)</span><span>@sumOrder.ToString("N0") تومان</span></li>
-                            <li><span>جمع</span><span>@sumOrder.ToString("N0") تومان</span></li>
-                            <li><span style="color: #424750; font-size:14px;">هزینه ارسال</span><span></span></li>
-                            <li><span><i class="fa fa-truck"></i>ارسال عادی</span><span>رایگان</span></li>
-                            <li><span>مبلغ قابل پرداخت</span><span>@sumOrder.ToString("N0") تومان</span></li>
+                            <li><span>مبلغ کل (@Model.Count() کالا)</span><span>@sumOrderWithoutDelivery.ToString("N0") ریال</span></li>
+                            <li><span style="color: #424750; font-size:14px;">هزینه ارسال:</span><span>@displayCost</span></li>
+                            <li><span>جمع</span><span>@sumOrder.ToString("N0") ریال</span></li>
+                            <li><span><i class="fa fa-truck"></i> ارسال عادی</span><span></span></li>
+                            <li><span>مبلغ قابل پرداخت</span><span>@sumOrder.ToString("N0") ریال</span></li>
                             <li class="checkout-digiclub-container">
                                 <span class="checkout-digiclub-row">
                                     <img src="assets/images/digiclub.png" alt="digiclub">
@@ -116,9 +127,10 @@
         </div>
     </div>
 </main>
+
 @section Scripts
 {
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function () {
 

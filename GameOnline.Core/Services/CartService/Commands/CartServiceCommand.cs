@@ -35,13 +35,19 @@ public class CartServiceCommand : ICartServiceCommand
         if (findCart == null || findCart.CartDetails == null || !findCart.CartDetails.Any())
             return OperationResult<string>.Error("سبد خرید خالی است");
 
-        int amount = findCart.CartDetails.Sum(x => x.Price * x.Count);
-        findCart.SumOrder = amount;
+        // جمع کل بدون هزینه ارسال
+        int sumOrder = findCart.CartDetails.Sum(x => x.Price * x.Count);
+
+        // محاسبه هزینه ارسال با توجه به متد Cost()
+        int deliveryCost = sumOrder.Cost(); // اینجا میگه اگه >=250k رایگان باشه، در غیر این صورت 49000
+        int totalAmount = sumOrder + deliveryCost; // جمع کل شامل هزینه ارسال
+
+        findCart.SumOrder = totalAmount;
         await _context.SaveChangesAsync();
 
         string merchantId = _config["ZarinPal:MerchantId"];
 
-        // ساختن آدرس callback با توجه به دامنه فعلی
+        // ساختن callback URL
         string scheme = _contextAccessor.HttpContext.Request.Scheme;
         string host = _contextAccessor.HttpContext.Request.Host.Value;
         string callbackUrl = $"{scheme}://{host}{_config["ZarinPal:CallbackUrl"]}{findCart.Id}";
@@ -49,7 +55,7 @@ public class CartServiceCommand : ICartServiceCommand
         var requestData = new
         {
             merchant_id = merchantId,
-            amount = amount,
+            amount = totalAmount, // اینجا مبلغ نهایی با هزینه ارسال
             callback_url = callbackUrl,
             description = "خرید از سایت گیم آنلاین",
             metadata = new { email = "test@test.com", mobile = "09120000000" }
@@ -71,6 +77,8 @@ public class CartServiceCommand : ICartServiceCommand
                           ?? (result?.errors?.validations?.ToString() ?? "خطای ناشناخته");
         return OperationResult<string>.Error(errorMsg);
     }
+
+
 
     public async Task<OperationResult<int>> VerificationZarinPal(int cartId, string authority)
     {

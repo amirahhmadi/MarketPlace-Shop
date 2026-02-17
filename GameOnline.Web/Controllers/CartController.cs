@@ -91,7 +91,7 @@ namespace GameOnline.Web.Controllers
                     CartDetailId = item.CartDetailId,
                     NewPrice = newPrice
                 });
-                item.Message = $"قیمت محصول به مقدار {(item.Price - newPrice).ToString("N0")} تومان کاهش داشته است";
+                item.Message = $"قیمت محصول به مقدار {(item.Price - newPrice).ToString("N0")} ریال کاهش داشته است";
                 item.DetailType = 2;
                 item.Price = newPrice;
             }
@@ -102,7 +102,7 @@ namespace GameOnline.Web.Controllers
                     CartDetailId = item.CartDetailId,
                     NewPrice = newPrice
                 });
-                item.Message = $"قیمت محصول به مقدار {(newPrice - item.Price).ToString("N0")} تومان افزایش داشته است";
+                item.Message = $"قیمت محصول به مقدار {(newPrice - item.Price).ToString("N0")} ریال افزایش داشته است";
                 item.DetailType = 1;
                 item.Price = newPrice;
             }
@@ -177,7 +177,7 @@ namespace GameOnline.Web.Controllers
                             CartDetailId = item.CartDetailId,
                             NewPrice = item.MainPrice,
                         });
-                        item.Message = $"قیمت محصول به مقدار {(item.Price - item.MainPrice).ToString("N0")} تومان کاهش داشته است";
+                        item.Message = $"قیمت محصول به مقدار {(item.Price - item.MainPrice).ToString("N0")} ریال کاهش داشته است";
                         item.DetailType = 2;
                         item.Price = item.MainPrice;
                     }
@@ -188,7 +188,7 @@ namespace GameOnline.Web.Controllers
                             CartDetailId = item.CartDetailId,
                             NewPrice = item.MainPrice,
                         });
-                        item.Message = $"قیمت محصول به مقدار {(item.MainPrice - item.Price).ToString("N0")} تومان افزایش داشته است";
+                        item.Message = $"قیمت محصول به مقدار {(item.MainPrice - item.Price).ToString("N0")} ریال افزایش داشته است";
                         item.DetailType = 1;
                         item.Price = item.MainPrice;
                     }
@@ -202,7 +202,7 @@ namespace GameOnline.Web.Controllers
                             CartDetailId = item.CartDetailId,
                             NewPrice = Special.Value,
                         });
-                        item.Message = $"قیمت محصول به مقدار {(item.Price - Special.Value).ToString("N0")} تومان کاهش داشته است";
+                        item.Message = $"قیمت محصول به مقدار {(item.Price - Special.Value).ToString("N0")} ریال کاهش داشته است";
                         item.DetailType = 2;
                         item.Price = Special.Value;
                     }
@@ -213,7 +213,7 @@ namespace GameOnline.Web.Controllers
                             CartDetailId = item.CartDetailId,
                             NewPrice = Special.Value,
                         });
-                        item.Message = $"قیمت محصول به مقدار {(Special.Value - item.Price).ToString("N0")} تومان افزایش داشته است";
+                        item.Message = $"قیمت محصول به مقدار {(Special.Value - item.Price).ToString("N0")} ریال افزایش داشته است";
                         item.DetailType = 1;
                         item.Price = Special.Value;
                     }
@@ -245,6 +245,9 @@ namespace GameOnline.Web.Controllers
             else
                 return View("Fail");
         }
+
+
+
 
         [HttpGet]
         [Route("veryfication-ZarinPal/{cartId}")]
