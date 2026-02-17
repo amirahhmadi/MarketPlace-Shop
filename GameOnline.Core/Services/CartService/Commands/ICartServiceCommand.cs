@@ -12,5 +12,5 @@ public interface ICartServiceCommand
 
     OperationResult<int> AddCart(AddCartViewmodel addCart);
     Task<OperationResult<string>> Payment(int cartId);
-    Task<OperationResult<int>> VerificationZarinPal(int cartId, string authority);
+    Task<OperationResult<long>> VerificationZarinPal(int cartId, string authority);
 }

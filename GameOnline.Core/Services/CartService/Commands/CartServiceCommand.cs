@@ -31,64 +31,81 @@ public class CartServiceCommand : ICartServiceCommand
     }
     public async Task<OperationResult<string>> Payment(int cartId)
     {
-        var findCart = _cartQuery.FindCartById(cartId);
-        if (findCart == null || findCart.CartDetails == null || !findCart.CartDetails.Any())
+        var cart = _cartQuery.FindCartById(cartId);
+
+        if (cart == null || cart.CartDetails == null || !cart.CartDetails.Any())
             return OperationResult<string>.Error("سبد خرید خالی است");
 
-        // جمع کل بدون هزینه ارسال
-        int sumOrder = findCart.CartDetails.Sum(x => x.Price * x.Count);
+        if (cart.OrderType == OrderType.Paid)
+            return OperationResult<string>.Error("این سفارش قبلاً ثبت شده است");
 
-        // محاسبه هزینه ارسال با توجه به متد Cost()
-        int deliveryCost = sumOrder.Cost(); // اینجا میگه اگه >=250k رایگان باشه، در غیر این صورت 49000
-        int totalAmount = sumOrder + deliveryCost; // جمع کل شامل هزینه ارسال
+        // جمع کل
+        int sumOrder = cart.CartDetails.Sum(x => x.Price * x.Count);
+        int deliveryCost = sumOrder.Cost();
+        int totalAmount = sumOrder + deliveryCost;
 
-        findCart.SumOrder = totalAmount;
+        // ذخیره مبلغ نهایی (خیلی مهم)
+        cart.SumOrder = totalAmount;
         await _context.SaveChangesAsync();
 
         string merchantId = _config["ZarinPal:MerchantId"];
 
-        // ساختن callback URL
         string scheme = _contextAccessor.HttpContext.Request.Scheme;
         string host = _contextAccessor.HttpContext.Request.Host.Value;
-        string callbackUrl = $"{scheme}://{host}{_config["ZarinPal:CallbackUrl"]}{findCart.Id}";
+        string callbackUrl = $"{scheme}://{host}/payment/verify/{cart.Id}";
 
         var requestData = new
         {
             merchant_id = merchantId,
-            amount = totalAmount, // اینجا مبلغ نهایی با هزینه ارسال
+            amount = totalAmount,
             callback_url = callbackUrl,
-            description = "خرید از سایت گیم آنلاین",
-            metadata = new { email = "test@test.com", mobile = "09120000000" }
+            description = "خرید از سایت گیم آنلاین"
         };
 
-        var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/request.json", content);
-        var responseString = await response.Content.ReadAsStringAsync();
+        var content = new StringContent(
+            JsonConvert.SerializeObject(requestData),
+            Encoding.UTF8,
+            "application/json"
+        );
 
-        var result = JsonConvert.DeserializeObject<dynamic>(responseString);
+        var response = await _httpClient.PostAsync(
+            "https://sandbox.zarinpal.com/pg/v4/payment/request.json",
+            content
+        );
+
+        if (!response.IsSuccessStatusCode)
+            return OperationResult<string>.Error("خطا در ارتباط با درگاه");
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<ZarinpalModels.ZarinpalRequestResponse>(responseString);
 
         if (result?.data?.code == 100)
         {
-            string authority = result.data.authority;
-            return OperationResult<string>.Success($"https://sandbox.zarinpal.com/pg/StartPay/{authority}");
+            string gatewayUrl =
+                $"https://sandbox.zarinpal.com/pg/StartPay/{result.data.authority}";
+
+            return OperationResult<string>.Success(gatewayUrl);
         }
 
-        string errorMsg = result?.errors?.message?.ToString()
-                          ?? (result?.errors?.validations?.ToString() ?? "خطای ناشناخته");
-        return OperationResult<string>.Error(errorMsg);
+        return OperationResult<string>.Error(
+            result?.errors?.FirstOrDefault()?.message ?? "خطا در پرداخت"
+        );
     }
 
 
 
-    public async Task<OperationResult<int>> VerificationZarinPal(int cartId, string authority)
-    {
-        var findCart = _cartQuery.FindCartById(cartId);
-        if (findCart == null || findCart.CartDetails == null || !findCart.CartDetails.Any())
-            return OperationResult<int>.Error("سبد خرید پیدا نشد");
 
-        int amount = findCart.CartDetails.Sum(x => x.Price * x.Count);
-        findCart.SumOrder = amount;
-        await _context.SaveChangesAsync();
+    public async Task<OperationResult<long>> VerificationZarinPal(int cartId, string authority)
+    {
+        var cart = _cartQuery.FindCartById(cartId);
+
+        if (cart == null)
+            return OperationResult<long>.Error("سفارش پیدا نشد");
+
+        if (cart.OrderType == OrderType.Paid)
+            return OperationResult<long>.Error("این تراکنش قبلاً تایید شده");
+
+        int amount = cart.SumOrder; // مهم: همون مبلغ ذخیره شده
 
         string merchantId = _config["ZarinPal:MerchantId"];
 
@@ -99,26 +116,37 @@ public class CartServiceCommand : ICartServiceCommand
             authority = authority
         };
 
-        var content = new StringContent(JsonConvert.SerializeObject(verifyData), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/verify.json", content);
+        var content = new StringContent(
+            JsonConvert.SerializeObject(verifyData),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        var response = await _httpClient.PostAsync(
+            "https://sandbox.zarinpal.com/pg/v4/payment/verify.json",
+            content
+        );
+
+        if (!response.IsSuccessStatusCode)
+            return OperationResult<long>.Error("خطا در ارتباط با درگاه");
+
         var responseString = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<ZarinpalModels.ZarinpalVerifyResponse>(responseString);
 
-        var result = JsonConvert.DeserializeObject<dynamic>(responseString);
-
-        if (result?.data?.code == 100)
+        if (result?.data?.code == 100 || result?.data?.code == 101)
         {
-            findCart.OrderType = OrderType.review_queue;
-            _context.Update(findCart);
+            cart.OrderType = OrderType.Paid;
             await _context.SaveChangesAsync();
 
-            int refId = result.data.ref_id;
-            return OperationResult<int>.Success(refId);
+            return OperationResult<long>.Success(result.data.ref_id);
         }
 
-        string errorMsg = result?.errors?.message?.ToString()
-                          ?? (result?.errors?.validations?.ToString() ?? "خطای ناشناخته در وریفای");
-        return OperationResult<int>.Error(errorMsg);
+        return OperationResult<long>.Error(
+            result?.errors?.FirstOrDefault()?.message ?? "خطا در پرداخت"
+        );
     }
+
+
 
     public OperationResult<int> AddCart(AddCartViewmodel addCart)
     {

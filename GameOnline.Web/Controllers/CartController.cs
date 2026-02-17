@@ -249,32 +249,21 @@ namespace GameOnline.Web.Controllers
 
 
 
-        [HttpGet]
-        [Route("veryfication-ZarinPal/{cartId}")]
-        public async Task<IActionResult> Verification(int cartId)
+        [HttpGet("payment/verify/{cartId}")]
+        public async Task<IActionResult> Verification(int cartId, string authority, string status)
         {
-            string status = HttpContext.Request.Query["Status"];
-            string authority = HttpContext.Request.Query["Authority"];
-
             if (string.IsNullOrEmpty(status) || string.IsNullOrEmpty(authority))
-                return View("Fail"); // درخواست نامعتبر
+                return View("Fail");
 
-            if (status.ToLower() != "ok")
-                return View("Fail"); // کاربر پرداخت را لغو کرده
+            if (!status.Equals("OK", StringComparison.OrdinalIgnoreCase))
+                return View("Fail");
 
-            // Verify واقعی تراکنش
             var result = await _cartServiceCommand.VerificationZarinPal(cartId, authority);
 
-            if (result != null && result.IsSuccess)
-            {
-                // پرداخت موفق
-                return View(); // صفحه موفقیت
-            }
-            else
-            {
-                // پرداخت ناموفق
-                return View("Fail"); // صفحه خطا
-            }
+            if (result.IsSuccess)
+                return View("verification");
+
+            return View("Fail");
         }
     }
 }
